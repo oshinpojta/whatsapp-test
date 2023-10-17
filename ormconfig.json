@@ -1,0 +1,15 @@
+{
+    "type": "mssql",
+    "host": "JESHWANTH",
+    "port": 1433,
+    "username": "jeshwanth",
+    "password": "nodejs@123",
+    "database": "Taxonanalytica",
+    "synchronize": true,
+    "logging": true,
+    "entities": ["dist/entity/**/*.js"],
+    "cli": {
+        "entitiesDir": "./src/entity"
+    },
+    "useUnifiedTopology": true
+}
