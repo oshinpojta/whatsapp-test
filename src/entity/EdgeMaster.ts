@@ -87,7 +87,7 @@ export class EdgeMaster extends BaseEntity {
   @Column()
   label: string;
 
-  @Column()
+  @Column({nullable:true})
   userId: string;
 
   @CreateDateColumn()

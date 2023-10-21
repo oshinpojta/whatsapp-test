@@ -14,22 +14,22 @@ export class ItemMaster extends BaseEntity {
   @PrimaryColumn()
   IT_CODE: string;
 
-  @Column()
+  @Column({ nullable: true })
   branchId: string;
 
   @Column({ nullable: true })
   CO_CODE: string;
 
-  @Column()
+  @Column({ nullable: true })
   IT_NAME: string;
 
   @Column({ nullable: true })
   ALT_NAME: string;
 
-  @Column()
+  @Column({ nullable: true })
   ItemType: string;
 
-  @Column()
+  @Column({ nullable: true })
   Machine: string;
 
   @Column({ nullable: true })
@@ -56,13 +56,13 @@ export class ItemMaster extends BaseEntity {
   @Column({ nullable: true })
   CUR_TIME: string;
   
-  @Column()
+  @Column({ nullable: true })
   Item_status: string;
 
-  @Column()
+  @Column({ nullable: true })
   Unit_Code: string;
 
-  @Column()
+  @Column({ nullable: true })
   Tarrif_No_Code: string;
 
   @Column({ nullable: true })
@@ -77,7 +77,7 @@ export class ItemMaster extends BaseEntity {
   @Column({ nullable: true })
   Reason: string;
 
-  @Column()
+  @Column({ nullable: true })
   Normal: boolean;
 
   @Column({ nullable: true })
@@ -98,7 +98,7 @@ export class ItemMaster extends BaseEntity {
   @Column({ nullable: true })
   Minimum: string;
 
-  @Column()
+  @Column({ nullable: true })
   Stock_Effect: boolean;
 
   @Column({ nullable: true })
@@ -137,7 +137,7 @@ export class ItemMaster extends BaseEntity {
   @Column({ nullable: true })
   REOALT_QTY: string;
 
-  @Column()
+  @Column({ nullable: true })
   Color_Value: string;
 
   @Column({ nullable: true })
@@ -146,13 +146,13 @@ export class ItemMaster extends BaseEntity {
   @Column({ nullable: true })
   Refe_NO: string;
 
-  @Column()
+  @Column({ nullable: true })
   BOM_Import_Yes_No: boolean;
 
   @Column({ nullable: true })
   Import_Yes_No: string;
 
-  @Column()
+  @Column({ nullable: true })
   Not_allow_fifo_Inpackingtick: boolean;
 
   @Column({ nullable: true })
@@ -206,7 +206,7 @@ export class ItemMaster extends BaseEntity {
   @Column({ nullable: true })
   Film_Name_ID: string;
 
-  @Column()
+  @Column({ nullable: true })
   Fabric_Name_ID: string;
 
   @Column({ nullable: true })
@@ -215,11 +215,11 @@ export class ItemMaster extends BaseEntity {
   @Column({ nullable: true })
   Metalize_Film: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   userId: string;
 
   @Column({ nullable: true })
-    Route: string;
+  Route: string;
 
   @CreateDateColumn()
   DateTime: Date;

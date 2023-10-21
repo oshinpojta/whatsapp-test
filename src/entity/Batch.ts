@@ -18,38 +18,47 @@ export class Batch extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({nullable:true})
   branchId: string;
 
-  @Column()
-  nodeId: string;
-
-  @Column()
-  jobId: string;
-
-  @Column()
-  itemId: string;
-
-  @Column()
+  @Column({nullable:true})
   activityId: string;
 
-  @Column()
-  quantity: number;
+  @Column({nullable:true})
+  shift: string;
 
-  @Column()
-  units: number;
-
-  @Column()
-  product: string;
-
-  @Column()
+  @Column({nullable:true})
   date: Date;
 
-  @Column()
-  userId: string;
+  @Column({nullable:true})
+  MachinenodeId: string;
 
-  @Column()
-  outputId: string;
+  @Column({nullable:true})
+  jobId: string;
+
+  @Column({nullable:true})
+  FGID: string;
+
+  @Column({nullable:true})
+  ItemCode: string;
+
+  @Column({nullable:true})
+  MaterialId: string;
+
+  @Column({nullable:true})
+  Availablequantity: number;
+
+  @Column({nullable:true})
+  Consumedquantity: number;
+
+  @Column({nullable:true})
+  Balancequantity: number;
+
+  @Column({nullable:true})
+  units: number;
+
+  @Column({nullable:true})
+  userId: string;
 
   @CreateDateColumn()
   DateTime: Date;

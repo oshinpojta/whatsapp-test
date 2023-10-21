@@ -36,7 +36,7 @@ export class Employee extends BaseEntity {
   @Column({nullable: true })
   dateOfJoining: Date;
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   lastDate: Date;
 
   @Column({default : true })

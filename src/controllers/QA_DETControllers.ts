@@ -129,33 +129,25 @@ export const getAllQA_DET = async (_: Request, res: Response) => {
   try {
     console.log("HELLOO")
     const oaDetRepository = getRepository(OA_DETMaster);
-  
-  /*  const qadet = await oaDetRepository
-      .createQueryBuilder('oaDet') // 'oaDet' is an alias for OA_DETMaster
-      .select(['oaDet.jobId', 'itemMaster.IT_NAME']) // Select JOBID from OA_DETMaster and IT_NAME from ItemMaster
-      .innerJoin('oaDet.itemmaster', 'itemMaster') // Join based on the defined relationship
-      .addSelect(['itemMaster.IT_NAME']) // Select additional columns from ItemMaster
-      .where('oaDet.IT_CODE = itemMaster.IT_CODE') // Apply the WHERE 
-      .getRawMany();*/
-
 
       const oaDetails = await OA_DETMaster.find();
       const itemMaster = await ItemMaster.find();
       
       // Create a Map for itemMaster using IT_CODE as the key
-      const itemMasterMap = new Map(itemMaster.map(item => [item.IT_CODE, item.IT_NAME]));
+      const itemMasterMap = new Map(itemMaster.map(item => [item.IT_CODE, { IT_NAME: item.IT_NAME, ItemType: item.ItemType }]));
       
       const commonObjects = [];
       
       for (const oaDetail of oaDetails) {
-        const IT_NAME = itemMasterMap.get(oaDetail.IT_CODE);
+        const itemData  = itemMasterMap.get(oaDetail.IT_CODE);
         // const IT_CODE 
       
-        if (IT_NAME !== undefined) {
+        if (itemData  !== undefined) {
           const commonObject = {
             jobId: oaDetail.jobId,
             IT_CODE: oaDetail.IT_CODE,
-            IT_NAME,
+            IT_NAME: itemData.IT_NAME,
+            ItemType: itemData.ItemType,
           };
           commonObjects.push(commonObject);
         }

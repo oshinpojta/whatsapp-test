@@ -25,7 +25,7 @@ const edgeMasterSchema = Joi.object({
   animation: Joi.boolean().required(),
   arrow: Joi.boolean().required(),
   // Thickness: Joi.number().required(),
-  label: Joi.string().required(),
+  label: Joi.string().allow('',null),
   userId:Joi.string().required(),
 
 });
