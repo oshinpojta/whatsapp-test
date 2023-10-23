@@ -10,6 +10,8 @@ const ItemMasterSchema = Joi.object({
   IT_NAME: Joi.string().allow('', null),
   ALT_NAME: Joi.string().allow('', null),
   ItemType: Joi.string().allow('', null),
+  NodeId: Joi.string().allow('', null),
+  RouteId: Joi.string().allow('', null),
   Machine: Joi.string().allow('', null),
   Production_Type: Joi.string().allow('', null),
   Production_section_ID: Joi.string().allow('', null),
@@ -92,6 +94,8 @@ export const createItemMaster = async (req: Request, res: Response) => {
     itemmaster.IT_NAME = req.body.IT_NAME
     itemmaster.ALT_NAME = req.body.ALT_NAME 
     itemmaster.ItemType = req.body.ItemType 
+    itemmaster.NodeId = req.body.NodeId 
+    itemmaster.RouteId = req.body.RouteId 
     itemmaster.Machine = req.body.Machine 
     itemmaster.Production_Type = req.body.Production_Type
     itemmaster.IG_CODE = req.body.IG_CODE
@@ -191,6 +195,8 @@ export const updateItemMaster = async (req: Request, res: Response) => {
     itemmaster.IT_NAME = req.body.IT_NAME
     itemmaster.ALT_NAME = req.body.ALT_NAME 
     itemmaster.ItemType = req.body.ItemType 
+    itemmaster.NodeId = req.body.NodeId
+    itemmaster.RouteId = req.body.RouteId
     itemmaster.Machine = req.body.Machine 
     itemmaster.Production_Type = req.body.Production_Type
     itemmaster.IG_CODE = req.body.IG_CODE
@@ -324,7 +330,9 @@ const updateDataItemMaster = async (data: any) => {
     itemmaster.CO_CODE = data.CO_CODE
     itemmaster.IT_NAME = data.IT_NAME
     itemmaster.ALT_NAME = data.ALT_NAME 
-    itemmaster.ItemType = data.ItemType 
+    itemmaster.ItemType = data.ItemType
+    itemmaster.NodeId = data.NodeId
+    itemmaster.RouteId = data.RouteId
     itemmaster.Machine = data.Machine 
     itemmaster.Production_Type = data.Production_Type
     itemmaster.IG_CODE = data.IG_CODE
@@ -413,7 +421,9 @@ const createDataItemMaster = async (data: any) => {
     itemmaster.CO_CODE = data.CO_CODE
     itemmaster.IT_NAME = data.IT_NAME
     itemmaster.ALT_NAME = data.ALT_NAME 
-    itemmaster.ItemType = data.ItemType 
+    itemmaster.ItemType = data.ItemType
+    itemmaster.NodeId = data.NodeId
+    itemmaster.RouteId = data.RouteId 
     itemmaster.Machine = data.Machine 
     itemmaster.Production_Type = data.Production_Type
     itemmaster.IG_CODE = data.IG_CODE
@@ -513,6 +523,3 @@ export const ItemMasterById = async (req: Request, res: Response) => {
     return InternalServerError(res, error);
   }
 };
-
-
-

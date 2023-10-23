@@ -30,6 +30,12 @@ export class ItemMaster extends BaseEntity {
   ItemType: string;
 
   @Column({ nullable: true })
+  NodeId: string;
+
+  @Column({ nullable: true })
+  RouteId: string;
+
+  @Column({ nullable: true })
   Machine: string;
 
   @Column({ nullable: true })
@@ -228,5 +234,3 @@ export class ItemMaster extends BaseEntity {
    oa_detmaster : OA_DETMaster[]
   
 }
-  
-  

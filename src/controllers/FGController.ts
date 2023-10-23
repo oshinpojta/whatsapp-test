@@ -8,6 +8,7 @@ const FGMappingSchema = Joi.object({
   nodeIdFG: Joi.string().required(),
   nodeIdRM: Joi.string().required(),
   userId: Joi.string().required(),
+  nodeId: Joi.string().required(),
   nodeCategory: Joi.string().required(),
   // nodeCate
   
@@ -26,6 +27,7 @@ export const createFGMapping = async (req: Request, res: Response) => {
     mapping.userId = req.body.userId;
     mapping.nodeIdFG = req.body.nodeIdFG;
     mapping.nodeIdRM = req.body.nodeIdRM;
+    mapping.nodeId = req.body.nodeId;
     mapping.nodeCategory = req.body.nodeCategory;
 
     await mapping.save();
@@ -59,6 +61,7 @@ export const updateFGMapping = async (req: Request, res: Response) => {
     mapping.branchId = req.body.branchId;
     mapping.nodeIdFG = req.body.nodeIdFG;
     mapping.nodeIdRM = req.body.nodeIdRM;
+    mapping.nodeId = req.body.nodeId;
     mapping.userId = req.body.userId;
     mapping.nodeCategory = req.body.nodeCategory;
 
@@ -130,6 +133,7 @@ const updateDataFGMapping = async (data: any) => {
     mapping.userId = data.userId;
     mapping.nodeIdFG = data.nodeIdFG;
     mapping.nodeIdRM = data.nodeIdRM;
+    mapping.nodeId = data.nodeId;
     mapping.nodeCategory = data.nodeCategory;
     await mapping.save();
 
@@ -154,6 +158,7 @@ const createDataFGMapping = async (data: any) => {
     mapping.userId = data.userId;
     mapping.nodeIdFG = data.nodeIdFG;
     mapping.nodeIdRM = data.nodeIdRM;
+    mapping.nodeId = data.nodeId;
     mapping.nodeCategory = data.nodeCategory;;
     await mapping.save();
 
@@ -189,6 +194,3 @@ export const FGMappingById = async (req: Request, res: Response) => {
     return InternalServerError(res, error);
   }
 };
-
-
-

@@ -25,9 +25,10 @@ export class FGMapping extends BaseEntity {
           @Column()
           userId: string;
 
+          @Column()
+          nodeId: string;
+
           @CreateDateColumn()
           DateTime: Date;
 
 }
-          
-        
