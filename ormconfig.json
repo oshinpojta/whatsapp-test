@@ -1,9 +1,9 @@
 {
     "type": "mssql",
-    "host": "JESHWANTH",
+    "host": "taxonalytica.cl77rwoetkdr.ap-south-1.rds.amazonaws.com",
     "port": 1433,
-    "username": "jeshwanth",
-    "password": "nodejs@123",
+    "username": "TaxonalyticaUser",
+    "password": "Taxonalytica123",
     "database": "Taxonanalytica",
     "synchronize": true,
     "logging": true,
@@ -11,5 +11,6 @@
     "cli": {
         "entitiesDir": "./src/entity"
     },
-    "useUnifiedTopology": true
+    "useUnifiedTopology": true,
+    "requestTimeout": 130000
 }
