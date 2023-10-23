@@ -4,14 +4,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
+  // OneToMany,
   CreateDateColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { JobAssign } from "./JobAssign";
+// import { JobAssign } from "./JobAssign";
 import { Shift } from "./Shift";
-import { Batch } from "./Batch";
-import { ActivityLog } from "./activitylog";
+// import { Batch } from "./Batch";
+// import { ActivityLog } from "./activitylog";
 
 @Entity()
 export class Jobs extends BaseEntity {
@@ -38,11 +38,11 @@ export class Jobs extends BaseEntity {
   @JoinColumn({ name: "shift_id" })
   shift: Shift
 
-  @OneToMany(() => Batch, (batch) => batch.job)
-  batch: Batch[]
+  // @OneToMany(() => Batch, (batch) => batch.job)
+  // batch: Batch[]
 
-  @OneToMany(() => ActivityLog, (activityLog) => activityLog.job)
-  activitylog: ActivityLog[]
+  // @OneToMany(() => ActivityLog, (activityLog) => activityLog.job)
+  // activitylog: ActivityLog[]
 
   @Column()
   jobDescription: string;

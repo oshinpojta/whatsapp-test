@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+// import { getRepository } from 'typeorm';
 import { Request, Response } from "express";
 import { InternalServerError } from "../response/InternalServerErrorResponse";
 import * as Joi from "joi";
@@ -128,7 +128,7 @@ export const createOA_DETMaster = async (req: Request, res: Response) => {
 export const getAllQA_DET = async (_: Request, res: Response) => {
   try {
     console.log("HELLOO")
-    const oaDetRepository = getRepository(OA_DETMaster);
+    // const oaDetRepository = getRepository(OA_DETMaster);
 
       const oaDetails = await OA_DETMaster.find();
       const itemMaster = await ItemMaster.find();

@@ -4,9 +4,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  OneToMany
+  // OneToMany
 } from "typeorm";
-import { ItemMaster } from "../entity/itemMaster";
+// import { ItemMaster } from "../entity/itemMaster";
 
 
 @Entity()
@@ -36,7 +36,7 @@ export class RouteMaster extends BaseEntity {
   DateTime: Date
 
   
-  @OneToMany(() => ItemMaster, (itemitcode) => itemitcode.itemitcode)
-  itemitcode: ItemMaster[]
+  // @OneToMany(() => ItemMaster, (itemitcode) => itemitcode.itemitcode)
+  // itemitcode: ItemMaster[]
 
 }

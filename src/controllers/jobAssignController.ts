@@ -3,7 +3,7 @@ import { InternalServerError } from "../response/InternalServerErrorResponse";
 import * as Joi from "joi";
 import { JobAssign } from "../entity/JobAssign";
 import { NodeMaster } from "../entity/NodeMaster";
-import { Jobs } from "../entity/Job";
+// import { Jobs } from "../entity/Job";
 import { Shift } from "../entity/Shift";
 
 const JobAssignSchema = Joi.object({
@@ -27,7 +27,7 @@ export const createJobAssign = async (req: Request, res: Response) => {
   try {
 
     const node = await NodeMaster.findOne(req.body.nodeId);
-    const job = await Jobs.findOne(req.body.jobId);
+    // const job = await Jobs.findOne(req.body.jobId);
     const shift = await Shift.findOne(req.body.shiftId);
 
     const jobAssign = new JobAssign();
@@ -73,7 +73,7 @@ export const updateJobAssign = async (req: Request, res: Response) => {
     }
 
     const node = await NodeMaster.findOne(req.body.node);
-    const job = await Jobs.findOne(req.body.job);
+    // const job = await Jobs.findOne(req.body.job);
     const shift = await Shift.findOne(req.body.shift);
 
     jobAssign.branchId = req.body.branchId;
@@ -152,7 +152,7 @@ const updateDataJobAssign = async (data: any) => {
     }
 
     const node = await NodeMaster.findOne(data.node);
-    const job = await Jobs.findOne(data.job);
+    // const job = await Jobs.findOne(data.job);
     const shift = await Shift.findOne(data.shift);
 
     jobAssign.branchId = data.branchId;
@@ -183,7 +183,7 @@ const createDataJobAssign = async (data: any) => {
   try {
 
     const node = await NodeMaster.findOne(data.node);
-    const job = await Jobs.findOne(data.job);
+    // const job = await Jobs.findOne(data.job);
     const shift = await Shift.findOne(data.shift);
 
     const jobAssign = new JobAssign();

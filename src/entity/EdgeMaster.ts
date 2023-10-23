@@ -2,12 +2,12 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
-  ManyToOne,
+  // JoinColumn,
+  // ManyToOne,
   PrimaryGeneratedColumn,
   CreateDateColumn
 } from "typeorm";
-import { NodeMaster } from "./NodeMaster";
+// import { NodeMaster } from "./NodeMaster";
 
 @Entity()
 export class EdgeMaster extends BaseEntity {

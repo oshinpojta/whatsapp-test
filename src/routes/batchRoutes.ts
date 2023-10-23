@@ -1,6 +1,6 @@
 import * as express from "express";
 import {
-  createBatch,getAllBatch,batchById,updateBatch,deleteBatch,updateBulkBatch,createBatchData,updateBatchData
+  createBatch,getAllBatch,batchById,updateBatch,deleteBatch,updateBulkBatch,//createBatchData,updateBatchData
 } from "../controllers/batchController";
 
 let router = express.Router();

@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn
 } from "typeorm";
-import { ActivityLog } from "./activitylog";
+// import { ActivityLog } from "./activitylog";
 import { EmployeeNodeMapping } from "./EmployeeNodeMapping";
 import { JobAssign } from "./JobAssign";
-import { Batch } from "./Batch";
+// import { Batch } from "./Batch";
 import { EdgeMaster } from "./EdgeMaster";
 
 @Entity()
@@ -98,14 +98,14 @@ export class NodeMaster extends BaseEntity {
   @Column()
   FontSize: string;
 
-  @OneToMany(() => ActivityLog, (activityLog) => activityLog.materialNode)
-  activitylog: ActivityLog[]
+  // @OneToMany(() => ActivityLog, (activityLog) => activityLog.materialNode)
+  // activitylog: ActivityLog[]
 
-  @OneToMany(() => Batch, (batch) => batch.machineNode)
-  machineNode: Batch[]
+  // @OneToMany(() => Batch, (batch) => batch.machineNode)
+  // machineNode: Batch[]
 
-  @OneToMany(() => Batch, (batch) => batch.materialNode)
-  materialNode: Batch[]
+  // @OneToMany(() => Batch, (batch) => batch.materialNode)
+  // materialNode: Batch[]
 
   @OneToMany(() => EmployeeNodeMapping, (empnodemap) => empnodemap.node)
   empNodeMapping: EmployeeNodeMapping[]

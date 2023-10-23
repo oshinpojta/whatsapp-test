@@ -3,16 +3,16 @@ import {
   Column,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
+  // PrimaryGeneratedColumn,
   PrimaryColumn,
   // Timestamp,
   CreateDateColumn
 } from "typeorm";
 import { Jobs } from "./Job";
 import { JobAssign } from "./JobAssign";
-import { ActivityLog } from "./activitylog";
+// import { ActivityLog } from "./activitylog";
 import { Batch } from "./Batch";
-import { EmployeeNodeMapping } from "./EmployeeNodeMapping";
+// import { EmployeeNodeMapping } from "./EmployeeNodeMapping";
 
 @Entity()
 export class Shift extends BaseEntity {
@@ -53,6 +53,6 @@ export class Shift extends BaseEntity {
   @OneToMany(() => Batch, (batch) => batch.shift)
   batch: Batch[]
 
-  @OneToMany(() => EmployeeNodeMapping, (batch) => batch.shift)
-  empNodeMapping: EmployeeNodeMapping[]
+  // @OneToMany(() => EmployeeNodeMapping, (batch) => batch.shift)
+  // empNodeMapping: EmployeeNodeMapping[]
 }

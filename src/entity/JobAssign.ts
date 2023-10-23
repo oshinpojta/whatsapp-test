@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { NodeMaster } from "./NodeMaster";
-import { Jobs } from "./Job";
+// import { Jobs } from "./Job";
 import { Shift } from "./Shift";
 
 @Entity()

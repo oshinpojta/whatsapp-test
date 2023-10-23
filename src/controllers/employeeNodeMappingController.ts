@@ -4,7 +4,7 @@ import * as Joi from "joi";
 import { EmployeeNodeMapping } from "../entity/EmployeeNodeMapping";
 import { Employee } from "../entity/Employee";
 import { NodeMaster } from "../entity/NodeMaster";
-import { Shift } from "../entity/Shift";
+// import { Shift } from "../entity/Shift";
 
 const employeeNodeMappingSchema = Joi.object({
   empnodemapId: Joi.number(),

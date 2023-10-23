@@ -6,9 +6,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn
 } from "typeorm";
-import { ActivityLog } from "./activitylog";
+// import { ActivityLog } from "./activitylog";
 import { EmployeeNodeMapping } from "./EmployeeNodeMapping";
-import { Batch } from "./Batch";
+// import { Batch } from "./Batch";
 
 @Entity()
 export class Employee extends BaseEntity {
@@ -51,11 +51,11 @@ export class Employee extends BaseEntity {
   @Column()
   password: string;
 
-  @OneToMany(() => ActivityLog, (activityLog) => activityLog.emp)
-  activitylog: ActivityLog[]
+  // @OneToMany(() => ActivityLog, (activityLog) => activityLog.emp)
+  // activitylog: ActivityLog[]
 
-  @OneToMany(() => Batch, (batch) => batch.emp)
-  batch: Batch[]
+  // @OneToMany(() => Batch, (batch) => batch.emp)
+  // batch: Batch[]
 
   @OneToMany(() => EmployeeNodeMapping, (empnodemap) => empnodemap.emp)
   empNodeMapping: EmployeeNodeMapping[]
