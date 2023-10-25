@@ -11,9 +11,8 @@ const employeeSchema = Joi.object({
   designation: Joi.string().required(),
   grade: Joi.string().required(),
   dateOfJoining: Joi.date().allow('',null),
-  lastDate: Joi.date().allow('',null),
+  lastDate: Joi.string().allow('', null),
   isActive: Joi.boolean().required(),
-  user: Joi.string().required(),
   userName: Joi.string().required(),
   password: Joi.string().required(),
 });
@@ -36,7 +35,6 @@ export const createEmployee = async (req: Request, res: Response) => {
     employee.dateOfJoining = req.body.dateOfJoining;
     employee.lastDate = req.body.lastDate;
     employee.isActive = req.body.isActive;
-    employee.user = req.body.user;
     employee.userName = req.body.userName;
     employee.password = req.body.password;
     await employee.save();
@@ -76,7 +74,6 @@ export const updateEmployee = async (req: Request, res: Response) => {
     employee.dateOfJoining = req.body.dateOfJoining;
     employee.lastDate = req.body.lastDate;
     employee.isActive = req.body.isActive;
-    employee.user = req.body.user;
     employee.userName = req.body.userName;
     employee.password = req.body.password;
     employee.userId = req.body.userId;

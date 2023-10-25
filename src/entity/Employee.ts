@@ -12,8 +12,6 @@ import { EmployeeNodeMapping } from "./EmployeeNodeMapping";
 
 @Entity()
 export class Employee extends BaseEntity {
-  // @PrimaryGeneratedColumn()
-  // id: number;
 
   @PrimaryGeneratedColumn()
   empId: number;
@@ -21,34 +19,31 @@ export class Employee extends BaseEntity {
   @Column()
   branchId: string;
 
-  @Column()
+  @Column({nullable: true })
   empTypeId: string;
 
-  @Column()
+  @Column({nullable: true })
   employeeName: string;
 
-  @Column()
+  @Column({nullable: true })
   designation: string;
 
-  @Column()
+  @Column({nullable: true })
   grade: string;
 
   @Column({nullable: true })
   dateOfJoining: Date;
 
   @Column({ nullable: true })
-  lastDate: Date;
+  lastDate: string;
 
   @Column({default : true })
   isActive: boolean;
 
-  @Column()
-  user: string;
-
-  @Column()
+  @Column({nullable: true })
   userName: string;
 
-  @Column()
+  @Column({nullable: true })
   password: string;
 
   // @OneToMany(() => ActivityLog, (activityLog) => activityLog.emp)

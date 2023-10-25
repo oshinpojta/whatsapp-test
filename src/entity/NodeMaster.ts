@@ -26,7 +26,7 @@ export class NodeMaster extends BaseEntity {
   @Column()
   nodeCategoryId: string;
 
-  @Column()
+  @Column({nullable: true})
   nodeType: string;
 
   @Column({nullable: true})
@@ -97,15 +97,6 @@ export class NodeMaster extends BaseEntity {
 
   @Column()
   FontSize: string;
-
-  // @OneToMany(() => ActivityLog, (activityLog) => activityLog.materialNode)
-  // activitylog: ActivityLog[]
-
-  // @OneToMany(() => Batch, (batch) => batch.machineNode)
-  // machineNode: Batch[]
-
-  // @OneToMany(() => Batch, (batch) => batch.materialNode)
-  // materialNode: Batch[]
 
   @OneToMany(() => EmployeeNodeMapping, (empnodemap) => empnodemap.node)
   empNodeMapping: EmployeeNodeMapping[]
