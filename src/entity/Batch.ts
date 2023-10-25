@@ -5,7 +5,7 @@ import {
   // JoinColumn,
   // ManyToOne,
   PrimaryGeneratedColumn,
-  CreateDateColumn
+  CreateDateColumn,
 } from "typeorm";
 // import { NodeMaster } from "./NodeMaster";
 // import { Employee } from "./Employee";
