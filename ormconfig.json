@@ -12,5 +12,5 @@
         "entitiesDir": "./src/entity"
     },
     "useUnifiedTopology": true,
-    "requestTimeout": 130000
+    "requestTimeout":13000
 }

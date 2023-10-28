@@ -186,6 +186,8 @@ export const updateItemMaster = async (req: Request, res: Response) => {
 
   try {
     const itemmaster = await ItemMaster.findOne(req.params.id);
+    console.log(itemmaster,"######");
+    
     if (!itemmaster) {
       return res.status(404).json({ error: 'itemmaster not found' });
     }
@@ -322,6 +324,8 @@ const updateDataItemMaster = async (data: any) => {
 
   try {
     const itemmaster = await ItemMaster.findOne(data.id);
+    console.log(itemmaster,"$$$$$");
+    
     if (!itemmaster) {
       return { error: error.details[0].message }
     }

@@ -9,6 +9,7 @@ const unitMasterSchema = Joi.object({
   unitDescription: Joi.string().required(),
   conversionRate: Joi.string().required(),
   refUnitId: Joi.string().required(),
+  userId: Joi.string().required(),
 });
 
 export const createUnitMaster = async (req: Request, res: Response) => {
@@ -25,6 +26,7 @@ export const createUnitMaster = async (req: Request, res: Response) => {
     unitMaster.unitDescription = req.body.unitDescription;
     unitMaster.conversionRate = req.body.conversionRate;
     unitMaster.refUnitId = req.body.refUnitId;
+    unitMaster.userId = req.body.userId;
     await unitMaster.save();
     return res.status(201).json(unitMaster);
   } catch (error) {
@@ -59,6 +61,7 @@ export const updateUnitMaster = async (req: Request, res: Response) => {
     unitMaster.unitDescription = req.body.unitDescription;
     unitMaster.conversionRate = req.body.conversionRate;
     unitMaster.refUnitId = req.body.refUnitId;
+    unitMaster.userId = req.body.userId;
 
     await unitMaster.save();
     return res.json(unitMaster);

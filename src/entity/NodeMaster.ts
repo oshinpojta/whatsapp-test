@@ -41,6 +41,10 @@ export class NodeMaster extends BaseEntity {
   @Column()
   height: string;
 
+  // New Column 28-10-23 
+  @Column({nullable:true})
+  borderRadius: string;
+
   @Column()
   xPosition: number;
 

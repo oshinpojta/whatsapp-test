@@ -3,7 +3,7 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  // CreateDateColumn
+  CreateDateColumn
 } from "typeorm";
 
 @Entity()
@@ -26,7 +26,7 @@ export class UnitMaster extends BaseEntity {
   @Column()
   userId: string;
 
-  // @CreateDateColumn()
-  // DateTime: Date
+  @CreateDateColumn()
+  DateTime: Date
 
 }

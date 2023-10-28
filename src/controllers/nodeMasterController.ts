@@ -32,7 +32,8 @@ const nodeMasterSchema = Joi.object({
   FontColor: Joi.string().required(),
   FontStyle: Joi.string().required(),
   FontSize:Joi.string().required(),
-  userId:Joi.string().required()
+  userId:Joi.string().required(),
+  borderRadius:Joi.string().allow('',null)
 
 });
 
@@ -77,6 +78,7 @@ export const createNodeMaster = async (req: Request, res: Response) => {
     nodeMaster.FontStyle = req.body.FontStyle
     nodeMaster.FontSize = req.body.FontSize
     nodeMaster.userId = req.body.userId
+    nodeMaster.borderRadius = req.body.borderRadius
     await nodeMaster.save();
     return res.status(201).json(nodeMaster);
   } catch (error) {
@@ -111,7 +113,7 @@ export const createBulkNodeMaster = async (req: Request, res: Response) => {
         nodeMaster.branchId = element.branchId;
         nodeMaster.nodeCategoryId = element.nodeCategoryId;
         nodeMaster.nodeCategory = element.nodeCategory;
-    nodeMaster.nodeType = element.nodeType;
+        nodeMaster.nodeType = element.nodeType;
         nodeMaster.nodeName = element.nodeName;
         nodeMaster.width = element.width;
         nodeMaster.height = element.height;
@@ -139,6 +141,7 @@ export const createBulkNodeMaster = async (req: Request, res: Response) => {
         nodeMaster.FontStyle = element.FontStyle
         nodeMaster.FontSize = element.FontSize
         nodeMaster.userId = element.userId
+        nodeMaster.borderRadius = element.borderRadius
         responseData.push(await nodeMaster.save());
 
       }
@@ -180,6 +183,7 @@ export const updateNodeMaster = async (req: Request, res: Response) => {
     nodeMaster.nodeType = req.body.nodeType;
     nodeMaster.nodeName = req.body.nodeName;
     nodeMaster.width = req.body.width;
+    nodeMaster.borderRadius = req.body.borderRadius;
     nodeMaster.height = req.body.height;
     nodeMaster.xPosition = req.body.xPosition;
     nodeMaster.yPosition = req.body.yPosition;
@@ -302,7 +306,7 @@ const updateDataNodeMaster = async (data: any) => {
     if (!nodeMaster) {
       return { error: 'nodeMaster not found' }
     }
-
+    console.log(data.borderRadius,"borderRadius,,,,")
     nodeMaster.id = data.id;
     nodeMaster.branchId = data.branchId;
     nodeMaster.nodeCategoryId = data.nodeCategoryId;
@@ -311,6 +315,7 @@ const updateDataNodeMaster = async (data: any) => {
     nodeMaster.nodeName = data.nodeName;
     nodeMaster.width = data.width;
     nodeMaster.height = data.height;
+    nodeMaster.borderRadius = data.borderRadius;
     nodeMaster.xPosition = data.xPosition;
     nodeMaster.yPosition = data.yPosition;
     nodeMaster.borderColor = data.borderColor;
@@ -360,6 +365,7 @@ const createDataNodeMaster = async (data: any) => {
     nodeMaster.nodeName = data.nodeName;
     nodeMaster.width = data.width;
     nodeMaster.height = data.height;
+    nodeMaster.borderRadius = data.borderRadius;
     nodeMaster.xPosition = data.xPosition;
     nodeMaster.yPosition = data.yPosition;
     nodeMaster.borderColor = data.borderColor;
