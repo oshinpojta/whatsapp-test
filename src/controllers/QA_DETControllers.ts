@@ -145,6 +145,7 @@ export const getAllQA_DET = async (_: Request, res: Response) => {
         if (itemData  !== undefined) {
           const commonObject = {
             jobId: oaDetail.jobId,
+            OA_Status: oaDetail.OA_Status,
             IT_CODE: oaDetail.IT_CODE,
             IT_NAME: itemData.IT_NAME,
             ItemType: itemData.ItemType,
