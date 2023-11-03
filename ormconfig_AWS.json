@@ -1,0 +1,16 @@
+{
+    "type": "mssql",
+    "host": "taxonalytica.cl77rwoetkdr.ap-south-1.rds.amazonaws.com",
+    "port": 1433,
+    "username": "TaxonalyticaUser",
+    "password": "Taxonalytica123",
+    "database": "Taxonanalytica",
+    "synchronize": true,
+    "logging": true,
+    "entities": ["dist/entity/**/*.js"],
+    "cli": {
+        "entitiesDir": "./src/entity"
+    },
+    "useUnifiedTopology": true,
+    "requestTimeout":13000
+}

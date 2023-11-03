@@ -350,7 +350,7 @@ export const createActivitylogg = async (req: Request, res: Response) => {
     activitylog.jobId = req.body.jobId
 
     await activitylog.save();
-    console.log("#######",activitylog)
+    // console.log("#######",activitylog)
     return res.status(201).json(activitylog);
   } catch (error) {
     return InternalServerError(res, error);

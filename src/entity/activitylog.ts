@@ -3,6 +3,7 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
+  CreateDateColumn
 } from "typeorm";
 
 @Entity()
@@ -16,7 +17,7 @@ export class ActivityLog extends BaseEntity {
   @Column()
   activityType: string;
 
-  @Column()
+  @Column({ type: 'date' }) // Use CreateDateColumn with type 'date'
   date: Date;
 
   @Column({ type: 'datetime' })
@@ -36,4 +37,10 @@ export class ActivityLog extends BaseEntity {
 
   @Column()
   jobId: string;
+
+  @Column({ nullable: true })
+  userId: string;
+
+  @CreateDateColumn()
+  DateTime: Date;
 }

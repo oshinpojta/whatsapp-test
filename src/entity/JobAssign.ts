@@ -19,8 +19,8 @@ export class JobAssign extends BaseEntity {
   @Column()
   branchId: string;
 
-  @Column()
-  date: Date;
+  @Column({ type: 'date' }) // Use CreateDateColumn with type 'date'
+  date: Date; 
 
   @Column()
   routeId: string;
