@@ -17,7 +17,7 @@ export class ActivityLog extends BaseEntity {
   @Column()
   activityType: string;
 
-  @Column({ type: 'date' }) // Use CreateDateColumn with type 'date'
+  @Column({ type: 'date', nullable: true }) // Use CreateDateColumn with type 'date'
   date: Date;
 
   @Column({ type: 'datetime' })
