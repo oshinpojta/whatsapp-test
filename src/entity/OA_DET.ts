@@ -21,7 +21,7 @@ export class OA_DETMaster extends BaseEntity {
   @Column({ nullable: true })
   OA_NO: string;
 
-  @Column()
+  @Column({ nullable: true })
   IT_CODE: string;
 
   @Column({ nullable: true })
@@ -81,7 +81,7 @@ export class OA_DETMaster extends BaseEntity {
   @Column({ nullable: true })
   Tolerance: number;
   
-  @Column()
+  @Column({ nullable: true })
   Close_Open_Status: boolean;
 
   @Column({ nullable: true })
@@ -154,14 +154,14 @@ export class OA_DETMaster extends BaseEntity {
   Production_type: string;
 
 
-   @ManyToOne(() => ItemMaster, (items) => items.IT_CODE)
-   @JoinColumn({ name: "ItemCode" })
-   itemmaster: ItemMaster
+  @ManyToOne(() => ItemMaster, (items) => items.IT_CODE)
+  @JoinColumn({ name: "ItemCode" })
+  itemmaster: ItemMaster
 
-  @Column()
+  @Column({ nullable: true })
   branchId: string;
 
-  @Column()
+  @Column({ nullable: true })
   userId: string;
 
   @CreateDateColumn()

@@ -14,8 +14,8 @@ import {
           @Column()
           branchId: string;
       
-          @Column()
-          date: Date;
+          @Column({ type: 'date' }) // Use CreateDateColumn with type 'date'
+          date: Date; 
       
           @Column()
           shiftNumber: string;
