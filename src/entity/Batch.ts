@@ -18,46 +18,58 @@ export class Batch extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   branchId: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   activityId: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   shift: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   date: Date;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   MachinenodeId: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   jobId: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   FGID: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   ItemCode: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   MaterialId: string;
 
-  @Column({nullable:true})
-  Availablequantity: number;
+  @Column({ nullable: true })
+  units1: number;
 
-  @Column({nullable:true})
-  Consumedquantity: number;
+  @Column({ nullable: true })
+  Availablequantity1: number;
 
-  @Column({nullable:true})
-  Balancequantity: number;
+  @Column({ nullable: true })
+  Consumedquantity1: number;
 
-  @Column({nullable:true})
-  units: number;
+  @Column({ nullable: true })
+  Balancequantity1: number;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
+  units2: number;
+
+  @Column({ nullable: true })
+  Availablequantity2: number;
+
+  @Column({ nullable: true })
+  Consumedquantity2: number;
+
+  @Column({ nullable: true })
+  Balancequantity2: number;
+
+  @Column({ nullable: true })
   userId: string;
 
   @CreateDateColumn()
