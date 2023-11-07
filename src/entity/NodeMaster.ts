@@ -35,6 +35,9 @@ export class NodeMaster extends BaseEntity {
   @Column()
   nodeName: string;
 
+  @Column({nullable:true})
+  itemDescription: string;
+
   @Column()
   width: string;
 

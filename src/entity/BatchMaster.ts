@@ -20,7 +20,7 @@ export class BatchMaster extends BaseEntity {
     @Column({ nullable: true })
     nodeId: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true})
     producedAt: Date;
 
     @Column({ nullable: true })

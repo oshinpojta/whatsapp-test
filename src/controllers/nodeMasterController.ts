@@ -9,6 +9,7 @@ const nodeMasterSchema = Joi.object({
   branchId: Joi.string().required(),
   nodeCategoryId: Joi.string().required(),
   nodeName: Joi.string().required(),
+  itemDescription: Joi.string().allow('',null),
   nodeType: Joi.string().allow('',null),
   nodeCategory: Joi.string().allow('',null),
   width: Joi.string().required(),
@@ -52,6 +53,7 @@ export const createNodeMaster = async (req: Request, res: Response) => {
     nodeMaster.nodeCategory = req.body.nodeCategory;
     nodeMaster.nodeType = req.body.nodeType;
     nodeMaster.nodeName = req.body.nodeName;  
+    nodeMaster.itemDescription = req.body.itemDescription;  
     nodeMaster.width = req.body.width;
     nodeMaster.height = req.body.height;
     nodeMaster.xPosition = req.body.xPosition;
@@ -115,6 +117,7 @@ export const createBulkNodeMaster = async (req: Request, res: Response) => {
         nodeMaster.nodeCategory = element.nodeCategory;
         nodeMaster.nodeType = element.nodeType;
         nodeMaster.nodeName = element.nodeName;
+        nodeMaster.itemDescription = element.itemDescription;
         nodeMaster.width = element.width;
         nodeMaster.height = element.height;
         nodeMaster.xPosition = element.xPosition;
@@ -182,6 +185,7 @@ export const updateNodeMaster = async (req: Request, res: Response) => {
     nodeMaster.nodeCategory = req.body.nodeCategory;
     nodeMaster.nodeType = req.body.nodeType;
     nodeMaster.nodeName = req.body.nodeName;
+    nodeMaster.itemDescription = req.body.itemDescription;
     nodeMaster.width = req.body.width;
     nodeMaster.borderRadius = req.body.borderRadius;
     nodeMaster.height = req.body.height;
@@ -313,6 +317,7 @@ const updateDataNodeMaster = async (data: any) => {
     nodeMaster.nodeCategory = data.nodeCategory;
     nodeMaster.nodeType = data.nodeType;
     nodeMaster.nodeName = data.nodeName;
+    nodeMaster.itemDescription = data.itemDescription;
     nodeMaster.width = data.width;
     nodeMaster.height = data.height;
     nodeMaster.borderRadius = data.borderRadius;
@@ -363,6 +368,7 @@ const createDataNodeMaster = async (data: any) => {
     nodeMaster.nodeCategory = data.nodeCategory;
     nodeMaster.nodeType = data.nodeType;
     nodeMaster.nodeName = data.nodeName;
+    nodeMaster.itemDescription = data.itemDescription;
     nodeMaster.width = data.width;
     nodeMaster.height = data.height;
     nodeMaster.borderRadius = data.borderRadius;
