@@ -1,5 +1,6 @@
 import * as express from "express";
 import branchRouter from "./branchRoutes";
+import batchMasterRouter from "./batchMasterRoutes";
 import shiftRouter from "./shiftRoutes";
 import departmentRouter from "./departmentRoutes";
 import sectionRouter from "./sectionRoutes";
@@ -31,6 +32,7 @@ import OA_DETMasterRouter from "./QA_DETRoute";
 let router = express.Router();
 
 router.use("/branch", branchRouter);
+router.use("/batchMaster", batchMasterRouter);
 router.use("/canvasMaster", canvasMaster);
 router.use("/department", departmentRouter);
 router.use("/edgeMaster", edgeMaster);
@@ -55,8 +57,8 @@ router.use("/batch", batchRouter);
 router.use("/attendance", attendance);
 router.use("/nodeAllocation", nodeAllocation);
 router.use("/nodeTypes", nodeTypes);
-router.use("/mapping",mappingRouter );
-router.use("/itemmaster",itemMasterRouter );
-router.use("/OA_DETRoute",OA_DETMasterRouter );
+router.use("/mapping", mappingRouter);
+router.use("/itemmaster", itemMasterRouter);
+router.use("/OA_DETRoute", OA_DETMasterRouter);
 
 export = router;
