@@ -26,16 +26,16 @@ export class NodeMaster extends BaseEntity {
   @Column()
   nodeCategoryId: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   nodeType: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   nodeCategory: string;
 
   @Column()
   nodeName: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   itemDescription: string;
 
   @Column()
@@ -45,7 +45,7 @@ export class NodeMaster extends BaseEntity {
   height: string;
 
   // New Column 28-10-23 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   borderRadius: string;
 
   @Column()
@@ -69,10 +69,10 @@ export class NodeMaster extends BaseEntity {
   @Column()
   fillTransparency: string;
 
-  @Column({default:false})
+  @Column({ default: false })
   isRootNode: boolean;
 
-  @Column({default:false})
+  @Column({ default: false })
   isParent: boolean;
 
   @Column()
@@ -81,13 +81,13 @@ export class NodeMaster extends BaseEntity {
   @Column()
   fuelUsed: string;
 
-  @Column({default:false})
+  @Column({ default: false })
   fuelUnitsId: string;
 
   @Column()
   capacity: string;
 
-  @Column({default:false})
+  @Column({ default: false })
   capacityUnitsId: string;
 
   @Column()
@@ -104,6 +104,18 @@ export class NodeMaster extends BaseEntity {
 
   @Column()
   FontSize: string;
+
+  @Column({ nullable: true })
+  units1: string;
+
+  @Column({ nullable: true })
+  units2: string;
+
+  @Column({ nullable: true })
+  unit1Measurable: string;
+
+  @Column({ nullable: true })
+  unit2Mandatory: string;
 
   @OneToMany(() => EmployeeNodeMapping, (empnodemap) => empnodemap.node)
   empNodeMapping: EmployeeNodeMapping[]

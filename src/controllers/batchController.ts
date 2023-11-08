@@ -12,6 +12,7 @@ const batchSchema = Joi.object({
   id: Joi.number(),
   branchId: Joi.string().allow('', null),
   activityId: Joi.string().allow('', null),
+  consumedActivityId: Joi.string().allow('', null),
   shift: Joi.string().allow('', null),
   date: Joi.date().allow('', null),
   MachinenodeId: Joi.number().allow('', null),
@@ -41,6 +42,7 @@ export const createBatch = async (req: Request, res: Response) => {
     const newBatch = new Batch();
     newBatch.branchId = req.body.branchId;
     newBatch.activityId = req.body.activityId;
+    newBatch.consumedActivityId = req.body.consumedActivityId;
     newBatch.shift = req.body.shift;
     newBatch.date = req.body.date;
     newBatch.MachinenodeId = req.body.MachinenodeId;
@@ -89,6 +91,7 @@ export const updateBatch = async (req: Request, res: Response) => {
     newBatch.id = req.body.id;
     newBatch.branchId = req.body.branchId;
     newBatch.activityId = req.body.activityId;
+    newBatch.consumedActivityId = req.body.consumedActivityId;
     newBatch.shift = req.body.shift;
     newBatch.date = req.body.date;
     newBatch.MachinenodeId = req.body.MachinenodeId;
@@ -171,6 +174,7 @@ export const updateBatchData = async (data: any) => {
     }
     newBatch.branchId = data.branchId;
     newBatch.activityId = data.activityId;
+    newBatch.consumedActivityId = data.consumedActivityId;
     newBatch.shift = data.shift;
     newBatch.date = data.date;
     newBatch.MachinenodeId = data.MachinenodeId;
@@ -207,6 +211,7 @@ export const createBatchData = async (data: any) => {
     const newBatch = new Batch();
     newBatch.branchId = data.branchId;
     newBatch.activityId = data.activityId;
+    newBatch.consumedActivityId = data.consumedActivityId;
     newBatch.shift = data.shift;
     newBatch.date = data.date;
     newBatch.MachinenodeId = data.MachinenodeId;

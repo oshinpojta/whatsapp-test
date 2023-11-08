@@ -18,9 +18,12 @@ export class BatchMaster extends BaseEntity {
     activityId: string;
 
     @Column({ nullable: true })
+    consumedActivityId: string;
+
+    @Column({ nullable: true })
     nodeId: string;
 
-    @Column({ nullable: true})
+    @Column({ nullable: true })
     producedAt: Date;
 
     @Column({ nullable: true })
@@ -60,7 +63,7 @@ export class BatchMaster extends BaseEntity {
     lastConsumedJobId: string;
 
     @Column({ nullable: true })
-    conversionRate: string;
+    conversionRate: number;
 
     @Column({ nullable: true })
     userId: string;

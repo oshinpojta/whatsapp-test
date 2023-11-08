@@ -12,6 +12,7 @@ const batchSchema = Joi.object({
   id: Joi.number(),
   branchId: Joi.string().allow('', null),
   activityId: Joi.string().allow('', null),
+  consumedActivityId: Joi.string().allow('', null),
   nodeId: Joi.string().allow('', null),
   producedAt: Joi.date().allow('', null),
   producedQty1: Joi.number().allow('', null),
@@ -26,7 +27,7 @@ const batchSchema = Joi.object({
   fgId: Joi.string().allow('', null),
   producedJobId: Joi.string().allow('', null),
   lastConsumedJobId: Joi.string().allow('', null),
-  conversionRate: Joi.string().allow('', null),
+  conversionRate: Joi.number().allow('', null),
   userId: Joi.number().allow('', null),
 });
 
@@ -41,6 +42,7 @@ export const createBatchMaster = async (req: Request, res: Response) => {
     const newBatch = new BatchMaster();
     newBatch.branchId = req.body.branchId;
     newBatch.activityId = req.body.activityId;
+    newBatch.consumedActivityId = req.body.consumedActivityId;
     newBatch.nodeId = req.body.nodeId;
     newBatch.producedAt = req.body.producedAt;
     newBatch.producedQty1 = req.body.producedQty1;
@@ -89,6 +91,7 @@ export const updateBatchMaster = async (req: Request, res: Response) => {
 
     newBatch.branchId = req.body.branchId;
     newBatch.activityId = req.body.activityId;
+    newBatch.consumedActivityId = req.body.consumedActivityId;
     newBatch.nodeId = req.body.nodeId;
     newBatch.producedAt = req.body.producedAt;
     newBatch.producedQty1 = req.body.producedQty1;
@@ -127,6 +130,7 @@ export const updateBatchMasterData = async (data: any) => {
     }
     newBatch.branchId = data.body.branchId;
     newBatch.activityId = data.body.activityId;
+    newBatch.consumedActivityId = data.consumedActivityId;
     newBatch.nodeId = data.body.nodeId;
     newBatch.producedAt = data.body.producedAt;
     newBatch.producedQty1 = data.body.producedQty1;
@@ -163,6 +167,7 @@ export const createBatchMasterData = async (data: any) => {
     const newBatch = new BatchMaster();
     newBatch.branchId = data.body.branchId;
     newBatch.activityId = data.body.activityId;
+    newBatch.consumedActivityId = data.consumedActivityId;
     newBatch.nodeId = data.body.nodeId;
     newBatch.producedAt = data.body.producedAt;
     newBatch.producedQty1 = data.body.producedQty1;

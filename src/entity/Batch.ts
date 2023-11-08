@@ -25,6 +25,9 @@ export class Batch extends BaseEntity {
   activityId: string;
 
   @Column({ nullable: true })
+  consumedActivityId: string;
+
+  @Column({ nullable: true })
   shift: string;
 
   @Column({ nullable: true })

@@ -9,9 +9,9 @@ const nodeMasterSchema = Joi.object({
   branchId: Joi.string().required(),
   nodeCategoryId: Joi.string().required(),
   nodeName: Joi.string().required(),
-  itemDescription: Joi.string().allow('',null),
-  nodeType: Joi.string().allow('',null),
-  nodeCategory: Joi.string().allow('',null),
+  itemDescription: Joi.string().allow('', null),
+  nodeType: Joi.string().allow('', null),
+  nodeCategory: Joi.string().allow('', null),
   width: Joi.string().required(),
   height: Joi.string().required(),
   xPosition: Joi.number().required(),
@@ -32,9 +32,13 @@ const nodeMasterSchema = Joi.object({
   targetPosition: Joi.string().required(),
   FontColor: Joi.string().required(),
   FontStyle: Joi.string().required(),
-  FontSize:Joi.string().required(),
-  userId:Joi.string().required(),
-  borderRadius:Joi.string().allow('',null)
+  FontSize: Joi.string().required(),
+  userId: Joi.string().required(),
+  borderRadius: Joi.string().allow('', null),
+  units1: Joi.string().allow('', null),
+  units2: Joi.string().allow('', null),
+  unit1Measurable: Joi.string().allow('', null),
+  unit2Mandatory: Joi.string().allow('', null),
 
 });
 
@@ -52,8 +56,8 @@ export const createNodeMaster = async (req: Request, res: Response) => {
     nodeMaster.nodeCategoryId = req.body.nodeCategoryId;
     nodeMaster.nodeCategory = req.body.nodeCategory;
     nodeMaster.nodeType = req.body.nodeType;
-    nodeMaster.nodeName = req.body.nodeName;  
-    nodeMaster.itemDescription = req.body.itemDescription;  
+    nodeMaster.nodeName = req.body.nodeName;
+    nodeMaster.itemDescription = req.body.itemDescription;
     nodeMaster.width = req.body.width;
     nodeMaster.height = req.body.height;
     nodeMaster.xPosition = req.body.xPosition;
@@ -81,6 +85,10 @@ export const createNodeMaster = async (req: Request, res: Response) => {
     nodeMaster.FontSize = req.body.FontSize
     nodeMaster.userId = req.body.userId
     nodeMaster.borderRadius = req.body.borderRadius
+    nodeMaster.units1 = req.body.units1
+    nodeMaster.units2 = req.body.units2
+    nodeMaster.unit1Measurable = req.body.unit1Measurable
+    nodeMaster.unit2Mandatory = req.body.unit2Mandatory
     await nodeMaster.save();
     return res.status(201).json(nodeMaster);
   } catch (error) {
@@ -145,6 +153,10 @@ export const createBulkNodeMaster = async (req: Request, res: Response) => {
         nodeMaster.FontSize = element.FontSize
         nodeMaster.userId = element.userId
         nodeMaster.borderRadius = element.borderRadius
+        nodeMaster.units1 = req.body.units1
+        nodeMaster.units2 = req.body.units2
+        nodeMaster.unit1Measurable = req.body.unit1Measurable
+        nodeMaster.unit2Mandatory = req.body.unit2Mandatory
         responseData.push(await nodeMaster.save());
 
       }
@@ -213,6 +225,10 @@ export const updateNodeMaster = async (req: Request, res: Response) => {
     nodeMaster.FontStyle = req.body.FontStyle
     nodeMaster.FontSize = req.body.FontSize
     nodeMaster.userId = req.body.userId
+    nodeMaster.units1 = req.body.units1
+    nodeMaster.units2 = req.body.units2
+    nodeMaster.unit1Measurable = req.body.unit1Measurable
+    nodeMaster.unit2Mandatory = req.body.unit2Mandatory
 
     await nodeMaster.save();
     return res.json(nodeMaster);
@@ -310,7 +326,7 @@ const updateDataNodeMaster = async (data: any) => {
     if (!nodeMaster) {
       return { error: 'nodeMaster not found' }
     }
-    console.log(data.borderRadius,"borderRadius,,,,")
+    console.log(data.borderRadius, "borderRadius,,,,")
     nodeMaster.id = data.id;
     nodeMaster.branchId = data.branchId;
     nodeMaster.nodeCategoryId = data.nodeCategoryId;
@@ -345,6 +361,10 @@ const updateDataNodeMaster = async (data: any) => {
     nodeMaster.FontStyle = data.FontStyle
     nodeMaster.FontSize = data.FontSize
     nodeMaster.userId = data.userId
+    nodeMaster.units1 = data.body.units1
+    nodeMaster.units2 = data.body.units2
+    nodeMaster.unit1Measurable = data.body.unit1Measurable
+    nodeMaster.unit2Mandatory = data.body.unit2Mandatory
 
     await nodeMaster.save();
     return nodeMaster
@@ -396,7 +416,10 @@ const createDataNodeMaster = async (data: any) => {
     nodeMaster.FontStyle = data.FontStyle
     nodeMaster.FontSize = data.FontSize
     nodeMaster.userId = data.userId
-
+    nodeMaster.units1 = data.body.units1
+    nodeMaster.units2 = data.body.units2
+    nodeMaster.unit1Measurable = data.body.unit1Measurable
+    nodeMaster.unit2Mandatory = data.body.unit2Mandatory
     await nodeMaster.save();
 
     return nodeMaster
