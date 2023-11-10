@@ -62,7 +62,7 @@ export class BatchMaster extends BaseEntity {
     @Column({ nullable: true })
     lastConsumedJobId: string;
 
-    @Column({ nullable: true })
+    @Column('float', { nullable: true })
     conversionRate: number;
 
     @Column({ nullable: true })
