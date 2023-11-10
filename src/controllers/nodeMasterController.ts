@@ -48,7 +48,6 @@ export const createNodeMaster = async (req: Request, res: Response) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-
   try {
     const nodeMaster = new NodeMaster();
     nodeMaster.id = req.body.id;
@@ -361,10 +360,10 @@ const updateDataNodeMaster = async (data: any) => {
     nodeMaster.FontStyle = data.FontStyle
     nodeMaster.FontSize = data.FontSize
     nodeMaster.userId = data.userId
-    nodeMaster.units1 = data.body.units1
-    nodeMaster.units2 = data.body.units2
-    nodeMaster.unit1Measurable = data.body.unit1Measurable
-    nodeMaster.unit2Mandatory = data.body.unit2Mandatory
+    nodeMaster.units1 = data.units1
+    nodeMaster.units2 = data.units2
+    nodeMaster.unit1Measurable = data.unit1Measurable
+    nodeMaster.unit2Mandatory = data.unit2Mandatory
 
     await nodeMaster.save();
     return nodeMaster
@@ -416,10 +415,10 @@ const createDataNodeMaster = async (data: any) => {
     nodeMaster.FontStyle = data.FontStyle
     nodeMaster.FontSize = data.FontSize
     nodeMaster.userId = data.userId
-    nodeMaster.units1 = data.body.units1
-    nodeMaster.units2 = data.body.units2
-    nodeMaster.unit1Measurable = data.body.unit1Measurable
-    nodeMaster.unit2Mandatory = data.body.unit2Mandatory
+    nodeMaster.units1 = data.units1
+    nodeMaster.units2 = data.units2
+    nodeMaster.unit1Measurable = data.unit1Measurable
+    nodeMaster.unit2Mandatory = data.unit2Mandatory
     await nodeMaster.save();
 
     return nodeMaster
