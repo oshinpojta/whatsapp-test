@@ -38,13 +38,13 @@ export class BatchMaster extends BaseEntity {
     @Column({ nullable: true })
     units1: string;
 
-    @Column({ nullable: true })
+    @Column('float', { nullable: true })
     producedQty2: number;
 
-    @Column({ nullable: true })
+    @Column('float', { nullable: true })
     consumedQty2: number;
 
-    @Column({ nullable: true })
+    @Column('float', { nullable: true })
     balanceQty2: number;
 
     @Column({ nullable: true })

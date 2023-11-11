@@ -46,7 +46,7 @@ export const createBatchMaster = async (req: Request, res: Response) => {
     newBatch.nodeId = req.body.nodeId;
     newBatch.producedAt = req.body.producedAt;
     newBatch.producedQty1 = req.body.producedQty1;
-    newBatch.consumedQty1 = req.body.consumedQty2;
+    newBatch.consumedQty1 = req.body.consumedQty1;
     newBatch.balanceQty1 = req.body.balanceQty1;
     newBatch.units1 = req.body.units1;
     newBatch.producedQty2 = req.body.producedQty2;
@@ -95,7 +95,7 @@ export const updateBatchMaster = async (req: Request, res: Response) => {
     newBatch.nodeId = req.body.nodeId;
     newBatch.producedAt = req.body.producedAt;
     newBatch.producedQty1 = req.body.producedQty1;
-    newBatch.consumedQty1 = req.body.consumedQty2;
+    newBatch.consumedQty1 = req.body.consumedQty1;
     newBatch.balanceQty1 = req.body.balanceQty1;
     newBatch.units1 = req.body.units1;
     newBatch.producedQty2 = req.body.producedQty2;
@@ -134,7 +134,7 @@ export const updateBatchMasterData = async (data: any) => {
     newBatch.nodeId = data.body.nodeId;
     newBatch.producedAt = data.body.producedAt;
     newBatch.producedQty1 = data.body.producedQty1;
-    newBatch.consumedQty1 = data.body.consumedQty2;
+    newBatch.consumedQty1 = data.body.consumedQty1;
     newBatch.balanceQty1 = data.body.balanceQty1;
     newBatch.units1 = data.body.units1;
     newBatch.producedQty2 = data.body.producedQty2;
@@ -171,7 +171,7 @@ export const createBatchMasterData = async (data: any) => {
     newBatch.nodeId = data.body.nodeId;
     newBatch.producedAt = data.body.producedAt;
     newBatch.producedQty1 = data.body.producedQty1;
-    newBatch.consumedQty1 = data.body.consumedQty2;
+    newBatch.consumedQty1 = data.body.consumedQty1;
     newBatch.balanceQty1 = data.body.balanceQty1;
     newBatch.units1 = data.body.units1;
     newBatch.producedQty2 = data.body.producedQty2;
