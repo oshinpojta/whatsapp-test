@@ -3,7 +3,8 @@ import {
   // createActivitylog,
   //  getInputForActivity,
    createActivitylogg,
-   getAllActivityLog
+   getAllActivityLog,
+   deleteActivity
 } from "../controllers/activitylogController";
 
 let router = express.Router();
@@ -11,6 +12,7 @@ let router = express.Router();
 // router.post("/", createActivitylog);
 router.post("/", createActivitylogg);
 router.get("/", getAllActivityLog);
+router.delete("/:id", deleteActivity);
 // router.get("/getInputForActivity", getInputForActivity);
 
 

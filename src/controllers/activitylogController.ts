@@ -367,3 +367,16 @@ export const getAllActivityLog = async (_: Request, res: Response) => {
   }
 };
 
+export const deleteActivity = async (req: Request, res: Response) => {
+  try {
+    const activitylog = await ActivityLog.findOne(req.params.id);
+    if (!activitylog) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    await activitylog.remove();
+    return res.status(204).end();
+  } catch (error) {
+    return InternalServerError(res, error);
+  }
+};

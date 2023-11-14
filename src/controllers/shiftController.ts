@@ -53,13 +53,11 @@ export const updateShift = async (req: Request, res: Response) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-
   try {
     const shift = await Shift.findOne(req.params.id);
     if (!shift) {
       return res.status(404).json({ error: 'Shift not found' });
     }
-
     // shift.shiftId = req.body.shiftId;
     shift.branchId = req.body.branchId;
     shift.shiftName = req.body.shiftName;

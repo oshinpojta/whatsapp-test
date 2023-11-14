@@ -17,7 +17,6 @@ import { Batch } from "./Batch";
 @Entity()
 export class Shift extends BaseEntity {
   @Column({ generated: 'increment' })
-
   shiftId: number;
 
   @Column()
