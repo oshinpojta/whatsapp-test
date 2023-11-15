@@ -3,7 +3,7 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  // CreateDateColumn
+  CreateDateColumn
 } from "typeorm";
 
 @Entity()
@@ -11,8 +11,8 @@ export class MaterialType extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  materialTypeId: number;
+  // @Column()
+  // materialTypeId: number;
 
   @Column()
   branchId: string;
@@ -21,7 +21,7 @@ export class MaterialType extends BaseEntity {
   typeDescription: string;
 
   @Column()
-  materialCategoryId: string;
+  materialCategoryId: number;
 
   @Column()
   routeId: string;
@@ -32,11 +32,11 @@ export class MaterialType extends BaseEntity {
   @Column()
   specification: string;
 
-  // @Column()
-  // userId: string;
+  @Column()
+  userId: string;
 
-  // @CreateDateColumn()
-  // DateTime: Date;
+  @CreateDateColumn()
+  DateTime: Date;
 
 
 }

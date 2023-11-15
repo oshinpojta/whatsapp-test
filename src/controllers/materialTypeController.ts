@@ -4,13 +4,14 @@ import * as Joi from "joi";
 import { MaterialType } from "../entity/MaterialType";
 
 const materialTypeSchema = Joi.object({
-  materialTypeId: Joi.string().required(),
+  // materialTypeId: Joi.string().required(),
   branchId: Joi.string().required(),
   typeDescription: Joi.string().required(),
-  materialCategoryId: Joi.string().required(),
+  materialCategoryId: Joi.number().required(),
   routeId: Joi.string().required(),
   nodeId: Joi.string().required(),
   specification: Joi.string().required(),
+  userId: Joi.string().required(),
 });
 
 export const createMaterialType = async (req: Request, res: Response) => {
@@ -22,13 +23,14 @@ export const createMaterialType = async (req: Request, res: Response) => {
 
   try {
     const materialType = new MaterialType();
-    materialType.materialTypeId = req.body.materialTypeId;
+    // materialType.materialTypeId = req.body.materialTypeId;
     materialType.branchId = req.body.branchId;
     materialType.typeDescription = req.body.typeDescription;
     materialType.materialCategoryId = req.body.materialcategoryId;
     materialType.routeId = req.body.routeId;
     materialType.nodeId = req.body.nodeId;
     materialType.specification = req.body.specification;
+    materialType.userId = req.body.userId;
     await materialType.save();
     return res.status(201).json(materialType);
   } catch (error) {
@@ -58,13 +60,14 @@ export const updateMaterialType = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'materialType not found' });
     }
 
-    materialType.materialTypeId = req.body.materialTypeId;
+    // materialType.materialTypeId = req.body.materialTypeId;
     materialType.branchId = req.body.branchId;
     materialType.typeDescription = req.body.typeDescription;
     materialType.materialCategoryId = req.body.materialcategoryId;
     materialType.routeId = req.body.routeId;
     materialType.nodeId = req.body.nodeId;
     materialType.specification = req.body.specification;
+    materialType.userId = req.body.userId;
 
     await materialType.save();
     return res.json(materialType);
