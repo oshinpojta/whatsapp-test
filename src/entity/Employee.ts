@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 // import { ActivityLog } from "./activitylog";
 import { EmployeeNodeMapping } from "./EmployeeNodeMapping";
+import { date } from "joi";
 // import { Batch } from "./Batch";
 
 @Entity()
@@ -31,10 +32,10 @@ export class Employee extends BaseEntity {
   @Column({nullable: true })
   grade: string;
 
-  @Column({nullable: true })
+  @Column({ type:'date',nullable: true, })
   dateOfJoining: Date;
 
-  @Column({ nullable: true })
+  @Column({ type:'date', nullable: true })
   lastDate: string;
 
   @Column({default : true })

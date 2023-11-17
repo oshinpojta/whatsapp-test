@@ -11,7 +11,7 @@ const employeeSchema = Joi.object({
   designation: Joi.string().required(),
   grade: Joi.string().required(),
   dateOfJoining: Joi.date().allow('',null),
-  lastDate: Joi.string().allow('', null),
+  lastDate: Joi.date().allow('', null),
   isActive: Joi.boolean().required(),
   userName: Joi.string().required(),
   password: Joi.string().required(),

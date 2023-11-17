@@ -51,13 +51,13 @@ export class Batch extends BaseEntity {
   @Column({ nullable: true })
   units1: number;
 
-  @Column({ nullable: true })
+  @Column('float', { nullable: true })
   Availablequantity1: number;
 
-  @Column({ nullable: true })
+  @Column('float', { nullable: true })
   Consumedquantity1: number;
 
-  @Column({ nullable: true })
+  @Column('float', { nullable: true })
   Balancequantity1: number;
 
   @Column({ nullable: true })
