@@ -66,6 +66,15 @@ export class BatchMaster extends BaseEntity {
     conversionRate: number;
 
     @Column({ nullable: true })
+    totalProducedQty: number
+
+    @Column({ nullable: true })
+    targetQty: number
+
+    @Column({ nullable: true })
+    outstandingQty: number
+
+    @Column({ nullable: true })
     userId: string;
 
     @CreateDateColumn()

@@ -7,7 +7,7 @@ import { ItemMaster } from "../entity/itemMaster";
 
 
 const QA_DETSchema = Joi.object({
-  jobId:Joi.string().required(),
+  jobId: Joi.string().required(),
   branchId: Joi.string().required(),
   CO_CODE: Joi.string().required(),
   OA_NO: Joi.string().required(),
@@ -16,7 +16,7 @@ const QA_DETSchema = Joi.object({
   Remarks: Joi.string().required(),
   fyear: Joi.string().required(),
   DB_CODE: Joi.string().required(),
-  ALT_QTY: Joi.string().required(),
+  ALT_QTY: Joi.number().required(),
   Delivery_Date: Joi.date().required(),
   ALT_RATE: Joi.number().required(),
   UR_CODE: Joi.number().required(),
@@ -117,7 +117,9 @@ export const createOA_DETMaster = async (req: Request, res: Response) => {
     qadet.ALT_UNIT = req.body.ALT_UNIT
     qadet.Production_type = req.body.Production_type
     qadet.userId = req.body.userId
-
+    qadet.ProducedQty1 = req.body.ProducedQty1
+    qadet.ProducedQty2 = req.body.ProducedQty2
+    qadet.TargetQty = req.body.ALT_QTY * 1000 / req.body.Circumfrence
     await qadet.save();
     return res.status(201).json(qadet);
   } catch (error) {
@@ -130,40 +132,41 @@ export const getAllQA_DET = async (_: Request, res: Response) => {
     console.log("HELLOO")
     // const oaDetRepository = getRepository(OA_DETMaster);
 
-      const oaDetails = await OA_DETMaster.find();
-      const itemMaster = await ItemMaster.find();
-      
-      // Create a Map for itemMaster using IT_CODE as the key
-      const itemMasterMap = new Map(itemMaster.map(item => [item.IT_CODE, { IT_NAME: item.IT_NAME, ItemType: item.ItemType }]));
-      
-      const commonObjects = [];
-      
-      for (const oaDetail of oaDetails) {
-        const itemData  = itemMasterMap.get(oaDetail.IT_CODE);
-        // const IT_CODE 
-      
-        if (itemData  !== undefined) {
-          const commonObject = {
-            jobId: oaDetail.jobId,
-            OA_Status: oaDetail.OA_Status,
-            IT_CODE: oaDetail.IT_CODE,
-            IT_NAME: itemData.IT_NAME,
-            ItemType: itemData.ItemType,
-          };
-          commonObjects.push(commonObject);
-        }
+    const oaDetails = await OA_DETMaster.find();
+    const itemMaster = await ItemMaster.find();
+
+    // Create a Map for itemMaster using IT_CODE as the key
+    const itemMasterMap = new Map(itemMaster.map(item => [item.IT_CODE, { IT_NAME: item.IT_NAME, ItemType: item.ItemType }]));
+
+    const commonObjects = [];
+
+    for (const oaDetail of oaDetails) {
+      const itemData = itemMasterMap.get(oaDetail.IT_CODE);
+      // const IT_CODE 
+
+      if (itemData !== undefined) {
+        const commonObject = {
+          jobId: oaDetail.jobId,
+          OA_Status: oaDetail.OA_Status,
+          TargetQty: oaDetail.TargetQty,
+          IT_CODE: oaDetail.IT_CODE,
+          IT_NAME: itemData.IT_NAME,
+          ItemType: itemData.ItemType,
+        };
+        commonObjects.push(commonObject);
       }
-      
-      console.log('common>>', commonObjects);
-      
-//console.log('common>>', commonObjects);
-  //    console.log('common Object length', commonObjects.length)
+    }
+
+    console.log('common>>', commonObjects);
+
+    //console.log('common>>', commonObjects);
+    //    console.log('common Object length', commonObjects.length)
     //  console.log('common>>',commonObjects);
 
-   // console.log('oadetails',oaDetails)
-   // console.log('itemMaster',itemMaster)
-   //p const qadet = await OA_DETMaster.find( {relations: ['ItemMaster']});
-   //p console.log(qadet,"@@@@@@@@@@@@@@@@@@@")
+    // console.log('oadetails',oaDetails)
+    // console.log('itemMaster',itemMaster)
+    //p const qadet = await OA_DETMaster.find( {relations: ['ItemMaster']});
+    //p console.log(qadet,"@@@@@@@@@@@@@@@@@@@")
     // const qadet  = await OA_DETMaster.find()
     return res.json(commonObjects);
   } catch (error) {
@@ -245,6 +248,9 @@ export const updateOA_DETMaster = async (req: Request, res: Response) => {
     qadet.ALT_UNIT = req.body.ALT_UNIT
     qadet.Production_type = req.body.Production_type
     qadet.userId = req.body.userId
+    qadet.ProducedQty1 = req.body.ProducedQty1
+    qadet.ProducedQty2 = req.body.ProducedQty2
+    qadet.TargetQty = req.body.ALT_QTY * 1000 / req.body.Circumfrence
 
     await qadet.save();
     return res.json(qadet);
@@ -254,7 +260,7 @@ export const updateOA_DETMaster = async (req: Request, res: Response) => {
 };
 
 export const updateBulkOA_DETMaster = async (req: Request, res: Response) => {
-console.log(123);
+  console.log(123);
   if (req.body.qadet.length) {
     const OA_DETMasterData = req.body.qadet
 
@@ -274,14 +280,14 @@ console.log(123);
 
       for (let i = 0; i < OA_DETMasterData.length; i++) {
         const element = OA_DETMasterData[i];
-        let qa_detUpdateData:any;
+        let qa_detUpdateData: any;
 
-        if(element.id){
+        if (element.id) {
           console.log("update");
           qa_detUpdateData = await updateDataOA_DETMaster(element)
         }
 
-        else{
+        else {
           qa_detUpdateData = await createDataOA_DETMaster(element)
           console.log("add");
         }
@@ -358,7 +364,9 @@ const updateDataOA_DETMaster = async (data: any) => {
     qadet.ALT_UNIT = data.ALT_UNIT
     qadet.Production_type = data.Production_type
     qadet.userId = data.userId
-
+    qadet.ProducedQty1 = data.ProducedQty1
+    qadet.ProducedQty2 = data.ProducedQty2
+    qadet.TargetQty = data.ALT_QTY / data.Circumfrence
     await qadet.save();
 
     return qadet
@@ -427,6 +435,9 @@ const createDataOA_DETMaster = async (data: any) => {
     qadet.ALT_UNIT = data.ALT_UNIT
     qadet.Production_type = data.Production_type
     qadet.userId = data.userId
+    qadet.ProducedQty1 = data.ProducedQty1
+    qadet.ProducedQty2 = data.ProducedQty2
+    qadet.TargetQty = data.ALT_QTY / data.Circumfrence
 
     await qadet.save();
 

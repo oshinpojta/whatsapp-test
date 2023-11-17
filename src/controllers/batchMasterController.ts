@@ -28,6 +28,9 @@ const batchSchema = Joi.object({
   producedJobId: Joi.string().allow('', null),
   lastConsumedJobId: Joi.string().allow('', null),
   conversionRate: Joi.number().allow('', null),
+  totalProducedQty: Joi.number().allow('', null),
+  targetQty: Joi.number().allow('', null),
+  outstandingQty: Joi.number().allow('', null),
   userId: Joi.number().allow('', null),
 });
 
@@ -58,7 +61,10 @@ export const createBatchMaster = async (req: Request, res: Response) => {
     newBatch.producedJobId = req.body.producedJobId;
     newBatch.lastConsumedJobId = req.body.lastConsumedJobId;
     newBatch.conversionRate = req.body.conversionRate;
-    newBatch.userId = req.body.userId;
+    newBatch.totalProducedQty = req.body.totalProducedQty,
+      newBatch.targetQty = req.body.targetQty,
+      newBatch.outstandingQty = req.body.outstandingQty,
+      newBatch.userId = req.body.userId;
     console.log(newBatch);
     await newBatch.save();
     return res.status(201).json(newBatch);
@@ -107,7 +113,10 @@ export const updateBatchMaster = async (req: Request, res: Response) => {
     newBatch.producedJobId = req.body.producedJobId;
     newBatch.lastConsumedJobId = req.body.lastConsumedJobId;
     newBatch.conversionRate = req.body.conversionRate;
-    newBatch.userId = req.body.userId;
+    newBatch.totalProducedQty = req.body.totalProducedQty,
+      newBatch.targetQty = req.body.targetQty,
+      newBatch.outstandingQty = req.body.outstandingQty,
+      newBatch.userId = req.body.userId;
 
     await newBatch.save();
     return res.json(newBatch);
@@ -146,7 +155,10 @@ export const updateBatchMasterData = async (data: any) => {
     newBatch.producedJobId = data.body.producedJobId;
     newBatch.lastConsumedJobId = data.body.lastConsumedJobId;
     newBatch.conversionRate = data.body.conversionRate;
-    newBatch.userId = data.body.userId;
+    newBatch.totalProducedQty = data.body.totalProducedQty,
+      newBatch.targetQty = data.body.targetQty,
+      newBatch.outstandingQty = data.body.outstandingQty,
+      newBatch.userId = data.body.userId;
 
     await newBatch.save();
 
@@ -183,7 +195,10 @@ export const createBatchMasterData = async (data: any) => {
     newBatch.producedJobId = data.body.producedJobId;
     newBatch.lastConsumedJobId = data.body.lastConsumedJobId;
     newBatch.conversionRate = data.body.conversionRate;
-    newBatch.userId = data.body.userId;
+    newBatch.totalProducedQty = data.body.totalProducedQty,
+      newBatch.targetQty = data.body.targetQty,
+      newBatch.outstandingQty = data.body.outstandingQty,
+      newBatch.userId = data.body.userId;
 
     await newBatch.save();
 

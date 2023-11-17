@@ -3,8 +3,8 @@ import {
   Column,
   Entity,
   CreateDateColumn,
-   ManyToOne,
-   JoinColumn,
+  ManyToOne,
+  JoinColumn,
   PrimaryColumn,
   // PrimaryGeneratedColumn,
 } from "typeorm";
@@ -37,7 +37,7 @@ export class OA_DETMaster extends BaseEntity {
   DB_CODE: string;
 
   @Column({ nullable: true })
-  ALT_QTY: string;
+  ALT_QTY: number;
 
   @Column({ nullable: true })
   Delivery_Date: Date;
@@ -80,7 +80,7 @@ export class OA_DETMaster extends BaseEntity {
 
   @Column({ nullable: true })
   Tolerance: number;
-  
+
   @Column({ nullable: true })
   Close_Open_Status: boolean;
 
@@ -110,7 +110,7 @@ export class OA_DETMaster extends BaseEntity {
 
   @Column({ nullable: true })
   Film_Type: string;
-  
+
   @Column({ nullable: true })
   Single_Double_up_Type: string;
 
@@ -153,6 +153,14 @@ export class OA_DETMaster extends BaseEntity {
   @Column({ nullable: true })
   Production_type: string;
 
+  @Column({ nullable: true })
+  ProducedQty1: number
+
+  @Column({ nullable: true })
+  ProducedQty2: number
+
+  @Column({ nullable: true })
+  TargetQty: number
 
   @ManyToOne(() => ItemMaster, (items) => items.IT_CODE)
   @JoinColumn({ name: "ItemCode" })
@@ -167,5 +175,5 @@ export class OA_DETMaster extends BaseEntity {
   @CreateDateColumn()
   DateTime: Date;
 
-  }
-  
+}
+
