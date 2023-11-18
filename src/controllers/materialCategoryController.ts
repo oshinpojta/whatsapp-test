@@ -4,7 +4,7 @@ import * as Joi from "joi";
 import { MaterialCategory } from "../entity/MaterialCategory";
 
 const materialCategorySchema = Joi.object({
-  materialCategoryId: Joi.string().required(),
+  userId: Joi.string().required(),
   branchId: Joi.string().required(),
   productTypeDescription: Joi.string().required(),
 });
@@ -18,7 +18,7 @@ export const createMaterialCategory = async (req: Request, res: Response) => {
 
   try {
     const materialCategory = new MaterialCategory();
-    materialCategory.materialCategoryId = req.body.materialCategoryId;
+    materialCategory.userId = req.body.userId;
     materialCategory.branchId = req.body.branchId;
     materialCategory.productTypeDescription = req.body.productTypeDescription;
     await materialCategory.save();
@@ -50,7 +50,7 @@ export const updateMaterialCategory = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'materialCategory not found' });
     }
 
-    materialCategory.materialCategoryId = req.body.materialCategoryId;
+    materialCategory.userId = req.body.userId;
     materialCategory.branchId = req.body.branchId;
     materialCategory.productTypeDescription = req.body.productTypeDescription;
 

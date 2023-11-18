@@ -4,9 +4,9 @@ import * as Joi from "joi";
 import { Section } from "../entity/Section";
 
 const sectionSchema = Joi.object({
-  sectionId: Joi.string().required(),
   branchId: Joi.string().required(),
   deptId: Joi.string().required(),
+  userId: Joi.string().required(),
   sectionName: Joi.string().required(),
 });
 
@@ -19,9 +19,9 @@ export const createSection = async (req: Request, res: Response) => {
 
   try {
     const section = new Section();
-    section.sectionId = req.body.sectionId;
     section.branchId = req.body.branchId;
     section.deptId = req.body.deptId;
+    section.userId = req.body.userId;
     section.sectionName = req.body.sectionName;
     await section.save();
     return res.status(201).json(section);
@@ -51,9 +51,9 @@ export const updateSection = async (req: Request, res: Response) => {
     if (!section) {
       return res.status(404).json({ error: 'Section not found' });
     }
-    section.sectionId = req.body.sectionId;
     section.branchId = req.body.branchId;
     section.deptId = req.body.deptId;
+    section.userId = req.body.userId;
     section.sectionName = req.body.sectionName;
 
     await section.save();

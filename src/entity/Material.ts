@@ -3,16 +3,14 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  // CreateDateColumn
+  CreateDateColumn
   
 } from "typeorm";
 
 @Entity()
 export class Material extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
 
-  @Column()
+  @PrimaryGeneratedColumn()
   materialId: number;
 
   @Column()
@@ -24,11 +22,9 @@ export class Material extends BaseEntity {
   @Column()
   unitId: string;
 
-  // @Column()
-  // userId: string;
+  @Column()
+  userId: string;
 
-  // @CreateDateColumn()
-  // DateTime: Date;
-
-
+  @CreateDateColumn()
+  DateTime: Date;
 }

@@ -3,7 +3,7 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  // CreateDateColumn
+  CreateDateColumn
 } from "typeorm";
 
 @Entity()
@@ -12,19 +12,16 @@ export class MaterialCategory extends BaseEntity {
   id: number;
 
   @Column()
-  materialCategoryId: number;
-
-  @Column()
   branchId: string;
 
   @Column()
   productTypeDescription: string;
 
-  // @Column()
-  // userId: string;
+  @Column()
+  userId: string;
 
-  // @CreateDateColumn()
-  // DateTime: Date;
+  @CreateDateColumn()
+  DateTime: Date;
 
 
 }

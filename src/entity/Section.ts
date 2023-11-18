@@ -3,15 +3,14 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  // CreateDateColumn
+  CreateDateColumn
 } from "typeorm";
 
 @Entity()
 export class Section extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
 
-  @Column()
+
+  @PrimaryGeneratedColumn()
   sectionId: number;
 
   @Column()
@@ -23,11 +22,11 @@ export class Section extends BaseEntity {
   @Column()
   sectionName: string;
 
-  // @Column()
-  // userId: string;
+  @Column()
+  userId: string;
 
-  // @CreateDateColumn()
-  // DateTime: Date
+  @CreateDateColumn()
+  DateTime: Date
 
 
 }

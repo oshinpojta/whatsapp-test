@@ -4,10 +4,10 @@ import * as Joi from "joi";
 import { Material } from "../entity/Material";
 
 const materialSchema = Joi.object({
-  materialId: Joi.string().required(),
   branchId: Joi.string().required(),
   materialName: Joi.string().required(),
   unitId: Joi.string().required(),
+  userId: Joi.string().required(),
 });
 
 export const createMaterial = async (req: Request, res: Response) => {
@@ -19,7 +19,7 @@ export const createMaterial = async (req: Request, res: Response) => {
 
   try {
     const material = new Material();
-    material.materialId = req.body.materialId;
+    material.userId = req.body.userId;
     material.branchId = req.body.branchId;
     material.materialName = req.body.materialName;
     material.unitId = req.body.unitId;
@@ -52,7 +52,7 @@ export const updateMaterial = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'material not found' });
     }
 
-    material.materialId = req.body.materialId;
+    material.userId = req.body.userId;
     material.branchId = req.body.branchId;
     material.materialName = req.body.materialName;
     material.unitId = req.body.unitId;
