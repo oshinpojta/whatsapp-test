@@ -15,9 +15,9 @@ const JobAssignSchema = Joi.object({
   routeId: Joi.string().required(),
   userId: Joi.string().required(),
   jobId: Joi.string().required(),
-  totalProducedQty: Joi.number().required(),
-  outstandingQty: Joi.number().required(),
-  targetQty: Joi.number().required(),
+  totalProducedQty: Joi.number().allow('',null),
+  outstandingQty: Joi.number().allow('',null),
+  targetQty: Joi.number().allow('',null),
 });
 
 export const createJobAssign = async (req: Request, res: Response) => {
@@ -207,7 +207,7 @@ const createDataJobAssign = async (data: any) => {
     jobAssign.jobId = data.jobId;
     jobAssign.totalProducedQty = data.totalProducedQty,
       jobAssign.outstandingQty = data.outstandingQty,
-      jobAssign.targetQty = data.body.targetQty,
+      jobAssign.targetQty = data.targetQty,
 
       await jobAssign.save();
 
