@@ -14,8 +14,10 @@ const JobAssignSchema = Joi.object({
   status: Joi.string().required(),
   routeId: Joi.string().required(),
   userId: Joi.string().required(),
-  jobId: Joi.string().required()
-  
+  jobId: Joi.string().required(),
+  totalProducedQty: Joi.number().required(),
+  outstandingQty: Joi.number().required(),
+  targetQty: Joi.number().required(),
 });
 
 export const createJobAssign = async (req: Request, res: Response) => {
@@ -39,8 +41,11 @@ export const createJobAssign = async (req: Request, res: Response) => {
     jobAssign.routeId = req.body.routeId;
     jobAssign.status = req.body.status;
     jobAssign.jobId = req.body.jobId;
+    jobAssign.totalProducedQty = req.body.totalProducedQty,
+      jobAssign.outstandingQty = req.body.outstandingQty,
+      jobAssign.targetQty = req.body.targetQty,
 
-    await jobAssign.save();
+      await jobAssign.save();
     return res.status(201).json(jobAssign);
   } catch (error) {
     return InternalServerError(res, error);
@@ -84,10 +89,12 @@ export const updateJobAssign = async (req: Request, res: Response) => {
     jobAssign.userId = req.body.userId;
     jobAssign.status = req.body.status;
     jobAssign.jobId = req.body.jobId;
+    jobAssign.totalProducedQty = req.body.totalProducedQty,
+      jobAssign.outstandingQty = req.body.outstandingQty,
+      jobAssign.targetQty = req.body.targetQty,
 
 
-
-    await jobAssign.save();
+      await jobAssign.save();
     return res.json(jobAssign);
   } catch (error) {
     return InternalServerError(res, error);
@@ -95,7 +102,7 @@ export const updateJobAssign = async (req: Request, res: Response) => {
 };
 
 export const updateBulkJobAssign = async (req: Request, res: Response) => {
-console.log(123);
+  console.log(123);
   if (req.body.jobAssign.length) {
     const jobAssignData = req.body.jobAssign
 
@@ -115,14 +122,14 @@ console.log(123);
 
       for (let i = 0; i < jobAssignData.length; i++) {
         const element = jobAssignData[i];
-        let jobAssignUpdateData:any;
+        let jobAssignUpdateData: any;
 
-        if(element.id){
+        if (element.id) {
           console.log("update");
           jobAssignUpdateData = await updateDataJobAssign(element)
         }
 
-        else{
+        else {
           jobAssignUpdateData = await createDataJobAssign(element)
           console.log("add");
         }
@@ -163,8 +170,11 @@ const updateDataJobAssign = async (data: any) => {
     jobAssign.routeId = data.routeId;
     jobAssign.status = data.status;
     jobAssign.jobId = data.jobId;
+    jobAssign.totalProducedQty = data.totalProducedQty,
+      jobAssign.outstandingQty = data.outstandingQty,
+      jobAssign.targetQty = data.body.targetQty,
 
-    await jobAssign.save();
+      await jobAssign.save();
 
     return jobAssign
 
@@ -189,14 +199,17 @@ const createDataJobAssign = async (data: any) => {
     const jobAssign = new JobAssign();
     jobAssign.branchId = data.branchId;
     jobAssign.date = data.date;
-    jobAssign.shift= shift;
+    jobAssign.shift = shift;
     jobAssign.node = node;
     jobAssign.routeId = data.routeId;
     jobAssign.userId = data.userId;
     jobAssign.status = data.status;
     jobAssign.jobId = data.jobId;
+    jobAssign.totalProducedQty = data.totalProducedQty,
+      jobAssign.outstandingQty = data.outstandingQty,
+      jobAssign.targetQty = data.body.targetQty,
 
-    await jobAssign.save();
+      await jobAssign.save();
 
     return jobAssign
   } catch (error) {

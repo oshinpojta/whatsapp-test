@@ -31,6 +31,14 @@ export class JobAssign extends BaseEntity {
   @Column()
   jobId: string;
 
+  @Column({ nullable: true })
+  totalProducedQty: number;
+
+  @Column({ nullable: true })
+  outstandingQty: number;
+
+  @Column({ nullable: true })
+  targetQty: number;
 
   @ManyToOne(() => NodeMaster, (node) => node.jobassign)
   @JoinColumn({ name: "node_id" })
