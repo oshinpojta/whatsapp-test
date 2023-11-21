@@ -22,7 +22,7 @@ const activityLogSchema = Joi.object({
   nodeId: Joi.string().required(),
   employeeName: Joi.string().required(),
   Shift: Joi.string().required(),
-  jobId: Joi.string().required(),
+  jobId: Joi.string().allow('', null),
   // inputId: Joi.string().required(),
   // outputId: Joi.string().required(),
   // inputQuantity: Joi.array().required(),
@@ -360,7 +360,7 @@ export const createActivitylogg = async (req: Request, res: Response) => {
 export const getAllActivityLog = async (_: Request, res: Response) => {
   try {
     const activitylog = await ActivityLog.find();
-    console.log(activitylog,"********************")
+    console.log(activitylog, "********************")
     return res.json(activitylog);
   } catch (error) {
     return InternalServerError(res, error);

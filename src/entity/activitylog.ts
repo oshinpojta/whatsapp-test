@@ -23,7 +23,7 @@ export class ActivityLog extends BaseEntity {
   @Column({ type: 'datetime' })
   shiftStartTime: Date;
 
-  @Column({ type: 'datetime'})
+  @Column({ type: 'datetime' })
   shiftEndTime: Date;
 
   @Column()
@@ -35,7 +35,7 @@ export class ActivityLog extends BaseEntity {
   @Column()
   Shift: string;
 
-  @Column()
+  @Column({ nullable: true })
   jobId: string;
 
   @Column({ nullable: true })
