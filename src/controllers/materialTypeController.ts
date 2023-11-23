@@ -26,7 +26,7 @@ export const createMaterialType = async (req: Request, res: Response) => {
     // materialType.materialTypeId = req.body.materialTypeId;
     materialType.branchId = req.body.branchId;
     materialType.typeDescription = req.body.typeDescription;
-    materialType.materialCategoryId = req.body.materialcategoryId;
+    materialType.materialCategoryId = req.body.materialCategoryId;
     materialType.routeId = req.body.routeId;
     materialType.nodeId = req.body.nodeId;
     materialType.specification = req.body.specification;
@@ -63,7 +63,7 @@ export const updateMaterialType = async (req: Request, res: Response) => {
     // materialType.materialTypeId = req.body.materialTypeId;
     materialType.branchId = req.body.branchId;
     materialType.typeDescription = req.body.typeDescription;
-    materialType.materialCategoryId = req.body.materialcategoryId;
+    materialType.materialCategoryId = req.body.materialCategoryId;
     materialType.routeId = req.body.routeId;
     materialType.nodeId = req.body.nodeId;
     materialType.specification = req.body.specification;

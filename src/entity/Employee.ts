@@ -8,7 +8,6 @@ import {
 } from "typeorm";
 // import { ActivityLog } from "./activitylog";
 import { EmployeeNodeMapping } from "./EmployeeNodeMapping";
-import { date } from "joi";
 // import { Batch } from "./Batch";
 
 @Entity()
