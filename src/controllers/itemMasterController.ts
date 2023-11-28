@@ -13,6 +13,7 @@ const ItemMasterSchema = Joi.object({
   NodeId: Joi.string().allow('', null),
   RouteId: Joi.string().allow('', null),
   Machine: Joi.string().allow('', null),
+  image_mach: Joi.string().allow('', null),
   Production_Type: Joi.string().allow('', null),
   Production_section_ID: Joi.string().allow('', null),
   IG_CODE: Joi.string().allow('', null),
@@ -97,6 +98,7 @@ export const createItemMaster = async (req: Request, res: Response) => {
     itemmaster.NodeId = req.body.NodeId 
     itemmaster.RouteId = req.body.RouteId 
     itemmaster.Machine = req.body.Machine 
+    itemmaster.image_mach = req.body.image_mach 
     itemmaster.Production_Type = req.body.Production_Type
     itemmaster.IG_CODE = req.body.IG_CODE
     itemmaster.ALT_UNIT = req.body.ALT_UNIT
@@ -200,6 +202,7 @@ export const updateItemMaster = async (req: Request, res: Response) => {
     itemmaster.NodeId = req.body.NodeId
     itemmaster.RouteId = req.body.RouteId
     itemmaster.Machine = req.body.Machine 
+    itemmaster.image_mach = req.body.image_mach 
     itemmaster.Production_Type = req.body.Production_Type
     itemmaster.IG_CODE = req.body.IG_CODE
     itemmaster.ALT_UNIT = req.body.ALT_UNIT
@@ -338,6 +341,7 @@ const updateDataItemMaster = async (data: any) => {
     itemmaster.NodeId = data.NodeId
     itemmaster.RouteId = data.RouteId
     itemmaster.Machine = data.Machine 
+    itemmaster.image_mach = data.image_mach 
     itemmaster.Production_Type = data.Production_Type
     itemmaster.IG_CODE = data.IG_CODE
     itemmaster.ALT_UNIT = data.ALT_UNIT
@@ -429,6 +433,7 @@ const createDataItemMaster = async (data: any) => {
     itemmaster.NodeId = data.NodeId
     itemmaster.RouteId = data.RouteId 
     itemmaster.Machine = data.Machine 
+    itemmaster.image_mach = data.image_mach 
     itemmaster.Production_Type = data.Production_Type
     itemmaster.IG_CODE = data.IG_CODE
     itemmaster.ALT_UNIT = data.ALT_UNIT
