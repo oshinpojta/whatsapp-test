@@ -39,6 +39,9 @@ export class ItemMaster extends BaseEntity {
   Machine: string;
 
   @Column({ nullable: true })
+  image_mach: string;
+
+  @Column({ nullable: true })
   Production_Type: string;
 
   @Column({ nullable: true })

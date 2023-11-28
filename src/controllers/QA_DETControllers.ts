@@ -155,6 +155,10 @@ export const getAllQA_DET = async (_: Request, res: Response) => {
           IT_CODE: oaDetail.IT_CODE,
           IT_NAME: itemData.IT_NAME,
           ItemType: itemData.ItemType,
+          ALT_QTY:oaDetail.ALT_QTY,
+          DateTime:oaDetail.DateTime,
+          Film_Type:oaDetail.Film_Type,
+          
         };
         commonObjects.push(commonObject);
       }
