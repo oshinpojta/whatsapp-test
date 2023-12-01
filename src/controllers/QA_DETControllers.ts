@@ -8,57 +8,58 @@ import { ItemMaster } from "../entity/itemMaster";
 
 const QA_DETSchema = Joi.object({
   jobId: Joi.string().required(),
-  branchId: Joi.string().allow('',null),
-  CO_CODE: Joi.string().allow('',null),
-  OA_NO: Joi.string().allow('',null),
-  IT_CODE: Joi.string().allow('',null),
-  OA_SRNO: Joi.number().allow('',null),
-  Remarks: Joi.string().allow('',null),
-  fyear: Joi.string().allow('',null),
-  DB_CODE: Joi.string().allow('',null),
-  ALT_QTY: Joi.number().allow('',null),
-  Delivery_Date: Joi.date().allow('',null),
-  ALT_RATE: Joi.number().allow('',null),
-  UR_CODE: Joi.number().allow('',null),
-  Final_Amt: Joi.number().allow('',null),
-  Location_Code: Joi.string().allow('',null),
-  Index: Joi.number().allow('',null),
-  URN_No: Joi.string().allow('',null),
-  OA_Status: Joi.string().allow('',null),
-  From_URN_No: Joi.string().allow('',null),
-  From_Item_Sr_No: Joi.string().allow('',null),
-  ALT_UNIT_ID: Joi.string().allow('',null),
-  Item_Long_Description: Joi.string().allow('',null),
-  reason: Joi.string().allow('',null),
-  Tolerance: Joi.number().allow('',null),
-  Close_Open_Status: Joi.boolean().allow('',null),
-  Close_Open_Reason: Joi.string().allow('',null),
-  Discount: Joi.string().allow('',null),
-  DIS_Amount: Joi.number().allow('',null),
-  InputAmount: Joi.string().allow('',null),
-  MRP: Joi.string().allow('',null),
-  Other_Unit_ID: Joi.string().allow('',null),
-  Other_Qty: Joi.string().allow('',null),
-  No_of_Color: Joi.string().allow('',null),
-  Film_Type: Joi.string().allow('',null),
-  Single_Double_up_Type: Joi.string().allow('',null),
-  Handle: Joi.string().allow('',null),
-  Handle_Type: Joi.string().allow('',null),
-  Bag_Size: Joi.string().allow('',null),
-  Liner: Joi.number().allow('',null),
-  Liner_Type: Joi.string().allow('',null),
-  Fabric_Type: Joi.string().allow('',null),
-  Color: Joi.string().allow('',null),
-  Special_Remark: Joi.string().allow('',null),
-  Circumfrence: Joi.number().allow('',null),
-  Film_Size: Joi.number().allow('',null),
-  Denier: Joi.number().allow('',null),
-  ALT_UNIT: Joi.string().allow('',null),
-  Production_type: Joi.string().allow('',null),
-  userId: Joi.string().allow('',null),
-  ProducedQty1: Joi.number().allow('',null),
-  ProducedQty2: Joi.number().allow('',null),
-  TargetQty: Joi.number().allow('',null),
+  branchId: Joi.string().allow('', null),
+  CO_CODE: Joi.string().allow('', null),
+  OA_NO: Joi.string().allow('', null),
+  IT_CODE: Joi.string().allow('', null),
+  OA_SRNO: Joi.number().allow('', null),
+  Remarks: Joi.string().allow('', null),
+  fyear: Joi.string().allow('', null),
+  DB_CODE: Joi.string().allow('', null),
+  ALT_QTY: Joi.number().allow('', null),
+  Delivery_Date: Joi.date().allow('', null),
+  ALT_RATE: Joi.number().allow('', null),
+  UR_CODE: Joi.number().allow('', null),
+  Final_Amt: Joi.number().allow('', null),
+  Location_Code: Joi.string().allow('', null),
+  Index: Joi.number().allow('', null),
+  URN_No: Joi.string().allow('', null),
+  OA_Status: Joi.string().allow('', null),
+  From_URN_No: Joi.string().allow('', null),
+  From_Item_Sr_No: Joi.string().allow('', null),
+  ALT_UNIT_ID: Joi.string().allow('', null),
+  Item_Long_Description: Joi.string().allow('', null),
+  reason: Joi.string().allow('', null),
+  Tolerance: Joi.number().allow('', null),
+  Close_Open_Status: Joi.boolean().allow('', null),
+  Close_Open_Reason: Joi.string().allow('', null),
+  Discount: Joi.string().allow('', null),
+  DIS_Amount: Joi.number().allow('', null),
+  InputAmount: Joi.string().allow('', null),
+  MRP: Joi.string().allow('', null),
+  Other_Unit_ID: Joi.string().allow('', null),
+  Other_Qty: Joi.string().allow('', null),
+  No_of_Color: Joi.string().allow('', null),
+  Film_Type: Joi.string().allow('', null),
+  Single_Double_up_Type: Joi.string().allow('', null),
+  Handle: Joi.string().allow('', null),
+  Handle_Type: Joi.string().allow('', null),
+  Bag_Size: Joi.string().allow('', null),
+  Liner: Joi.number().allow('', null),
+  Liner_Type: Joi.string().allow('', null),
+  Fabric_Type: Joi.string().allow('', null),
+  Color: Joi.string().allow('', null),
+  Special_Remark: Joi.string().allow('', null),
+  Circumfrence: Joi.number().allow('', null),
+  Film_Size: Joi.number().allow('', null),
+  Denier: Joi.number().allow('', null),
+  ALT_UNIT: Joi.string().allow('', null),
+  Production_type: Joi.string().allow('', null),
+  userId: Joi.string().allow('', null),
+  ProducedQty1: Joi.number().allow('', null),
+  ProducedQty2: Joi.number().allow('', null),
+  TargetQty: Joi.number().allow('', null),
+  Status: Joi.string().allow('', null),
   // ItemMaster: Joi.string().required()
 });
 
@@ -123,6 +124,7 @@ export const createOA_DETMaster = async (req: Request, res: Response) => {
     qadet.ProducedQty1 = req.body.ProducedQty1
     qadet.ProducedQty2 = req.body.ProducedQty2
     qadet.TargetQty = req.body.ALT_QTY * 1000 / req.body.Circumfrence
+    qadet.Status = req.body.Status
     await qadet.save();
     return res.status(201).json(qadet);
   } catch (error) {
@@ -155,10 +157,11 @@ export const getAllQA_DET = async (_: Request, res: Response) => {
           IT_CODE: oaDetail.IT_CODE,
           IT_NAME: itemData.IT_NAME,
           ItemType: itemData.ItemType,
-          ALT_QTY:oaDetail.ALT_QTY,
-          DateTime:oaDetail.DateTime,
-          Film_Type:oaDetail.Film_Type,
-          
+          ALT_QTY: oaDetail.ALT_QTY,
+          DateTime: oaDetail.DateTime,
+          Film_Type: oaDetail.Film_Type,
+          Status: oaDetail.Status,
+
         };
         commonObjects.push(commonObject);
       }
@@ -258,6 +261,7 @@ export const updateOA_DETMaster = async (req: Request, res: Response) => {
     qadet.ProducedQty1 = req.body.ProducedQty1
     qadet.ProducedQty2 = req.body.ProducedQty2
     qadet.TargetQty = req.body.ALT_QTY * 1000 / req.body.Circumfrence
+    qadet.Status = req.body.Status
 
     await qadet.save();
     return res.json(qadet);
@@ -374,6 +378,7 @@ const updateDataOA_DETMaster = async (data: any) => {
     qadet.ProducedQty1 = data.ProducedQty1
     qadet.ProducedQty2 = data.ProducedQty2
     qadet.TargetQty = data.ALT_QTY / data.Circumfrence
+    qadet.Status = data.Status
     await qadet.save();
 
     return qadet
@@ -445,6 +450,7 @@ const createDataOA_DETMaster = async (data: any) => {
     qadet.ProducedQty1 = data.ProducedQty1
     qadet.ProducedQty2 = data.ProducedQty2
     qadet.TargetQty = data.ALT_QTY / data.Circumfrence
+    qadet.Status = data.Status
 
     await qadet.save();
 

@@ -160,7 +160,10 @@ export class OA_DETMaster extends BaseEntity {
   ProducedQty2: number
 
   @Column({ nullable: true })
-  TargetQty: number
+  TargetQty: number;
+
+  @Column({ nullable: true })
+  Status: string;
 
   @ManyToOne(() => ItemMaster, (items) => items.IT_CODE)
   @JoinColumn({ name: "ItemCode" })
