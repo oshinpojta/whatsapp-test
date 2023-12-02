@@ -123,7 +123,7 @@ export const createOA_DETMaster = async (req: Request, res: Response) => {
     qadet.userId = req.body.userId
     qadet.ProducedQty1 = req.body.ProducedQty1
     qadet.ProducedQty2 = req.body.ProducedQty2
-    qadet.TargetQty = req.body.ALT_QTY * 1000 / req.body.Circumfrence
+    qadet.TargetQty = req.body.ALT_QTY * req.body.Circumfrence /1000
     qadet.Status = req.body.Status
     await qadet.save();
     return res.status(201).json(qadet);
@@ -260,7 +260,7 @@ export const updateOA_DETMaster = async (req: Request, res: Response) => {
     qadet.userId = req.body.userId
     qadet.ProducedQty1 = req.body.ProducedQty1
     qadet.ProducedQty2 = req.body.ProducedQty2
-    qadet.TargetQty = req.body.ALT_QTY * 1000 / req.body.Circumfrence
+    qadet.TargetQty = req.body.ALT_QTY * req.body.Circumfrence / 1000
     qadet.Status = req.body.Status
 
     await qadet.save();
@@ -377,7 +377,7 @@ const updateDataOA_DETMaster = async (data: any) => {
     qadet.userId = data.userId
     qadet.ProducedQty1 = data.ProducedQty1
     qadet.ProducedQty2 = data.ProducedQty2
-    qadet.TargetQty = data.ALT_QTY / data.Circumfrence
+    qadet.TargetQty = data.ALT_QTY * data.Circumfrence / 1000
     qadet.Status = data.Status
     await qadet.save();
 
@@ -449,7 +449,7 @@ const createDataOA_DETMaster = async (data: any) => {
     qadet.userId = data.userId
     qadet.ProducedQty1 = data.ProducedQty1
     qadet.ProducedQty2 = data.ProducedQty2
-    qadet.TargetQty = data.ALT_QTY / data.Circumfrence
+    qadet.TargetQty = data.ALT_QTY * data.Circumfrence/1000
     qadet.Status = data.Status
 
     await qadet.save();
