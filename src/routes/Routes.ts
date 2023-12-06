@@ -29,6 +29,7 @@ import mappingRouter from "./FGMappingRoutes";
 import itemMasterRouter from "./itemMaster";
 import OA_DETMasterRouter from "./QA_DETRoute";
 import ItemMaster2Router from "./Item_Master2Routes"
+import OA_DET2Router from "./OA_DET2Routes"
 
 let router = express.Router();
 
@@ -62,5 +63,6 @@ router.use("/mapping", mappingRouter);
 router.use("/itemmaster", itemMasterRouter);
 router.use("/OA_DETRoute", OA_DETMasterRouter);
 router.use("/itemmaster2", ItemMaster2Router);
+router.use("/OA_DETRoute2", OA_DET2Router);
 
 export = router;
