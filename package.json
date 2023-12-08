@@ -47,6 +47,7 @@
         "@types/express": "^4.17.11",
         "@types/joi": "^17.2.3",
         "@types/jsonwebtoken": "^8.5.6",
+        "@types/mssql": "^9.1.4",
         "@types/multer": "^1.4.7",
         "@types/mysql": "^2.15.17",
         "@types/uuid": "^8.3.3",

@@ -1,17 +1,18 @@
 import { Request, Response } from "express";
+import sql from 'mssql';
 import { InternalServerError } from "../response/InternalServerErrorResponse";
 import * as Joi from "joi";
 import { ItemMaster2 } from "../entity/Item_Master2";
 
 const ItemMasterSchema2 = Joi.object({
-  IT_CODE:Joi.string().allow('', null),
+  IT_CODE: Joi.string().allow('', null),
   branchId: Joi.string().allow('', null),
   CO_CODE: Joi.string().allow('', null),
   IT_NAME: Joi.string().allow('', null),
   ALT_NAME: Joi.string().allow('', null),
   ItemType: Joi.string().allow('', null),
   NodeId: Joi.string().allow('', null),
-//   RouteId: Joi.string().allow('', null),
+  //   RouteId: Joi.string().allow('', null),
   Machine: Joi.string().allow('', null),
   image_mach: Joi.string().allow('', null),
   Production_Type: Joi.string().allow('', null),
@@ -77,7 +78,7 @@ const ItemMasterSchema2 = Joi.object({
   Metalize_Film: Joi.boolean().allow('', null),
   userId: Joi.string().allow('', null),
   Route: Joi.number().allow('', null),
-  
+
 });
 
 export const createItemMaster2 = async (req: Request, res: Response) => {
@@ -89,16 +90,16 @@ export const createItemMaster2 = async (req: Request, res: Response) => {
   try {
 
     const itemmaster2 = new ItemMaster2();
-    itemmaster2.IT_CODE = req.body.IT_CODE 
+    itemmaster2.IT_CODE = req.body.IT_CODE
     itemmaster2.branchId = req.body.branchId
     itemmaster2.CO_CODE = req.body.CO_CODE
     itemmaster2.IT_NAME = req.body.IT_NAME
-    itemmaster2.ALT_NAME = req.body.ALT_NAME 
-    itemmaster2.ItemType = req.body.ItemType 
-    itemmaster2.NodeId = req.body.NodeId 
-//     itemmaster2.RouteId = req.body.RouteId 
-    itemmaster2.Machine = req.body.Machine 
-    itemmaster2.image_mach = req.body.image_mach 
+    itemmaster2.ALT_NAME = req.body.ALT_NAME
+    itemmaster2.ItemType = req.body.ItemType
+    itemmaster2.NodeId = req.body.NodeId
+    //     itemmaster2.RouteId = req.body.RouteId 
+    itemmaster2.Machine = req.body.Machine
+    itemmaster2.image_mach = req.body.image_mach
     itemmaster2.Production_Type = req.body.Production_Type
     itemmaster2.IG_CODE = req.body.IG_CODE
     itemmaster2.ALT_UNIT = req.body.ALT_UNIT
@@ -162,7 +163,7 @@ export const createItemMaster2 = async (req: Request, res: Response) => {
     itemmaster2.userId = req.body.userId
     itemmaster2.Route = req.body.Route
 
-    
+
     await itemmaster2.save();
     return res.status(201).json(itemmaster2);
   } catch (error) {
@@ -171,8 +172,21 @@ export const createItemMaster2 = async (req: Request, res: Response) => {
 };
 
 export const getAllItemMaster2 = async (_: Request, res: Response) => {
+  const config = {
+    user: 'TaxonalyticaUser',
+    password: 'Taxonalytica123',
+    server: 'taxonalytica.cl77rwoetkdr.ap-south-1.rds.amazonaws.com',
+    database: 'Taxonanalytica',
+  };
+
   try {
-    const itemmaster2 = await ItemMaster2.find();
+    const pool = await new sql.ConnectionPool(config).connect()
+    const result = await pool.query`SELECT * FROM [Taxonanalytica].[dbo].[item_master2]`;
+
+    const itemmaster2 = result.recordset;
+
+    await pool.close();
+    console.log("Item_master", itemmaster2.length);
     return res.json(itemmaster2);
   } catch (error) {
     return InternalServerError(res, error);
@@ -188,21 +202,21 @@ export const updateItemMaster2 = async (req: Request, res: Response) => {
 
   try {
     const itemmaster2 = await ItemMaster2.findOne(req.params.id);
-    console.log(itemmaster2,"######");
-    
+    console.log(itemmaster2, "######");
+
     if (!itemmaster2) {
       return res.status(404).json({ error: 'itemmaster not found' });
     }
-    itemmaster2.IT_CODE = req.body.IT_CODE 
+    itemmaster2.IT_CODE = req.body.IT_CODE
     itemmaster2.branchId = req.body.branchId
     itemmaster2.CO_CODE = req.body.CO_CODE
     itemmaster2.IT_NAME = req.body.IT_NAME
-    itemmaster2.ALT_NAME = req.body.ALT_NAME 
-    itemmaster2.ItemType = req.body.ItemType 
+    itemmaster2.ALT_NAME = req.body.ALT_NAME
+    itemmaster2.ItemType = req.body.ItemType
     itemmaster2.NodeId = req.body.NodeId
-//     itemmaster2.RouteId = req.body.RouteId
-    itemmaster2.Machine = req.body.Machine 
-    itemmaster2.image_mach = req.body.image_mach 
+    //     itemmaster2.RouteId = req.body.RouteId
+    itemmaster2.Machine = req.body.Machine
+    itemmaster2.image_mach = req.body.image_mach
     itemmaster2.Production_Type = req.body.Production_Type
     itemmaster2.IG_CODE = req.body.IG_CODE
     itemmaster2.ALT_UNIT = req.body.ALT_UNIT
@@ -275,7 +289,7 @@ export const updateItemMaster2 = async (req: Request, res: Response) => {
 };
 
 export const updateBulkItemMaster2 = async (req: Request, res: Response) => {
-console.log(123);
+  console.log(123);
   if (req.body.itemmaster2.length) {
     const itemMaster2Data = req.body.itemmaster2
 
@@ -295,14 +309,14 @@ console.log(123);
 
       for (let i = 0; i < itemMaster2Data.length; i++) {
         const element = itemMaster2Data[i];
-        let itemMaster2UpdateData:any;
+        let itemMaster2UpdateData: any;
 
-        if(element.id){
+        if (element.id) {
           console.log("update");
           itemMaster2UpdateData = await updateDataItemMaster2(element)
         }
 
-        else{
+        else {
           itemMaster2UpdateData = await createDataItemMaster2(element)
           console.log("add");
         }
@@ -327,21 +341,21 @@ const updateDataItemMaster2 = async (data: any) => {
 
   try {
     const itemmaster2 = await ItemMaster2.findOne(data.id);
-    console.log(itemmaster2,"$$$$$");
-    
+    console.log(itemmaster2, "$$$$$");
+
     if (!itemmaster2) {
       return { error: error.details[0].message }
     }
-    itemmaster2.IT_CODE = data.IT_CODE 
+    itemmaster2.IT_CODE = data.IT_CODE
     itemmaster2.branchId = data.branchId
     itemmaster2.CO_CODE = data.CO_CODE
     itemmaster2.IT_NAME = data.IT_NAME
-    itemmaster2.ALT_NAME = data.ALT_NAME 
+    itemmaster2.ALT_NAME = data.ALT_NAME
     itemmaster2.ItemType = data.ItemType
     itemmaster2.NodeId = data.NodeId
-//     itemmaster2.RouteId = data.RouteId
-    itemmaster2.Machine = data.Machine 
-    itemmaster2.image_mach = data.image_mach 
+    //     itemmaster2.RouteId = data.RouteId
+    itemmaster2.Machine = data.Machine
+    itemmaster2.image_mach = data.image_mach
     itemmaster2.Production_Type = data.Production_Type
     itemmaster2.IG_CODE = data.IG_CODE
     itemmaster2.ALT_UNIT = data.ALT_UNIT
@@ -424,16 +438,16 @@ const createDataItemMaster2 = async (data: any) => {
   try {
 
     const itemmaster2 = new ItemMaster2();
-    itemmaster2.IT_CODE = data.IT_CODE 
+    itemmaster2.IT_CODE = data.IT_CODE
     itemmaster2.branchId = data.branchId
     itemmaster2.CO_CODE = data.CO_CODE
     itemmaster2.IT_NAME = data.IT_NAME
-    itemmaster2.ALT_NAME = data.ALT_NAME 
+    itemmaster2.ALT_NAME = data.ALT_NAME
     itemmaster2.ItemType = data.ItemType
     itemmaster2.NodeId = data.NodeId
-//     itemmaster2.RouteId = data.RouteId 
-    itemmaster2.Machine = data.Machine 
-    itemmaster2.image_mach = data.image_mach 
+    //     itemmaster2.RouteId = data.RouteId 
+    itemmaster2.Machine = data.Machine
+    itemmaster2.image_mach = data.image_mach
     itemmaster2.Production_Type = data.Production_Type
     itemmaster2.IG_CODE = data.IG_CODE
     itemmaster2.ALT_UNIT = data.ALT_UNIT
