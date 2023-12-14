@@ -42,7 +42,7 @@ import {
           @Column({ nullable: true })
           Delivery_Date: Date;
         
-          @Column({ nullable: true })
+          @Column('float', { nullable: true })
           ALT_RATE: number;
         
           @Column({ nullable: true })

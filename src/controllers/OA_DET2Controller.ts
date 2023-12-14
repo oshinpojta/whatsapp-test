@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { InternalServerError } from "../response/InternalServerErrorResponse";
 import * as Joi from "joi";
 import { OA_DETMaster2 } from "../entity/OA_DET2";
-import { ItemMaster } from "../entity/itemMaster";
+// import { ItemMaster } from "../entity/itemMaster";
 
 
 const OA_DET2Schema = Joi.object({
