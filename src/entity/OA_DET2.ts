@@ -13,7 +13,7 @@ import {
         @Entity()
         export class OA_DETMaster2 extends BaseEntity {
           @PrimaryColumn()
-          jobId: string;
+          Job_id: string;
         
           @Column({ nullable: true })
           CO_CODE: string;

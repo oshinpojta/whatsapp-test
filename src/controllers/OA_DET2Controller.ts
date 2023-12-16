@@ -7,7 +7,7 @@ import { OA_DETMaster2 } from "../entity/OA_DET2";
 
 
 const OA_DET2Schema = Joi.object({
-  jobId: Joi.string(),
+  Job_id: Joi.string(),
   branchId: Joi.string().allow('', null),
   CO_CODE: Joi.string().allow('', null),
   OA_NO: Joi.string().allow('', null),
@@ -72,7 +72,7 @@ export const createOA_DETMaster2 = async (req: Request, res: Response) => {
   try {
 
     const oadet2 = new OA_DETMaster2();
-    oadet2.jobId = req.body.jobId;
+    oadet2.Job_id = req.body.Job_id;
     oadet2.branchId = req.body.branchId;
     oadet2.CO_CODE = req.body.CO_CODE
     oadet2.OA_NO = req.body.OA_NO
@@ -151,7 +151,7 @@ export const getAllQA_DET2 = async (_: Request, res: Response) => {
 
   //     if (itemData !== undefined) {
   //       const commonObject = {
-  //         jobId: oaDetail.jobId,
+  //         Job_id: oaDetail.Job_id,
   //         OA_Status: oaDetail.OA_Status,
   //         TargetQty: oaDetail.TargetQty,
   //         IT_CODE: oaDetail.IT_CODE,
@@ -216,7 +216,7 @@ export const updateOA_DETMaster2 = async (req: Request, res: Response) => {
     if (!oadet2) {
       return res.status(404).json({ error: 'qadet2 not found' });
     }
-    oadet2.jobId = req.body.jobId;
+    oadet2.Job_id = req.body.Job_id;
     oadet2.branchId = req.body.branchId;
     oadet2.CO_CODE = req.body.CO_CODE
     oadet2.OA_NO = req.body.OA_NO
@@ -333,7 +333,7 @@ const updateDataOA_DETMaster2 = async (data: any) => {
     if (!oadet2) {
       return { error: error.details[0].message }
     }
-    oadet2.jobId = data.jobId;
+    oadet2.Job_id = data.Job_id;
     oadet2.branchId = data.branchId;
     oadet2.CO_CODE = data.CO_CODE
     oadet2.OA_NO = data.OA_NO
@@ -404,7 +404,7 @@ const createDataOA_DETMaster2 = async (data: any) => {
 
   try {
     const oadet2 = new OA_DETMaster2();
-    oadet2.jobId = data.jobId;
+    oadet2.Job_id = data.Job_id;
     oadet2.branchId = data.branchId;
     oadet2.CO_CODE = data.CO_CODE
     oadet2.OA_NO = data.OA_NO

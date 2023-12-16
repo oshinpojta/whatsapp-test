@@ -21,7 +21,7 @@ export const loginUser = async (req: Request, res: Response) => {
         if (!foundMatch || !username) return res.status(401).json({ message: 'Username not found' });
         if (!passwordCheck) return res.status(401).json({ message: "Username and password doesn't match" });
 
-        const { empId, designation } = foundMatch;
+        const { empId, designation, empTypeId } = foundMatch;
 
         const accessToken = jwt.sign(
             {
@@ -47,7 +47,7 @@ export const loginUser = async (req: Request, res: Response) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        res.json({ accessToken, designation, empId })
+        res.json({ accessToken, designation, empId,empTypeId })
 
     } catch (error) {
         return InternalServerError(res, error);
