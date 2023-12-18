@@ -116,8 +116,51 @@ export const updateBatch = async (req: Request, res: Response) => {
   }
 };
 
+// export const updateBulkBatch = async (req: Request, res: Response) => {
+//   console.log(123);
+//   if (req.body.newBatch.length) {
+//     const batchData = req.body.newBatch
+
+//     let responseData: any = []
+
+//     for (let i = 0; i < batchData.length; i++) {
+//       const element = batchData[i];
+//       const { error } = batchSchema.validate(element);
+
+//       if (error) {
+//         return res.status(400).json({ error: error.details[0].message });
+//       }
+//     }
+
+//     try {
+
+//       for (let i = 0; i < batchData.length; i++) {
+//         const element = batchData[i];
+//         let BatchUpdateData: any;
+
+//         if (element.id) {
+//           console.log("update");
+//           BatchUpdateData = await updateBatchData(element)
+//         }
+
+//         else {
+//           BatchUpdateData = await createBatchData(element)
+//           console.log("add");
+//         }
+
+//         responseData.push(BatchUpdateData);
+
+//       }
+//       return res.status(201).json(responseData);
+//     } catch (error) {
+//       return InternalServerError(res, error);
+//     }
+//   }
+
+// };
+
 export const updateBulkBatch = async (req: Request, res: Response) => {
-  console.log(123);
+  console.log("Incoming");
   if (req.body.newBatch.length) {
     const batchData = req.body.newBatch
 
@@ -130,26 +173,22 @@ export const updateBulkBatch = async (req: Request, res: Response) => {
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
-
     }
-
     try {
 
       for (let i = 0; i < batchData.length; i++) {
         const element = batchData[i];
-        let BatchUpdateData: any;
+        let batchUpdateData:any;
 
-        if (element.id) {
+        if(element.edgeId){
           console.log("update");
-          BatchUpdateData = await updateBatchData(element)
+          batchUpdateData = await updateBatchData(element)
         }
-
-        else {
-          BatchUpdateData = await createBatchData(element)
+        else{
+          batchUpdateData = await createBatchData(element)
           console.log("add");
         }
-
-        responseData.push(BatchUpdateData);
+        responseData.push(batchUpdateData);
 
       }
       return res.status(201).json(responseData);
@@ -160,6 +199,47 @@ export const updateBulkBatch = async (req: Request, res: Response) => {
 
 };
 
+// export const updateBatchData = async (data: any) => {
+//   const { error } = batchSchema.validate(data);
+
+//   if (error) {
+//     return { error: error.details[0].message }
+//   }
+
+//   try {
+//     const newBatch = await Batch.findOne(data.id);
+//     if (!newBatch) {
+//       return { error: error.details[0].message }
+//     }
+//     newBatch.branchId = data.branchId;
+//     newBatch.activityId = data.activityId;
+//     newBatch.consumedActivityId = data.consumedActivityId;
+//     newBatch.shift = data.shift;
+//     newBatch.date = data.date;
+//     newBatch.MachinenodeId = data.MachinenodeId;
+//     newBatch.jobId = data.jobId;
+//     newBatch.FGID = data.FGID;
+//     newBatch.ItemCode = data.ItemCode;
+//     newBatch.MaterialId = data.MaterialId;
+//     newBatch.units1 = data.units1;
+//     newBatch.Availablequantity1 = data.Availablequantity1;
+//     newBatch.Consumedquantity1 = data.Consumedquantity1;
+//     newBatch.Balancequantity1 = data.Balancequantity1;
+//     newBatch.units2 = data.units2;
+//     newBatch.Availablequantity2 = data.Availablequantity2;
+//     newBatch.Consumedquantity2 = data.Consumedquantity2;
+//     newBatch.Balancequantity2 = data.Balancequantity2;
+//     newBatch.userId = data.userId;
+
+//     await newBatch.save();
+
+//     return newBatch
+
+//   } catch (error) {
+//     return error
+//   }
+// };
+
 export const updateBatchData = async (data: any) => {
   const { error } = batchSchema.validate(data);
 
@@ -168,9 +248,9 @@ export const updateBatchData = async (data: any) => {
   }
 
   try {
-    const newBatch = await Batch.findOne(data.id);
+    const newBatch = await Batch.findOne(data.activityId);
     if (!newBatch) {
-      return { error: error.details[0].message }
+      return { error: 'edgeMaster not found' }
     }
     newBatch.branchId = data.branchId;
     newBatch.activityId = data.activityId;
@@ -193,7 +273,6 @@ export const updateBatchData = async (data: any) => {
     newBatch.userId = data.userId;
 
     await newBatch.save();
-
     return newBatch
 
   } catch (error) {
@@ -201,12 +280,50 @@ export const updateBatchData = async (data: any) => {
   }
 };
 
+// export const createBatchData = async (data: any) => {
+//   const { error } = batchSchema.validate(data);
+
+//   if (error) {
+//     return { error: error.details[0].message }
+//   }
+//   try {
+//     const newBatch = new Batch();
+//     newBatch.branchId = data.branchId;
+//     newBatch.activityId = data.activityId;
+//     newBatch.consumedActivityId = data.consumedActivityId;
+//     newBatch.shift = data.shift;
+//     newBatch.date = data.date;
+//     newBatch.MachinenodeId = data.MachinenodeId;
+//     newBatch.jobId = data.jobId;
+//     newBatch.FGID = data.FGID;
+//     newBatch.ItemCode = data.ItemCode;
+//     newBatch.MaterialId = data.MaterialId;
+//     newBatch.units1 = data.units1;
+//     newBatch.Availablequantity1 = data.Availablequantity1;
+//     newBatch.Consumedquantity1 = data.Consumedquantity1;
+//     newBatch.Balancequantity1 = data.Balancequantity1;
+//     newBatch.units2 = data.units2;
+//     newBatch.Availablequantity2 = data.Availablequantity2;
+//     newBatch.Consumedquantity2 = data.Consumedquantity2;
+//     newBatch.Balancequantity2 = data.Balancequantity2;
+//     newBatch.userId = data.userId;
+
+//     await newBatch.save();
+
+//     return newBatch
+//   } catch (error) {
+//     console.log(error)
+//     return error
+//   }
+// };
+
 export const createBatchData = async (data: any) => {
   const { error } = batchSchema.validate(data);
-
+  
   if (error) {
     return { error: error.details[0].message }
   }
+  console.log("************",error)
   try {
     const newBatch = new Batch();
     newBatch.branchId = data.branchId;
@@ -228,7 +345,6 @@ export const createBatchData = async (data: any) => {
     newBatch.Consumedquantity2 = data.Consumedquantity2;
     newBatch.Balancequantity2 = data.Balancequantity2;
     newBatch.userId = data.userId;
-
     await newBatch.save();
 
     return newBatch
