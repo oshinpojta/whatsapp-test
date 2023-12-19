@@ -178,13 +178,15 @@ export const updateBulkBatch = async (req: Request, res: Response) => {
 
       for (let i = 0; i < batchData.length; i++) {
         const element = batchData[i];
-        let batchUpdateData:any;
+        const activity = await Batch.findOne({ activityId: element.activityId });
+        console.log("ACTIVITYY", activity);
+        let batchUpdateData: any;
 
-        if(element.edgeId){
+        if (element.id || activity) {
           console.log("update");
           batchUpdateData = await updateBatchData(element)
         }
-        else{
+        else {
           batchUpdateData = await createBatchData(element)
           console.log("add");
         }
@@ -248,9 +250,9 @@ export const updateBatchData = async (data: any) => {
   }
 
   try {
-    const newBatch = await Batch.findOne(data.activityId);
+    const newBatch = await Batch.findOne({ activityId: data.activityId });
     if (!newBatch) {
-      return { error: 'edgeMaster not found' }
+      return { error: ' batch not found' }
     }
     newBatch.branchId = data.branchId;
     newBatch.activityId = data.activityId;
@@ -319,11 +321,11 @@ export const updateBatchData = async (data: any) => {
 
 export const createBatchData = async (data: any) => {
   const { error } = batchSchema.validate(data);
-  
+
   if (error) {
     return { error: error.details[0].message }
   }
-  console.log("************",error)
+  console.log("************", error)
   try {
     const newBatch = new Batch();
     newBatch.branchId = data.branchId;

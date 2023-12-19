@@ -44,10 +44,11 @@ export const loginUser = async (req: Request, res: Response) => {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
+            path: '/',
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        res.json({ accessToken, designation, empId,empTypeId })
+        res.json({ accessToken, designation, empId, empTypeId })
 
     } catch (error) {
         return InternalServerError(res, error);
@@ -61,7 +62,7 @@ export const refresh = async (req: Request, res: Response) => {
         if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' });
 
         const refreshToken = cookies.jwt;
-
+        console.log("REFRESH", refreshToken);
         jwt.verify(
             refreshToken,
             process.env.REFRESH_TOKEN_SECRET as string,

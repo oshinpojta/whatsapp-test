@@ -10,6 +10,7 @@ import { pagination } from "typeorm-pagination";
 import Routes from "./routes/Routes";
 const helmet = require("helmet");
 var cors = require('cors')
+const cookieParser = require('cookie-parser');
 
 
 
@@ -27,7 +28,17 @@ try {
   // app.use(express.urlencoded({ extended: true }));
   // app.use(express.json());
   app.use(helmet());
-  app.use(cors())
+  app.use(cors(
+    {
+      origin: [
+        "http://localhost:3000",
+        "http://192.168.43.197:3000", // give correct IP
+      ],
+      credentials: true,
+      allowedHeaders: ["Content-Type", "Authorization"],
+    }
+  ))
+  app.use(cookieParser());
 
   app.use(
     compression({

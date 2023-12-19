@@ -21,7 +21,7 @@ export class Batch extends BaseEntity {
   @Column({ nullable: true })
   branchId: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'nvarchar', nullable: true })
   activityId: string;
 
   @Column({ nullable: true })
