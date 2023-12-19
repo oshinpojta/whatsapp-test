@@ -32,6 +32,7 @@ import ItemMaster2Router from "./Item_Master2Routes"
 import OA_DET2Router from "./OA_DET2Routes"
 import authRoutes from "./authRoutes";
 import MenuRoutes from "./menuRoutes"
+import RolePermissionsRoutes from "./rolePermissionRoutes"
 
 let router = express.Router();
 
@@ -68,5 +69,6 @@ router.use("/itemmaster2", ItemMaster2Router);
 router.use("/OA_DETRoute2", OA_DET2Router);
 router.use("/auth", authRoutes);
 router.use("/menu", MenuRoutes);
+router.use("/rolePermissions", RolePermissionsRoutes);
 
 export = router;
