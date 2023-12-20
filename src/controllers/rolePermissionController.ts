@@ -4,7 +4,7 @@ import * as Joi from "joi";
 import { rolePermissions } from "../entity/rolePermissions"
 
 const PermissionsSchema = Joi.object({
-  
+  id:Joi.number(),
   branchId: Joi.string().required(),
   menuId: Joi.string().required(),
   roleId: Joi.string().required(),
