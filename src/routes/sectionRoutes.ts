@@ -4,12 +4,13 @@ import {
 } from "../controllers/sectionController";
 
 let router = express.Router();
+const authorize = require('../middleware/authorize');
 
-router.get("/", getAllSection);
-router.post("/", createSection);
-router.get("/:id", sectionById);
-router.put("/:id", updateSection);
-router.delete("/:id", deleteSection);
+router.get("/",authorize("section", "read"), getAllSection);
+router.post("/",authorize("section", "create"), createSection);
+router.get("/:id",authorize("section", "read"), sectionById);
+router.put("/:id",authorize("section", "update"), updateSection);
+router.delete("/:id",authorize("section", "delete"), deleteSection);
 
 
 export = router;

@@ -33,7 +33,7 @@ export const loginUser = async (req: Request, res: Response) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '15m' }
+            { expiresIn: '60m' }
         )
 
         const refreshToken = jwt.sign(

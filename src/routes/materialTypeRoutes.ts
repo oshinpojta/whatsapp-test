@@ -4,12 +4,13 @@ import {
 } from "../controllers/materialTypeController";
 
 let router = express.Router();
+const authorize = require('../middleware/authorize');
 
-router.get("/", getAllMaterialType);
-router.post("/", createMaterialType);
-router.get("/:id", materialTypeById);
-router.put("/:id", updateMaterialType);
-router.delete("/:id", deleteMaterialType);
+router.get("/",authorize("material_type", "read"), getAllMaterialType);
+router.post("/",authorize("material_type", "create"), createMaterialType);
+router.get("/:id",authorize("material_type", "read"), materialTypeById);
+router.put("/:id",authorize("material_type", "update"), updateMaterialType);
+router.delete("/:id",authorize("material_type", "delete"), deleteMaterialType);
 
 
 export = router;

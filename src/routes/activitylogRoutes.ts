@@ -8,11 +8,12 @@ import {
 } from "../controllers/activitylogController";
 
 let router = express.Router();
+const authorize = require('../middleware/authorize');
 
 // router.post("/", createActivitylog);
-router.post("/", createActivitylogg);
-router.get("/", getAllActivityLog);
-router.delete("/:id", deleteActivity);
+router.post("/", authorize("activity_log", "create"), createActivitylogg);
+router.get("/", authorize("activity_log", "read"), getAllActivityLog);
+router.delete("/:id", authorize("activity_log", "delete"), deleteActivity);
 // router.get("/getInputForActivity", getInputForActivity);
 
 

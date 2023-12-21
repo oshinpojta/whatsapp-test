@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import sql from 'mssql';
+// import sql from 'mssql';
 import { InternalServerError } from "../response/InternalServerErrorResponse";
 import * as Joi from "joi";
 import { ItemMaster2 } from "../entity/Item_Master2";
@@ -171,22 +171,31 @@ export const createItemMaster2 = async (req: Request, res: Response) => {
   }
 };
 
+// export const getAllItemMaster2 = async (_: Request, res: Response) => {
+//   const config = {
+//     user: 'TaxonalyticaUser',
+//     password: 'Taxonalytica123',
+//     server: 'taxonalytica.cl77rwoetkdr.ap-south-1.rds.amazonaws.com',
+//     database: 'Taxonanalytica',
+//   };
+
+//   try {
+//     const pool = await new sql.ConnectionPool(config).connect()
+//     const result = await pool.query`SELECT * FROM [Taxonanalytica].[dbo].[item_master2]`;
+
+//     const itemmaster2 = result.recordset;
+
+//     await pool.close();
+//     console.log("Item_master", itemmaster2.length);
+//     return res.json(itemmaster2);
+//   } catch (error) {
+//     return InternalServerError(res, error);
+//   }
+// };
+
 export const getAllItemMaster2 = async (_: Request, res: Response) => {
-  const config = {
-    user: 'TaxonalyticaUser',
-    password: 'Taxonalytica123',
-    server: 'taxonalytica.cl77rwoetkdr.ap-south-1.rds.amazonaws.com',
-    database: 'Taxonanalytica',
-  };
-
   try {
-    const pool = await new sql.ConnectionPool(config).connect()
-    const result = await pool.query`SELECT * FROM [Taxonanalytica].[dbo].[item_master2]`;
-
-    const itemmaster2 = result.recordset;
-
-    await pool.close();
-    console.log("Item_master", itemmaster2.length);
+    const itemmaster2 = await ItemMaster2.find();
     return res.json(itemmaster2);
   } catch (error) {
     return InternalServerError(res, error);

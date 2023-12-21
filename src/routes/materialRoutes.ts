@@ -4,12 +4,13 @@ import {
 } from "../controllers/materialController";
 
 let router = express.Router();
+const authorize = require('../middleware/authorize');
 
-router.get("/", getAllMaterial);
-router.post("/", createMaterial);
-router.get("/:id", materialById);
-router.put("/:id", updateMaterial);
-router.delete("/:id", deleteMaterial);
+router.get("/",authorize("material", "read"), getAllMaterial);
+router.post("/",authorize("material", "create"), createMaterial);
+router.get("/:id",authorize("material", "read"), materialById);
+router.put("/:id",authorize("material", "update"), updateMaterial);
+router.delete("/:id",authorize("material", "delete"), deleteMaterial);
 
 
 export = router;

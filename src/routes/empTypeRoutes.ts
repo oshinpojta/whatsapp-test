@@ -3,6 +3,7 @@ import {
   createEmpType, getAllEmpType, updateEmpType,deleteEmpType, empTypeById
 } from "../controllers/empTypeController";
 
+
 let router = express.Router();
 
 router.get("/", getAllEmpType);

@@ -4,13 +4,14 @@ import {
 } from "../controllers/attendanceController";
 
 let router = express.Router();
+const authorize = require('../middleware/authorize');
 
-router.get("/", getAllAttendance);
-router.post("/", createAttendance);
-router.get("/:id", AttendanceById);
-router.put("/bulk", updateBulkAttendance);
-router.put("/:id", updateAttendance);
-router.delete("/:id", deleteAttendance);
+router.get("/", authorize("attendance", "read"), getAllAttendance);
+router.post("/", authorize("attendance","create"), createAttendance);
+router.get("/:id", authorize("attendance","read"), AttendanceById);
+router.put("/bulk", authorize("attendance","update"), updateBulkAttendance);
+router.put("/:id", authorize("attendance","update"), updateAttendance);
+router.delete("/:id", authorize("attendance","delete"), deleteAttendance);
 
 
 export = router;

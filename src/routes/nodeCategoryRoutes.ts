@@ -4,12 +4,13 @@ import {
 } from "../controllers/nodeCategoryController";
 
 let router = express.Router();
+const authorize = require('../middleware/authorize');
 
-router.get("/", getAllNodeCategory);
-router.post("/", createNodeCategory);
-router.get("/:id", nodeCategoryById);
-router.put("/:id", updateNodeCategory);
-router.delete("/:id", deleteNodeCategory);
+router.get("/",authorize("node_category", "read"),  getAllNodeCategory);
+router.post("/",authorize("node_category", "create"), createNodeCategory);
+router.get("/:id",authorize("node_category", "read"), nodeCategoryById);
+router.put("/:id",authorize("node_category", "update"), updateNodeCategory);
+router.delete("/:id",authorize("node_category", "delete"), deleteNodeCategory);
 
 
 export = router;
