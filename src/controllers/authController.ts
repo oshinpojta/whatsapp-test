@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 export const loginUser = async (req: Request, res: Response) => {
     try {
         const { userName, password } = req.body;
-        console.log(userName, password);
+        console.log(res);
 
         if (!userName || !password) return res.status(400).json({ message: 'Both username and password are required' });
 
@@ -27,7 +27,9 @@ export const loginUser = async (req: Request, res: Response) => {
             {
                 "userInfo": {
                     "username": username,
-                    //"accessRoles": foundMatch.role,
+                    "designation": foundMatch.designation,
+                    "empId": foundMatch.empId,
+                    "empTypeId": foundMatch.empTypeId,
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
@@ -35,7 +37,7 @@ export const loginUser = async (req: Request, res: Response) => {
         )
 
         const refreshToken = jwt.sign(
-            { "username": foundMatch.userName },
+            { "username": foundMatch.userName, "designation": foundMatch.designation },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '7d' }
         )
@@ -66,13 +68,13 @@ export const refresh = async (req: Request, res: Response) => {
         jwt.verify(
             refreshToken,
             process.env.REFRESH_TOKEN_SECRET as string,
-            async (error: Error | null, decoded: { username: string }) => {
+            async (error: Error | null, decoded: { username: string, designation: string, empId: string, empTypeId: string }) => {
                 if (error) {
                     return res.status(401).json({ message: 'Unauthorized' });
                 }
 
                 try {
-                    const foundUser = { username: decoded.username }; //await User.findOne({ username: decoded.username }).exec();
+                    const foundUser = { username: decoded.username, designation: decoded.designation, empId: decoded.empId, empTypeId: decoded.empTypeId }; //await User.findOne({ username: decoded.username }).exec();
 
                     if (!foundUser) return res.status(401).json({ message: 'Unauthorized' });
 
@@ -80,14 +82,16 @@ export const refresh = async (req: Request, res: Response) => {
                         {
                             UserInfo: {
                                 username: foundUser.username,
-                                // roles: foundUser.roles
+                                role: foundUser.designation,
+                                empId: foundUser.empId,
+                                empTypeId: foundUser.empTypeId
                             }
                         },
                         process.env.ACCESS_TOKEN_SECRET,
                         { expiresIn: '15m' }
                     );
-
-                    res.json({ accessToken });
+                    console.log(decoded);
+                    res.json({ accessToken: accessToken, username: foundUser.username, designation: foundUser.designation, empId: foundUser.empId, empTypeId: foundUser.empTypeId });
                 } catch (error) {
                     return InternalServerError(res, error);
                 }
