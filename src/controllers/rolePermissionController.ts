@@ -4,7 +4,7 @@ import * as Joi from "joi";
 import { rolePermissions } from "../entity/rolePermissions"
 
 const PermissionsSchema = Joi.object({
-  id:Joi.number(),
+  id: Joi.number(),
   branchId: Joi.string().required(),
   menuId: Joi.string().required(),
   roleId: Joi.string().required(),
@@ -14,6 +14,7 @@ const PermissionsSchema = Joi.object({
   update: Joi.boolean().required(),
   delete: Joi.boolean().required(),
   userId: Joi.string().required(),
+  key: Joi.string().required().allow(null),
 });
 
 export const createRolePermissions = async (req: Request, res: Response) => {
@@ -34,6 +35,7 @@ export const createRolePermissions = async (req: Request, res: Response) => {
     rolepermission.update = req.body.update
     rolepermission.delete = req.body.delete
     rolepermission.userId = req.body.userId
+    rolepermission.key = req.body.key
 
     await rolepermission.save();
     return res.status(201).json(rolepermission);
@@ -73,9 +75,10 @@ export const updateRolePermissions = async (req: Request, res: Response) => {
     rolepermission.update = req.body.update
     rolepermission.delete = req.body.delete
     rolepermission.userId = req.body.userId
+    rolepermission.key = req.body.key
 
 
-      await rolepermission.save();
+    await rolepermission.save();
     return res.json(rolepermission);
   } catch (error) {
     return InternalServerError(res, error);
@@ -103,11 +106,13 @@ export const updateBulkRolePermissions = async (req: Request, res: Response) => 
 
       for (let i = 0; i < rolepermissionData.length; i++) {
         const element = rolepermissionData[i];
+        const rolepermission = await rolePermissions.findOne({ key: element.key });
         let rolepermissionUpdateData: any;
+        console.log(rolepermission);
 
-        if (element.id) {
+        if (rolepermission) {
           console.log("update");
-          rolepermissionUpdateData = await updateDataRolePermission(element)
+          rolepermissionUpdateData = await updateDataRolePermission(element, rolepermission)
         }
 
         else {
@@ -126,9 +131,9 @@ export const updateBulkRolePermissions = async (req: Request, res: Response) => 
 
 };
 
-const updateDataRolePermission = async (data: any) => {
+const updateDataRolePermission = async (data: any, rolepermission: any) => {
   console.log("Incoming");
-  
+
   const { error } = PermissionsSchema.validate(data);
 
   if (error) {
@@ -136,7 +141,6 @@ const updateDataRolePermission = async (data: any) => {
   }
 
   try {
-    const rolepermission = await rolePermissions.findOne(data.id);
     if (!rolepermission) {
       return { error: error.details[0].message }
     }
@@ -150,8 +154,9 @@ const updateDataRolePermission = async (data: any) => {
     rolepermission.update = data.update
     rolepermission.delete = data.delete
     rolepermission.userId = data.userId
+    rolepermission.key = data.key
 
-      await rolepermission.save();
+    await rolepermission.save();
 
     return rolepermission
 
@@ -179,8 +184,9 @@ const createDataRolePermission = async (data: any) => {
     rolepermission.update = data.update
     rolepermission.delete = data.delete
     rolepermission.userId = data.userId
+    rolepermission.key = data.key
 
-      await rolepermission.save();
+    await rolepermission.save();
 
     return rolepermission
   } catch (error) {

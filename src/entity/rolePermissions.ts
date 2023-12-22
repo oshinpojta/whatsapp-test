@@ -1,45 +1,47 @@
 import {
-          BaseEntity,
-          Column,
-          Entity,
-          PrimaryGeneratedColumn,
-          CreateDateColumn
-        } from "typeorm";
-        
-        @Entity()
-        export class rolePermissions extends BaseEntity {
-          @PrimaryGeneratedColumn()
-          id: number;
-        
-          @Column()
-          branchId: string;
-        
-          @Column()
-          menuId: string;
-        
-          @Column()
-          roleId: string;
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn
+} from "typeorm";
 
-          @Column()
-          access_all: boolean;
+@Entity()
+export class rolePermissions extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-          @Column()
-          create: boolean;
+  @Column()
+  branchId: string;
 
-          @Column()
-          read: boolean;
+  @Column()
+  menuId: string;
 
-          @Column()
-          update: boolean;
+  @Column()
+  roleId: string;
 
-          @Column()
-          delete: boolean;
+  @Column()
+  access_all: boolean;
 
-          @Column()
-          userId: string;
-        
-          @CreateDateColumn()
-          DateTime: Date;
-        
-        }
-        
+  @Column()
+  create: boolean;
+
+  @Column()
+  read: boolean;
+
+  @Column()
+  update: boolean;
+
+  @Column()
+  delete: boolean;
+
+  @Column()
+  userId: string;
+
+  @Column({ nullable: true })
+  key: string;
+
+  @CreateDateColumn()
+  DateTime: Date;
+
+}
