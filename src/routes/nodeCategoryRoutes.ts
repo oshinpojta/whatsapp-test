@@ -6,9 +6,9 @@ import {
 let router = express.Router();
 const authorize = require('../middleware/authorize');
 
-router.get("/",authorize("node_category", "read"),  getAllNodeCategory);
+router.get("/", getAllNodeCategory);
 router.post("/",authorize("node_category", "create"), createNodeCategory);
-router.get("/:id",authorize("node_category", "read"), nodeCategoryById);
+router.get("/:id",nodeCategoryById);
 router.put("/:id",authorize("node_category", "update"), updateNodeCategory);
 router.delete("/:id",authorize("node_category", "delete"), deleteNodeCategory);
 

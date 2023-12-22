@@ -6,9 +6,9 @@ import {
 let router = express.Router();
 const authorize = require('../middleware/authorize');
 
-router.get("/",authorize("fg_mapping","read"), getAllFGMapping);
+router.get("/",getAllFGMapping);
 router.post("/",authorize("fg_mapping","create"), createFGMapping);
-router.get("/:id",authorize("fg_mapping","read"), FGMappingById);
+router.get("/:id",FGMappingById);
 router.put("/bulk",authorize("fg_mapping","update"), updateBulkFGMapping);
 router.put("/:id",authorize("fg_mapping","update"), updateFGMapping);
 router.delete("/:id",authorize("fg_mapping","delete"), deleteFGMapping);

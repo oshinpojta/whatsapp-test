@@ -6,9 +6,9 @@ import {
 let router = express.Router();
 const authorize = require('../middleware/authorize');
 
-router.get("/",authorize("material", "read"), getAllMaterial);
+router.get("/",getAllMaterial);
 router.post("/",authorize("material", "create"), createMaterial);
-router.get("/:id",authorize("material", "read"), materialById);
+router.get("/:id",materialById);
 router.put("/:id",authorize("material", "update"), updateMaterial);
 router.delete("/:id",authorize("material", "delete"), deleteMaterial);
 

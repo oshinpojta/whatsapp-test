@@ -4,7 +4,6 @@ import {
 } from "../controllers/rolePermissionController";
 
 let router = express.Router();
-const authorize = require('../middleware/authorize');
 
 router.get("/", getAllRolePermissions);
 router.post("/", createRolePermissions);

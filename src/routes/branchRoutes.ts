@@ -6,9 +6,9 @@ import {
 let router = express.Router();
 const authorize = require('../middleware/authorize');
 
-router.get("/",authorize("branch","read"), getAllBranch);
+router.get("/",getAllBranch);
 router.post("/",authorize("branch","create"), createBranch);
-router.get("/:id",authorize("branch","read"), branchById);
+router.get("/:id",branchById);
 router.put("/:id",authorize("branch","update"), updateBranch);
 router.delete("/:id",authorize("branch","delete"), deleteBranch);
 

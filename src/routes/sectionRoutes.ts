@@ -6,9 +6,9 @@ import {
 let router = express.Router();
 const authorize = require('../middleware/authorize');
 
-router.get("/",authorize("section", "read"), getAllSection);
+router.get("/",getAllSection);
 router.post("/",authorize("section", "create"), createSection);
-router.get("/:id",authorize("section", "read"), sectionById);
+router.get("/:id",sectionById);
 router.put("/:id",authorize("section", "update"), updateSection);
 router.delete("/:id",authorize("section", "delete"), deleteSection);
 

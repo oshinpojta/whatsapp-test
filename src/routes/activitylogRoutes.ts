@@ -12,7 +12,7 @@ const authorize = require('../middleware/authorize');
 
 // router.post("/", createActivitylog);
 router.post("/", authorize("activity_log", "create"), createActivitylogg);
-router.get("/", authorize("activity_log", "read"), getAllActivityLog);
+router.get("/",getAllActivityLog);
 router.delete("/:id", authorize("activity_log", "delete"), deleteActivity);
 // router.get("/getInputForActivity", getInputForActivity);
 

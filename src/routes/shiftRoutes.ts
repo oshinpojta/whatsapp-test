@@ -6,9 +6,9 @@ import {
 let router = express.Router();
 const authorize = require('../middleware/authorize');
 
-router.get("/",authorize("shift", "read"), getAllShift);
+router.get("/",getAllShift);
 router.post("/",authorize("shift", "create"), createShift);
-router.get("/:id",authorize("shift", "read"), shiftById);
+router.get("/:id",shiftById);
 router.put("/:id",authorize("shift", "update"), updateShift);
 router.delete("/:id",authorize("shift", "delete"), deleteShift);
 

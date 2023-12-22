@@ -6,9 +6,9 @@ import {
 let router = express.Router();
 const authorize = require('../middleware/authorize');
 
-router.get("/",authorize("menus", "read"), getAllMenu);
+router.get("/", getAllMenu);
 router.get("/tables", getAllTableMaster);
-router.get("/:id",authorize("menus", "read"), menuById);
+router.get("/:id", menuById);
 router.put("/:id",authorize("menus", "update"), updateMenu);
 router.delete("/:id",authorize("menus", "delete"), deleteMenu);
 
