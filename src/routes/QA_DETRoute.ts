@@ -6,9 +6,9 @@ import {
 let router = express.Router();
 const authorize = require('../middleware/authorize');
 
-router.get("/",authorize("oa_det_master", "read"), getAllQA_DET);
+router.get("/",getAllQA_DET);
 router.post("/",authorize("oa_det_master", "create"), createOA_DETMaster);
-router.get("/:id",authorize("oa_det_master", "read"), OA_DETMasterById);
+router.get("/:id",OA_DETMasterById);
 router.put("/bulk",authorize("oa_det_master", "update"), updateBulkOA_DETMaster);
 router.put("/:id",authorize("oa_det_master", "update"), updateOA_DETMaster);
 router.delete("/:id",authorize("oa_det_master", "delete"), deleteOA_DETMaster);
