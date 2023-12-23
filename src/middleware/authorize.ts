@@ -2,13 +2,14 @@
 
 const jwt = require('express-jwt');
 require('dotenv').config();
+import { Menus } from "../entity/Menu";
 import { rolePermissions } from "../entity/rolePermissions";
 
 module.exports = authorize
 
 function authorize(accessItem: any, operation: any) {
     const accessToken = process.env.ACCESS_TOKEN_SECRET;
-    
+
     if (!accessToken) {
         throw new Error('JWT secret is not defined. Make sure it is set in the environment.');
     }
@@ -29,17 +30,13 @@ function authorize(accessItem: any, operation: any) {
 
         async (req: any, res: any, next: any) => {
             // check user still exists
-            console.log(req.user.userInfo);
-            console.log(accessToken);
-            const userDetail = req.user.userInfo.designation;
-            console.log(userDetail);
-            
+            const userDetail = req.user.userInfo.empTypeId;
+
             const user = await rolePermissions.find({ roleId: userDetail })
-            const access = user.filter((item) => item.menuId == accessItem)[0];
-            console.log(user);
-            console.log(accessItem);
-            console.log(access);
-            
+            console.log("USER", user);
+            const menuId = await Menus.findOne({ Description: accessItem });
+            const access = user.filter((item) => item.menuId === menuId.MenuId.toString())[0];
+            console.log("ACCESS", menuId);
             if (!user) {
                 return res.status(401).json({ message: 'Unauthorized' });
             }
