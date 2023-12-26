@@ -8,7 +8,7 @@ let router = express.Router();
 router.get("/",getAllJobAssign);
 router.post("/",authorize("job_assign", "create"), createJobAssign);
 router.get("/:id",jobAssignById);
-router.put("/bulk",authorize("job_assign", "update"), updateBulkJobAssign);
+router.put("/bulk",authorize("job_assign", "create"), updateBulkJobAssign);
 router.put("/:id",authorize("job_assign", "update"), updateJobAssign);
 router.delete("/:id",authorize("job_assign", "delete"), deleteJobAssign);
 
