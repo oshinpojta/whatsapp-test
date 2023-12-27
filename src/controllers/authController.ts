@@ -37,7 +37,10 @@ export const loginUser = async (req: Request, res: Response) => {
         )
 
         const refreshToken = jwt.sign(
-            { "username": foundMatch.userName, "designation": foundMatch.designation },
+            {
+                "username": foundMatch.userName, "designation": foundMatch.designation, "empId": foundMatch.empId,
+                "empTypeId": foundMatch.empTypeId
+            },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '7d' }
         )
@@ -80,7 +83,7 @@ export const refresh = async (req: Request, res: Response) => {
 
                     const accessToken = jwt.sign(
                         {
-                            UserInfo: {
+                            userInfo: {
                                 username: foundUser.username,
                                 role: foundUser.designation,
                                 empId: foundUser.empId,

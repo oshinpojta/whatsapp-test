@@ -30,20 +30,20 @@ function authorize(accessItem: any, operation: any) {
 
         async (req: any, res: any, next: any) => {
             // check user still exists
-            const userDetail = req.user.userInfo.empTypeId;
+            const userDetail = req.user?.userInfo?.empTypeId;
 
-            const user = await rolePermissions.find({ roleId: userDetail })
-            console.log("USER", user);
+            const user = await rolePermissions.find({ roleId: userDetail });
             const menuId = await Menus.findOne({ Description: accessItem });
             const access = user.filter((item) => item.menuId === menuId.MenuId.toString())[0];
-            console.log("ACCESS", menuId);
+            console.log("ACCESS", userDetail);
             if (!user) {
                 return res.status(401).json({ message: 'Unauthorized' });
             }
-            // if (userDetail == 'Admin' || access?.access_all) {
-            //     next();
-            // }
-            if ((userDetail === 'Admin' || !access?.access_all) && (operation === "read" && !access?.read) ||
+            if (userDetail == 3 || access?.access_all) {
+                next();
+                return;
+            }
+            if ((userDetail === 3 || !access?.access_all) && (operation === "read" && !access?.read) ||
                 (operation === "create" && !access?.create) ||
                 (operation === "update" && !access?.update) ||
                 (operation === "delete" && !access?.delete)) {
