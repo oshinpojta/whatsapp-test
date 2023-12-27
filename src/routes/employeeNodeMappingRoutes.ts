@@ -9,7 +9,7 @@ const authorize = require('../middleware/authorize');
 router.get("/",getAllEmployeeNodeMapping);
 router.post("/",authorize("employee_node_mapping","create"), createEmployeeNodeMapping);
 router.get("/:id",EmployeeNodeMappingById);
-router.put("/bulk",authorize("employee_node_mapping","update"), updateBulkEmployeeNodeMapping);
+router.put("/bulk",authorize("employee_node_mapping","create"), updateBulkEmployeeNodeMapping);
 router.put("/:id",authorize("employee_node_mapping","update"), updateEmployeeNodeMapping);
 router.delete("/:id",authorize("employee_node_mapping","delete"), deleteEmployeeNodeMapping);
 

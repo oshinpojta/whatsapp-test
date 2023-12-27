@@ -9,7 +9,7 @@ const authorize = require('../middleware/authorize');
 router.get("/",getAllNodeTypes);
 router.post("/",authorize("node_types", "create"), createNodeType);
 router.get("/:id",NodeTypeById);
-router.put("/bulk",authorize("node_types", "update"), updateBulkNodeType);
+router.put("/bulk",authorize("node_types", "create"), updateBulkNodeType);
 router.put("/:id",authorize("node_types", "update"), updateNodeTypes);
 router.delete("/:id",authorize("node_types", "delete"), deleteNodeType);
 

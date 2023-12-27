@@ -9,7 +9,7 @@ const authorize = require('../middleware/authorize');
 router.get("/",getAllQA_DET2);
 router.post("/",authorize("oa_det_master2", "create"), createOA_DETMaster2);
 router.get("/:id",OA_DETMaster2ById);
-router.put("/bulk",authorize("oa_det_master2", "update"), updateBulkOA_DETMaster2);
+router.put("/bulk",authorize("oa_det_master2", "create"), updateBulkOA_DETMaster2);
 router.put("/:id",authorize("oa_det_master2", "update"), updateOA_DETMaster2);
 router.delete("/:id",authorize("oa_det_master2", "delete"), deleteOA_DETMaster2);
 
