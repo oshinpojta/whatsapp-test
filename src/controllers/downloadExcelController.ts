@@ -5,7 +5,7 @@ import { InternalServerError } from "../response/InternalServerErrorResponse";
 export const downloadExcel = async (req: Request, res: Response) => {
     try {
         const data = [
-            ...req.body.reportData,
+            ...req.body.filteredData,
         ];
         console.log(req.body.MachineWiseHeader);
         // Create a new workbook and add a worksheet
