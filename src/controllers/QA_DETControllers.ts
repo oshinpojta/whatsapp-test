@@ -123,10 +123,20 @@ export const createOA_DETMaster = async (req: Request, res: Response) => {
     qadet.userId = req.body.userId
     qadet.ProducedQty1 = req.body.ProducedQty1
     qadet.ProducedQty2 = req.body.ProducedQty2
-    qadet.TargetQty = req.body.ALT_QTY * req.body.Circumfrence /1000
+    qadet.TargetQty = req.body.ALT_QTY * req.body.Circumfrence / 1000
     qadet.Status = req.body.Status
     await qadet.save();
     return res.status(201).json(qadet);
+  } catch (error) {
+    return InternalServerError(res, error);
+  }
+};
+
+export const getAllOADETData = async (_: Request, res: Response) => {
+
+  try {
+    const oadet = await OA_DETMaster.find();
+    return res.json(oadet);
   } catch (error) {
     return InternalServerError(res, error);
   }
@@ -161,6 +171,7 @@ export const getAllQA_DET = async (_: Request, res: Response) => {
           DateTime: oaDetail.DateTime,
           Film_Type: oaDetail.Film_Type,
           Status: oaDetail.Status,
+          Delivery_Date: oaDetail.Delivery_Date,
 
         };
         commonObjects.push(commonObject);
@@ -449,7 +460,7 @@ const createDataOA_DETMaster = async (data: any) => {
     qadet.userId = data.userId
     qadet.ProducedQty1 = data.ProducedQty1
     qadet.ProducedQty2 = data.ProducedQty2
-    qadet.TargetQty = data.ALT_QTY * data.Circumfrence/1000
+    qadet.TargetQty = data.ALT_QTY * data.Circumfrence / 1000
     qadet.Status = data.Status
 
     await qadet.save();
