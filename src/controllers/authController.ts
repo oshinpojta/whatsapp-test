@@ -91,7 +91,7 @@ export const refresh = async (req: Request, res: Response) => {
                             }
                         },
                         process.env.ACCESS_TOKEN_SECRET,
-                        { expiresIn: '15m' }
+                        { expiresIn: '30m' }
                     );
                     console.log(decoded);
                     res.json({ accessToken: accessToken, username: foundUser.username, designation: foundUser.designation, empId: foundUser.empId, empTypeId: foundUser.empTypeId });
@@ -107,7 +107,8 @@ export const refresh = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
     try {
-        const cookies = req.cookies
+        const cookies = req.cookies;
+        console.log("Cookies", req);
         if (!cookies?.jwt) return res.sendStatus(204)
         res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true })
         res.json({ message: 'Cookie cleared' })
