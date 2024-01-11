@@ -34,7 +34,7 @@ import authRoutes from "./authRoutes";
 import MenuRoutes from "./menuRoutes"
 import RolePermissionsRoutes from "./rolePermissionRoutes"
 
-import { downloadExcel } from "../controllers/downloadExcelController";
+import { downloadMachineExcel, downloadMaterialExcel } from "../controllers/downloadExcelController";
 
 let router = express.Router();
 
@@ -72,6 +72,7 @@ router.use("/OA_DETRoute2", OA_DET2Router);
 router.use("/auth", authRoutes);
 router.use("/menu", MenuRoutes);
 router.use("/rolePermissions", RolePermissionsRoutes);
-router.post("/downloadExcel", downloadExcel);
+router.post("/downloadMachineExcel", downloadMachineExcel);
+router.post("/downloadMaterialExcel", downloadMaterialExcel);
 
 export = router;
