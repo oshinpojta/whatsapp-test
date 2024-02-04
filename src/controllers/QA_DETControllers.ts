@@ -45,7 +45,7 @@ const QA_DETSchema = Joi.object({
   Handle: Joi.string().allow('', null),
   Handle_Type: Joi.string().allow('', null),
   Bag_Size: Joi.string().allow('', null),
-  Liner: Joi.number().allow('', null),
+  Liner: Joi.number().allow('', null) || Joi.string().allow('', null),
   Liner_Type: Joi.string().allow('', null),
   Fabric_Type: Joi.string().allow('', null),
   Color: Joi.string().allow('', null),
