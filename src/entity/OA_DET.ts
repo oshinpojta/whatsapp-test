@@ -123,8 +123,8 @@ export class OA_DETMaster extends BaseEntity {
   @Column({ nullable: true })
   Bag_Size: string;
 
-  @Column({ nullable: true })
-  Liner: number;
+  @Column({ nullable: true, type: 'nvarchar' })
+  Liner: string;
 
   @Column({ nullable: true })
   Liner_Type: string;
