@@ -169,36 +169,79 @@ export const updateBatchMasterData = async (data: any) => {
   }
 };
 
+export const updateBulkBatchMaster = async (req: Request, res: Response) => {
+  console.log("Incoming");
+  if (req.body.newBatch.length) {
+    const batchData = req.body.newBatch
+
+    let responseData: any = []
+
+    for (let i = 0; i < batchData.length; i++) {
+      const element = batchData[i];
+      const { error } = batchSchema.validate(element);
+
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+      }
+    }
+    try {
+
+      for (let i = 0; i < batchData.length; i++) {
+        const element = batchData[i];
+        const activity = await BatchMaster.findOne({ activityId: element.activityId });
+        console.log("ACTIVITYY", activity);
+        let batchUpdateData: any;
+
+        if (element.id || activity) {
+          console.log("update");
+          batchUpdateData = await updateBatchMasterData(element)
+        }
+        else {
+          batchUpdateData = await createBatchMasterData(element)
+          console.log("add");
+        }
+        responseData.push(batchUpdateData);
+
+      }
+      return res.status(201).json(responseData);
+    } catch (error) {
+      return InternalServerError(res, error);
+    }
+  }
+
+};
+
+
 export const createBatchMasterData = async (data: any) => {
   const { error } = batchSchema.validate(data);
-
+  console.log(data);
   if (error) {
     return { error: error.details[0].message }
   }
   try {
     const newBatch = new BatchMaster();
-    newBatch.branchId = data.body.branchId;
-    newBatch.activityId = data.body.activityId;
+    newBatch.branchId = data.branchId;
+    newBatch.activityId = data.activityId;
     newBatch.consumedActivityId = data.consumedActivityId;
-    newBatch.nodeId = data.body.nodeId;
-    newBatch.producedAt = data.body.producedAt;
-    newBatch.producedQty1 = data.body.producedQty1;
-    newBatch.consumedQty1 = data.body.consumedQty1;
-    newBatch.balanceQty1 = data.body.balanceQty1;
-    newBatch.units1 = data.body.units1;
-    newBatch.producedQty2 = data.body.producedQty2;
-    newBatch.consumedQty2 = data.body.consumedQty2;
-    newBatch.balanceQty2 = data.body.balanceQty2;
-    newBatch.units2 = data.body.units2;
-    newBatch.lastConsumedAt = data.body.lastConsumedAt;
-    newBatch.fgId = data.body.fgId;
-    newBatch.producedJobId = data.body.producedJobId;
-    newBatch.lastConsumedJobId = data.body.lastConsumedJobId;
-    newBatch.conversionRate = data.body.conversionRate;
-    newBatch.totalProducedQty = data.body.totalProducedQty,
-      newBatch.targetQty = data.body.targetQty,
-      newBatch.outstandingQty = data.body.outstandingQty,
-      newBatch.userId = data.body.userId;
+    newBatch.nodeId = data.nodeId;
+    newBatch.producedAt = data.producedAt;
+    newBatch.producedQty1 = data.producedQty1;
+    newBatch.consumedQty1 = data.consumedQty1;
+    newBatch.balanceQty1 = data.balanceQty1;
+    newBatch.units1 = data.units1;
+    newBatch.producedQty2 = data.producedQty2;
+    newBatch.consumedQty2 = data.consumedQty2;
+    newBatch.balanceQty2 = data.balanceQty2;
+    newBatch.units2 = data.units2;
+    newBatch.lastConsumedAt = data.lastConsumedAt;
+    newBatch.fgId = data.fgId;
+    newBatch.producedJobId = data.producedJobId;
+    newBatch.lastConsumedJobId = data.lastConsumedJobId;
+    newBatch.conversionRate = data.conversionRate;
+    newBatch.totalProducedQty = data.totalProducedQty,
+      newBatch.targetQty = data.targetQty,
+      newBatch.outstandingQty = data.outstandingQty,
+      newBatch.userId = data.userId;
 
     await newBatch.save();
 

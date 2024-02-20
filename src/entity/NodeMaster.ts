@@ -120,6 +120,12 @@ export class NodeMaster extends BaseEntity {
   @Column({ nullable: true })
   allowExcessQty: string;
 
+  @Column({ nullable: true })
+  inputMeasurable: number;
+
+  @Column({ nullable: true })
+  outputMeasurable: number;
+
   @OneToMany(() => EmployeeNodeMapping, (empnodemap) => empnodemap.node)
   empNodeMapping: EmployeeNodeMapping[]
 

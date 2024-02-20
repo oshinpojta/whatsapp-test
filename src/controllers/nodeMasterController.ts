@@ -40,6 +40,8 @@ const nodeMasterSchema = Joi.object({
   unit1Measurable: Joi.string().allow('', null),
   unit2Mandatory: Joi.string().allow('', null),
   allowExcessQty: Joi.string().allow('', null),
+  inputMeasurable: Joi.string().allow('', null),
+  outputMeasurable: Joi.string().allow('', null),
 
 });
 
@@ -90,6 +92,8 @@ export const createNodeMaster = async (req: Request, res: Response) => {
     nodeMaster.unit1Measurable = req.body.unit1Measurable
     nodeMaster.unit2Mandatory = req.body.unit2Mandatory
     nodeMaster.allowExcessQty = req.body.allowExcessQty
+    nodeMaster.inputMeasurable = req.body.inputMeasurable
+    nodeMaster.outputMeasurable = req.body.outputMeasurable
     await nodeMaster.save();
     return res.status(201).json(nodeMaster);
   } catch (error) {
@@ -159,6 +163,8 @@ export const createBulkNodeMaster = async (req: Request, res: Response) => {
         nodeMaster.unit1Measurable = element.unit1Measurable
         nodeMaster.unit2Mandatory = element.unit2Mandatory
         nodeMaster.allowExcessQty = element.allowExcessQty
+        nodeMaster.inputMeasurable = element.inputMeasurable
+        nodeMaster.outputMeasurable = element.outputMeasurable
         responseData.push(await nodeMaster.save());
 
       }
@@ -232,6 +238,8 @@ export const updateNodeMaster = async (req: Request, res: Response) => {
     nodeMaster.unit1Measurable = req.body.unit1Measurable
     nodeMaster.unit2Mandatory = req.body.unit2Mandatory
     nodeMaster.allowExcessQty = req.body.allowExcessQty
+    nodeMaster.inputMeasurable = req.body.inputMeasurable
+    nodeMaster.outputMeasurable = req.body.outputMeasurable
 
     await nodeMaster.save();
     return res.json(nodeMaster);
@@ -369,6 +377,8 @@ const updateDataNodeMaster = async (data: any) => {
     nodeMaster.unit1Measurable = data.unit1Measurable
     nodeMaster.unit2Mandatory = data.unit2Mandatory
     nodeMaster.allowExcessQty = data.allowExcessQty
+    nodeMaster.inputMeasurable = data.inputMeasurable
+    nodeMaster.outputMeasurable = data.outputMeasurable
 
     await nodeMaster.save();
     return nodeMaster
@@ -425,6 +435,9 @@ const createDataNodeMaster = async (data: any) => {
     nodeMaster.unit1Measurable = data.unit1Measurable
     nodeMaster.unit2Mandatory = data.unit2Mandatory
     nodeMaster.allowExcessQty = data.allowExcessQty
+    nodeMaster.inputMeasurable = data.inputMeasurable
+    nodeMaster.outputMeasurable = data.outputMeasurable
+
     await nodeMaster.save();
 
     return nodeMaster
