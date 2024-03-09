@@ -8,7 +8,7 @@ const axios = require("axios");
 export const sendWebhookRequest = async (req: Request, res: Response) => {
     try {
         let body_param = req.body;
-        const token = 'EAALLZAFRoRQIBO1xNnttCGs02z6o2WVZBgK3XbNMt1nWkcgBllWKe4sx837JlHbKXtI8MWrekYDMdVLr5lJw06pgSaiZBd38RxkvGTnNZAZCszhPZCEOOxY0j2fZC9N4BkwFRq3d2SiZASKc3cD40mQc9k58YxvewhS6ZAgj0cHCcbW8mtGnO0B5hKziwaxOJwoh72ysUgvJZB0OjyvvKquLudoOVgEDQguF5FOMxC';
+        const token = 'EAADs4mGRLYwBO1dZBOvZCKdCPHph27qCMwv0kkNRmtyZBVZCKt8fmW7AZB0kDUfRHhcHSsMRGXrI1WAoHvmMKis5IFg2Fr83fv4xQEwcepbzITZAYJQbaRkcIc10JMXZCgNZCY2vuVL1RjDtSDCMwCB6BzXBlYv0GSeZC8hzPyv0l9m7GCnt5wLhmdBFJZCCai2SdNzdiz3aJvKYbBnpcZC79xLKIr5GlTxYZCd6nPQZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -30,21 +30,59 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                 const qadet = await OA_DETMaster.findOne(msg_body);
                 const itemmaster = await ItemMaster.findOne(qadet.IT_CODE);
 
-                axios({
-                    method: "POST",
-                    url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
-                    data: {
-                        messaging_product: "whatsapp",
-                        to: from,
-                        text: {
-                            body: "Hi.. Thank you for your message the Item Name is:" + itemmaster?.IT_NAME
+                if (msg_body.includes("create")) {
+                    axios({
+                        method: "POST",
+                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                        data: {
+                            "messaging_product": "whatsapp",
+                            "recipient_type": "individual",
+                            "to": "+15134626290",
+                            "type": "template",
+                            "template": {
+                                "name": "job_priority",
+                                "language": {
+                                    "code": "en_US"
+                                },
+                                "components": [
+                                    {
+                                        "type": "BUTTON",
+                                        "sub_type": "flow",
+                                        "index": "0",
+                                        "parameters": [
+                                            {
+                                                "type": "action",
+                                                "action": {
+                                                    "flow_token": "unused"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        headers: {
+                            "Content-Type": "application/json"
                         }
-                    },
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
 
-                });
+                    });
+                } else {
+                    axios({
+                        method: "POST",
+                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                        data: {
+                            messaging_product: "whatsapp",
+                            to: from,
+                            text: {
+                                body: "Hi.. Thank you for your message the Item Name is:" + itemmaster?.IT_NAME
+                            }
+                        },
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+
+                    });
+                }
 
                 res.sendStatus(200);
             } else {
