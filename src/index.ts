@@ -12,6 +12,7 @@ const helmet = require("helmet");
 var cors = require('cors')
 const cookieParser = require('cookie-parser');
 const axios = require("axios");
+import { sendWebhookRequest } from "./controllers/webhookController";
 
 
 
@@ -66,6 +67,8 @@ try {
       res.sendStatus(400);
     }
   });
+
+  app.post("/webhook", sendWebhookRequest);
 
   app.get("/health", (_, res) => {
     res.status(200).json({

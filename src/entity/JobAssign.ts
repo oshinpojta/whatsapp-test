@@ -32,6 +32,9 @@ export class JobAssign extends BaseEntity {
   jobId: string;
 
   @Column({ nullable: true })
+  priority: string;
+
+  @Column({ nullable: true })
   totalProducedQty: number;
 
   @Column({ nullable: true })

@@ -15,9 +15,10 @@ const JobAssignSchema = Joi.object({
   routeId: Joi.string().required(),
   userId: Joi.string().required(),
   jobId: Joi.string().required(),
-  totalProducedQty: Joi.number().allow('',null),
-  outstandingQty: Joi.number().allow('',null),
-  targetQty: Joi.number().allow('',null),
+  priority: Joi.string().required(),
+  totalProducedQty: Joi.number().allow('', null),
+  outstandingQty: Joi.number().allow('', null),
+  targetQty: Joi.number().allow('', null),
 });
 
 export const createJobAssign = async (req: Request, res: Response) => {
@@ -41,6 +42,7 @@ export const createJobAssign = async (req: Request, res: Response) => {
     jobAssign.routeId = req.body.routeId;
     jobAssign.status = req.body.status;
     jobAssign.jobId = req.body.jobId;
+    jobAssign.priority = req.body.priority;
     jobAssign.totalProducedQty = req.body.totalProducedQty,
       jobAssign.outstandingQty = req.body.outstandingQty,
       jobAssign.targetQty = req.body.targetQty,
@@ -89,6 +91,7 @@ export const updateJobAssign = async (req: Request, res: Response) => {
     jobAssign.userId = req.body.userId;
     jobAssign.status = req.body.status;
     jobAssign.jobId = req.body.jobId;
+    jobAssign.priority = req.body.priority;
     jobAssign.totalProducedQty = req.body.totalProducedQty,
       jobAssign.outstandingQty = req.body.outstandingQty,
       jobAssign.targetQty = req.body.targetQty,
@@ -170,6 +173,7 @@ const updateDataJobAssign = async (data: any) => {
     jobAssign.routeId = data.routeId;
     jobAssign.status = data.status;
     jobAssign.jobId = data.jobId;
+    jobAssign.priority = data.priority;
     jobAssign.totalProducedQty = data.totalProducedQty,
       jobAssign.outstandingQty = data.outstandingQty,
       jobAssign.targetQty = data.body.targetQty,
@@ -205,6 +209,7 @@ const createDataJobAssign = async (data: any) => {
     jobAssign.userId = data.userId;
     jobAssign.status = data.status;
     jobAssign.jobId = data.jobId;
+    jobAssign.priority = data.priority;
     jobAssign.totalProducedQty = data.totalProducedQty,
       jobAssign.outstandingQty = data.outstandingQty,
       jobAssign.targetQty = data.targetQty,
