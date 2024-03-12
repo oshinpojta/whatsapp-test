@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import { InternalServerError } from "../response/InternalServerErrorResponse";
 import { OA_DETMaster } from "../entity/OA_DET";
-import { ItemMaster } from "../entity/itemMaster";
 import { JobAssign } from "../entity/JobAssign";
-import { NodeMaster } from "../entity/NodeMaster";
-import { Shift } from "../entity/Shift";
 
 const axios = require("axios");
 
@@ -14,6 +11,16 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
         const token = 'EAADs4mGRLYwBO1vobOZAYyw0xaZBbuAS5n0ruPTy59aDyu3ddi0tXKLuMIo6tXdQMJMoEv82tF2V7QUzOZBPoYbbpL6CycfcTvT23bnvBGplI70AuwCMQSc8OJzmh05RdzM9HdUZCIk8bX8bufSf1ECOZAfuXhZC9LJtitNAOFm62chU1ZBQFN6wIE8ZAv8nutC7j37vuYKJWXelciMIdlZCJBT7voZANTWNByTzsZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
+
+        const config = {
+            user: 'newuser',
+            password: 'Root@123',
+            server: 'LAPTOP-ODV7LQNH',
+            database: 'Taxonanalytica',
+            // options: {
+            //   encrypt: true, // For Azure SQL Database
+            // },
+        };
 
         if (body_param.object) {
             console.log("inside body param" + JSON.stringify(body_param.entry[0].changes[0].value.messages));
@@ -34,7 +41,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     const datePickerResponseTimestamp = parseInt(responses.screen_0_DatePicker_1, 10);
                     const datePickerResponse = new Date(datePickerResponseTimestamp);
                     console.log(datePickerResponse);
-                    const qadet = await OA_DETMaster.findOne("0319-170224");
+                    const qadet = await OA_DETMaster.findOne("0326-071223");
                     console.log("QAAAA", qadet?.jobId);
                     qadet.jobId = qadet.jobId;
                     qadet.branchId = qadet.branchId;
@@ -93,28 +100,29 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
 
                     await qadet.save();
 
-
-                    const jobAssign = await JobAssign.findOne("0319-170224");
-
-                    const node = await NodeMaster.findOne(jobAssign.node);
+                    const sql = require('mssql');
+                    await sql.connect(config);
+                    let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE jobId = '0326-071223';`);
+                    //console.log('jobassign', jobAssign.recordset[jobAssign.recordset.length - 1]);
+                    jobAssign = jobAssign.recordset[jobAssign.recordset.length - 1];
 
                     //const shift = await Shift.findOne(jobAssign.shift);
+                    let jobAssignVal = await JobAssign.findOne(jobAssign.id);
+                    // jobAssign.branchId = jobAssign.branchId;
+                    // jobAssign.date = jobAssign.date;
+                    // //jobAssign.shiftName = shift;
+                    // jobAssign.node = jobAssign.node_id;
+                    // jobAssign.userId = jobAssign.userId;
+                    // jobAssign.routeId = jobAssign.routeId;
+                    // jobAssign.status = jobAssign.status;
+                    // jobAssign.jobId = "0326-071223";
+                    jobAssignVal.priority = radioButtonResponse;
+                    // jobAssign.totalProducedQty = jobAssign.totalProducedQty,
+                    //     jobAssign.outstandingQty = jobAssign.outstandingQty,
+                    //     jobAssign.targetQty = jobAssign.targetQty,
+                    console.log('jobassign', jobAssignVal);
 
-                    jobAssign.branchId = jobAssign.branchId;
-                    jobAssign.date = jobAssign.date;
-                    //jobAssign.shiftName = shift;
-                    jobAssign.node = node;
-                    jobAssign.userId = jobAssign.userId;
-                    jobAssign.routeId = jobAssign.routeId;
-                    jobAssign.status = jobAssign.status;
-                    jobAssign.jobId = "0307-201123";
-                    jobAssign.priority = jobAssign.priority;
-                    jobAssign.totalProducedQty = jobAssign.totalProducedQty,
-                        jobAssign.outstandingQty = jobAssign.outstandingQty,
-                        jobAssign.targetQty = jobAssign.targetQty,
-
-                        await jobAssign.save();
-
+                    await jobAssignVal.save();
 
                     console.log('Date Picker Response:', datePickerResponse);
                 } else {
@@ -126,7 +134,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                             data: {
                                 "messaging_product": "whatsapp",
                                 "recipient_type": "individual",
-                                "to": "+15134626290",
+                                "to": from,
                                 "type": "template",
                                 "template": {
                                     "name": "job_priority",
@@ -164,29 +172,20 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                         console.log("resulttt");
                         const sql = require('mssql');
 
-                        const config = {
-                            user: 'newuser',
-                            password: 'Root@123',
-                            server: 'LAPTOP-ODV7LQNH',
-                            database: 'Taxonanalytica',
-                            // options: {
-                            //   encrypt: true, // For Azure SQL Database
-                            // },
-                        };
 
                         try {
                             console.log(msg_body);
                             await sql.connect(config);
-                            let result = await new sql.Request().query(`SELECT IT_CODE FROM [Machoptic].[dbo].[item_master] WHERE IT_NAME LIKE '${msg_body}%';`);
+                            let result = await new sql.Request().query(`SELECT IT_CODE FROM [Taxonanalytica].[dbo].[item_master] WHERE IT_NAME LIKE '${msg_body}%';`);
 
                             console.log(result);
                             const items = result?.recordset.map((item: any) => item?.IT_CODE);
 
-                            const placeholders = items.map((item: any) => item).join(',');
+                            const placeholders = items.map((item: any) => `'${item}'`).join(',');
 
                             console.log("Jo", placeholders);
 
-                            const job = await new sql.Request().query(`SELECT [jobId], [Status] FROM [Machoptic].[dbo].[oa_det_master] WHERE IT_CODE IN ('MMI00A000319');`);
+                            const job = await new sql.Request().query(`SELECT [jobId], [Status] FROM [Taxonanalytica].[dbo].[oa_det_master] WHERE IT_CODE IN (${placeholders});`);
 
                             console.log("Jobb", job);
 
