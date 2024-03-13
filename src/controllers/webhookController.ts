@@ -2,13 +2,14 @@ import { Request, Response } from "express";
 import { InternalServerError } from "../response/InternalServerErrorResponse";
 import { OA_DETMaster } from "../entity/OA_DET";
 import { JobAssign } from "../entity/JobAssign";
+import { any } from "joi";
 
 const axios = require("axios");
 
 export const sendWebhookRequest = async (req: Request, res: Response) => {
     try {
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBO1vobOZAYyw0xaZBbuAS5n0ruPTy59aDyu3ddi0tXKLuMIo6tXdQMJMoEv82tF2V7QUzOZBPoYbbpL6CycfcTvT23bnvBGplI70AuwCMQSc8OJzmh05RdzM9HdUZCIk8bX8bufSf1ECOZAfuXhZC9LJtitNAOFm62chU1ZBQFN6wIE8ZAv8nutC7j37vuYKJWXelciMIdlZCJBT7voZANTWNByTzsZD';
+        const token = 'EAADs4mGRLYwBO4KvJIFSV2vLtTt5C9ruHo6DKWl550ZCoTiQgIfAxEnZCFn1smRGwZAQwKn0bdWgZB4OtSkTV3427vTG2W6BIZAtRVZBZAveUWy1XSectqT8Nmw7a12XzutH6KZAmlsa7OVk9iqtjhGAwxqtZAt0WZBUFzD3zTJZBxwEW9le9ei6woIlhRjg6SYFH5wsGW7xxKqWoNZCu8cEKR0kGnstn4chOKH4avwZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -128,46 +129,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                 } else {
                     let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
                     if (msg_body.includes("create")) {
-                        axios({
-                            method: "POST",
-                            url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
-                            data: {
-                                "messaging_product": "whatsapp",
-                                "recipient_type": "individual",
-                                "to": from,
-                                "type": "template",
-                                "template": {
-                                    "name": "job_priority",
-                                    "language": {
-                                        "code": "en_US"
-                                    },
-                                    "components": [
-                                        {
-                                            "type": "BUTTON",
-                                            "sub_type": "flow",
-                                            "index": "0",
-                                            "parameters": [
-                                                {
-                                                    "type": "action",
-                                                    "action": {
-                                                        "flow_token": "unused",
-                                                        "flow_action_data": {
-                                                            "data": {
-                                                                "jobId": "030440"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            },
-                            headers: {
-                                "Content-Type": "application/json"
-                            }
 
-                        });
                     } else {
                         console.log("resulttt");
                         const sql = require('mssql');
@@ -183,28 +145,76 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
 
                             const placeholders = items.map((item: any) => `'${item}'`).join(',');
 
-                            console.log("Jo", placeholders);
 
                             const job = await new sql.Request().query(`SELECT [jobId], [Status] FROM [Taxonanalytica].[dbo].[oa_det_master] WHERE IT_CODE IN (${placeholders});`);
 
-                            console.log("Jobb", job);
+                            const jobs = job?.recordset; //?.map((item: any) => item?.jobId + '-' + item?.Status)?.join('\t\t\t');
 
-                            const jobs = job?.recordset?.map((item: any) => item?.jobId + '-' + item?.Status)?.join('\t\t\t');
+                            // axios({
+                            //     method: "POST",
+                            //     url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                            //     data: {
+                            //         messaging_product: "whatsapp",
+                            //         to: from,
+                            //         text: {
+                            //             body: "Here is the following Job Details : \t\t\t " + jobs
+                            //         }
+                            //     },
+                            //     headers: {
+                            //         "Content-Type": "application/json"
+                            //     }
 
-                            axios({
-                                method: "POST",
-                                url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
-                                data: {
-                                    messaging_product: "whatsapp",
-                                    to: from,
-                                    text: {
-                                        body: "Here is the following Job Details : \t\t\t " + jobs
+                            // });
+                            console.log("jobssss", jobs, job);
+                            jobs.forEach((element: any) => {
+                                axios({
+                                    method: "POST",
+                                    url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                                    data: {
+                                        "messaging_product": "whatsapp",
+                                        "recipient_type": "individual",
+                                        "to": from,
+                                        "type": "template",
+                                        "template": {
+                                            "name": "jobbb",
+                                            "language": {
+                                                "code": "en_US"
+                                            },
+                                            "components": [
+                                                // {
+                                                //     "type": "body",
+                                                //     "parameters": [
+                                                //         {
+                                                //             "type": "text",
+                                                //             "text": `${element?.jobId}`
+                                                //         }
+                                                //     ]
+                                                // },
+                                                {
+                                                    "type": "BUTTON",
+                                                    "sub_type": "flow",
+                                                    "index": "0",
+                                                    "parameters": [
+                                                        {
+                                                            "type": "action",
+                                                            "action": {
+                                                                "flow_token": "unused",
+                                                                "flow_action_data": {
+                                                                    "data": {
+                                                                        "jobId": `${element?.jobId}`
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    headers: {
+                                        "Content-Type": "application/json"
                                     }
-                                },
-                                headers: {
-                                    "Content-Type": "application/json"
-                                }
-
+                                });
                             });
 
                         } catch (error) {
