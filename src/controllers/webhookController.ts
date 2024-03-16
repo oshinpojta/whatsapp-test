@@ -11,7 +11,7 @@ const filePath = "D:\CRM-BE\Taxonalytica_BE_Access\constants\data.json";
 export const sendWebhookRequest = async (req: Request, res: Response) => {
     try {
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBO3G9IEaZCpqo1BzckxsoC7UP9CekBUzd8jnYj4uCz8WteYluqYf2uw3zmFQ8Ovzmyr1fAk1FW0a4JJXBMZAZAhEa1cp1pXGiPoXRxr7DZB7dBuh8o9HkL1ZBcpLdBdoZCC7RnNC6f9CNFkgxgW5CKeFjAR8X8yEsSNLsCqZBuHBPU4f0AiG63XrT3txkOZBURSsj075P61Y7vHfsGmD6Rle2rasZD';
+        const token = 'EAADs4mGRLYwBOZC9IU3PaHOl5AsXC8EeIHvVDIQj31OCcpEfbdgrxbvru5ZAMseNR1ZCqWP5iMNwxNChVeJ6bngHQzekBJxbB9WGu012RIzCTSQ88LEZA4ws7xz4BNUzX1Pi8xKOpWHczzqszi8WvDhgs4ZCSQZAaSC5a5BrKZCNjEFTTQvIqkVv0uMTskZA8FLVCPm5dM4Ky2k0mxeAFcaZA213bKYHsAut0MLYZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -121,13 +121,13 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                 }
                 if (msg?.interactive?.type == 'nfm_reply') {
                     const responses = JSON.parse(msg?.interactive.nfm_reply.response_json);
-                    const radioButtonResponse = responses.screen_0_RadioButtonsGroup_0.split('_')[1];
-                    console.log('Radio Button Response:', radioButtonResponse);
 
-                    const datePickerResponseTimestamp = parseInt(responses.screen_0_DatePicker_1, 10);
+                    const datePickerResponseTimestamp = parseInt(responses.screen_0_DatePicker_0, 10);
                     const datePickerResponse = new Date(datePickerResponseTimestamp);
                     console.log(datePickerResponse);
-                    const qadet = await OA_DETMaster.findOne("0326-071223");
+                    const readData = JSON.parse(fs.readFileSync(filePath));
+
+                    const qadet = await OA_DETMaster.findOne(`${readData?.jobId}`);
                     console.log("QAAAA", qadet?.jobId);
                     qadet.jobId = qadet.jobId;
                     qadet.branchId = qadet.branchId;
@@ -185,39 +185,29 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     qadet.allowExcessQty = qadet.allowExcessQty
 
                     await qadet.save();
+                    axios({
+                        method: "POST",
+                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                        data: {
+                            messaging_product: "whatsapp",
+                            to: from,
+                            text: {
+                                body: "Successfully updated Delivery Date"
+                            }
+                        },
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
 
-                    const sql = require('mssql');
-                    await sql.connect(config);
-                    const readData = JSON.parse(fs.readFileSync(filePath));
-                    let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE jobId = ${readData?.jobId};`);
-                    //console.log('jobassign', jobAssign.recordset[jobAssign.recordset.length - 1]);
-                    jobAssign = jobAssign.recordset[jobAssign.recordset.length - 1];
-
-                    //const shift = await Shift.findOne(jobAssign.shift);
-                    let jobAssignVal = await JobAssign.findOne(jobAssign.id);
-                    // jobAssign.branchId = jobAssign.branchId;
-                    // jobAssign.date = jobAssign.date;
-                    // //jobAssign.shiftName = shift;
-                    // jobAssign.node = jobAssign.node_id;
-                    // jobAssign.userId = jobAssign.userId;
-                    // jobAssign.routeId = jobAssign.routeId;
-                    // jobAssign.status = jobAssign.status;
-                    // jobAssign.jobId = "0326-071223";
-                    jobAssignVal.priority = radioButtonResponse;
-                    // jobAssign.totalProducedQty = jobAssign.totalProducedQty,
-                    //     jobAssign.outstandingQty = jobAssign.outstandingQty,
-                    //     jobAssign.targetQty = jobAssign.targetQty,
-                    console.log('jobassign', jobAssignVal);
-
-                    await jobAssignVal.save();
-
+                    });
                     console.log('Date Picker Response:', datePickerResponse);
                 }
                 if (msg?.interactive?.type == "button_reply") {
                     const sql = require('mssql');
                     await sql.connect(config);
                     const readData = JSON.parse(fs.readFileSync(filePath));
-                    let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE jobId = ${readData?.jobId};`);
+                    console.log(readData?.jobId);
+                    let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE jobId = '${readData?.jobId}';`);
                     console.log('jobassign', jobAssign.recordset[jobAssign.recordset.length - 1]);
                     jobAssign = jobAssign.recordset[jobAssign.recordset.length - 1];
 
@@ -254,6 +244,37 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                         }
 
                     });
+                    axios({
+                        method: "POST",
+                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                        data: {
+                            "messaging_product": "whatsapp",
+                            "recipient_type": "individual",
+                            "to": from,
+                            "type": "template",
+                            "template": {
+                                "name": "delivery_date",
+                                "language": {
+                                    "code": "en_US"
+                                },
+                                "components": [
+                                    {
+                                        "type": "BUTTON",
+                                        "sub_type": "flow",
+                                        "index": "0",
+                                        "parameters": [
+                                            {
+                                                "type": "action",
+                                                "action": {
+                                                    "flow_token": "unused",
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    });
                 }
                 if (msg?.type === "text") {
                     console.log("resulttt");
@@ -262,20 +283,21 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     try {
                         console.log(msg_body);
                         await sql.connect(config);
-                        let result = await new sql.Request().query(`SELECT IT_CODE FROM [Taxonanalytica].[dbo].[item_master] WHERE IT_NAME LIKE '${msg_body}%';`);
+                        let result = await new sql.Request().query(`SELECT IT_CODE, IT_NAME FROM [Taxonanalytica].[dbo].[item_master] WHERE IT_NAME LIKE '${msg_body}%';`);
 
                         console.log(result);
                         const items = result?.recordset.map((item: any) => item?.IT_CODE);
+                        const itemNames = result?.recordset.map((item: any) => item?.IT_NAME);
 
                         const placeholders = items.map((item: any) => `'${item}'`).join(',');
-
 
                         const job = await new sql.Request().query(`SELECT [jobId], [Status] FROM [Taxonanalytica].[dbo].[oa_det_master] WHERE IT_CODE IN (${placeholders});`);
 
                         const jobs = job?.recordset;
 
-                        const listObject = createListObject(jobs);
-                        console.log("jobssss", jobs, job);
+                        const listObject = createListObject(jobs, itemNames);
+                        console.log("ITEMNAMES", itemNames);
+
                         let messageObject = {
                             "messaging_product": "whatsapp",
                             "recipient_type": "individual",
@@ -319,8 +341,9 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                                         }
                                     ]
                                 }
-                            },
+                            }
                         };
+                        messageObject.interactive = listObject;
                         console.log("Valuesss", JSON.stringify(messageObject, null, 2));
                         axios({
                             method: "POST",
@@ -365,7 +388,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
     }
 }
 
-const createListObject = (jobs: any) => {
+const createListObject = (jobs: any, itemNames: any) => {
     const object = {
         type: "list",
         header: {
@@ -386,7 +409,7 @@ const createListObject = (jobs: any) => {
                     rows: jobs.map((item: any, index: any) => ({
                         id: index + 1,
                         title: item?.jobId,
-                        description: item?.status,
+                        description: itemNames[index],
                     }))
                 },
             ],
