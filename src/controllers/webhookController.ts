@@ -5,13 +5,13 @@ import { JobAssign } from "../entity/JobAssign";
 
 const axios = require("axios");
 const fs = require('fs');
-const path = require('path');
+//const path = require('path');
 const filePath = "D:\CRM-BE\Taxonalytica_BE_Access\constants\data.json";
 
 export const sendWebhookRequest = async (req: Request, res: Response) => {
     try {
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBOZC9IU3PaHOl5AsXC8EeIHvVDIQj31OCcpEfbdgrxbvru5ZAMseNR1ZCqWP5iMNwxNChVeJ6bngHQzekBJxbB9WGu012RIzCTSQ88LEZA4ws7xz4BNUzX1Pi8xKOpWHczzqszi8WvDhgs4ZCSQZAaSC5a5BrKZCNjEFTTQvIqkVv0uMTskZA8FLVCPm5dM4Ky2k0mxeAFcaZA213bKYHsAut0MLYZD';
+        const token = 'EAADs4mGRLYwBO07IET2Y1sVyTvgucvYLxZCAZBVZBPm8L7BrRse3utORzjwscf0r56GvrjVJeFI357aAhRvoxNWLZBln8c0ZAvLmS51sXaDRrLnPqVw0MKzxJ8SyUBT8JbgeJA7jtpym7rqQSccsEGpP9hZAEYdzPI7NQZBKR4ydvFXYnCi4NN657rOBqzOAtocIVdtf2TXDqvUaJpwKOZBPGV0EQ9ZBv9svTyHAZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -104,7 +104,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                         });
                         try {
                             console.log("Titleee", msg?.interactive?.list_reply?.title);
-                            const data = { jobId: `${msg?.interactive?.list_reply?.title}` }
+                            const data = { jobId: `${msg?.interactive?.list_reply?.title}`, jobName: `${msg?.interactive?.list_reply?.description}` };
                             fs.writeFileSync(filePath, JSON.stringify(data));
                             console.log('Data written successfully.');
                             const readData = JSON.parse(fs.readFileSync(filePath));
@@ -192,7 +192,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                             messaging_product: "whatsapp",
                             to: from,
                             text: {
-                                body: "Successfully updated Delivery Date"
+                                body: `Successfully updated Delivery Date for the job ${readData?.jobId} - ${readData?.jobName}`
                             }
                         },
                         headers: {
