@@ -150,22 +150,6 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                         }
 
                     });
-
-                    axios({
-                        method: "POST",
-                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
-                        data: {
-                            messaging_product: "whatsapp",
-                            to: readData?.phoneno || '15134626290',
-                            text: {
-                                body: `Priority and Delivery date is updated for the following job ${readData?.jobId} - ${readData?.jobName}`
-                            }
-                        },
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-
-                    });
                     console.log('Date Picker Response:', datePickerResponse);
                 }
                 if (msg?.interactive?.type == "button_reply") {
@@ -176,9 +160,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
 
                     let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE jobId = '${readData?.jobId}';`);
                     jobAssign = jobAssign.recordset[jobAssign.recordset.length - 1];
-                    let employeeNode = await new sql.Request().query(`SELECT [emp_id] FROM [Taxonanalytica].[dbo].[employee_node_mapping] WHERE node_id = '${jobAssign.node_id}';`);
-                    let employeePhone = await new sql.Request().query(`SELECT [phoneno] FROM [Taxonanalytica].[dbo].[employee] WHERE empId = '${employeeNode?.recordset[0]?.emp_id}';`);
-                    console.log("employeeee", employeePhone);
+
                     console.log('jobassign', jobAssign.recordset[jobAssign.recordset.length - 1]);
 
                     //const shift = await Shift.findOne(jobAssign.shift);
@@ -247,8 +229,6 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                             }
                         }
                     });
-                    const data = { ...readData, phoneno: employeePhone?.recordset[0]?.phoneno };
-                    fs.writeFileSync(filePath, JSON.stringify(data));
                 }
                 if (msg?.type === "text") {
                     console.log("resulttt");
