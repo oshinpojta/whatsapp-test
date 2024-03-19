@@ -19,32 +19,35 @@ export class Employee extends BaseEntity {
   @Column()
   branchId: string;
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   empTypeId: string;
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   employeeName: string;
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   designation: string;
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   grade: string;
 
-  @Column({ type:'date',nullable: true, })
+  @Column({ type: 'date', nullable: true, })
   dateOfJoining: Date;
 
-  @Column({ type:'date', nullable: true })
+  @Column({ type: 'date', nullable: true })
   lastDate: string;
 
-  @Column({default : true })
+  @Column({ default: true })
   isActive: boolean;
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   userName: string;
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   password: string;
+
+  @Column({ nullable: true })
+  phoneno: string;
 
   // @OneToMany(() => ActivityLog, (activityLog) => activityLog.emp)
   // activitylog: ActivityLog[]

@@ -8,22 +8,23 @@ const fs = require('fs');
 //const path = require('path');
 const filePath = "D:\CRM-BE\Taxonalytica_BE_Access\constants\data.json";
 
+const config = {
+    user: 'newuser',
+    password: 'Root@123',
+    server: 'LAPTOP-ODV7LQNH',
+    database: 'Taxonanalytica',
+    // options: {
+    //   encrypt: true, // For Azure SQL Database
+    // },
+};
+
 export const sendWebhookRequest = async (req: Request, res: Response) => {
     try {
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBO07IET2Y1sVyTvgucvYLxZCAZBVZBPm8L7BrRse3utORzjwscf0r56GvrjVJeFI357aAhRvoxNWLZBln8c0ZAvLmS51sXaDRrLnPqVw0MKzxJ8SyUBT8JbgeJA7jtpym7rqQSccsEGpP9hZAEYdzPI7NQZBKR4ydvFXYnCi4NN657rOBqzOAtocIVdtf2TXDqvUaJpwKOZBPGV0EQ9ZBv9svTyHAZD';
+        const token = 'EAADs4mGRLYwBO8tiU1ySGE5uVe0k7PiX23L1FT8lB31s2H3jAPvzEtM1BUwbEXvotWOHtnm7e8yUtM2rtqy1CFLDKZBy2bsR3e3gX5dYWBhJ4lHxZA55V04U7IWjeq4hNQUknvM2Km0ti1W3vPxr3sXjAf2i6N6WZBkhrpvI0Pij0DZBiX7aCGreJn4Kw1WdPerCF35P12DkF3ZCnkPjZBJbd1tgFOvovSamGA';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
-        const config = {
-            user: 'newuser',
-            password: 'Root@123',
-            server: 'LAPTOP-ODV7LQNH',
-            database: 'Taxonanalytica',
-            // options: {
-            //   encrypt: true, // For Azure SQL Database
-            // },
-        };
         const buttonInteractiveObject = {
             type: "button",
             header: {
@@ -126,65 +127,14 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     const datePickerResponse = new Date(datePickerResponseTimestamp);
                     console.log(datePickerResponse);
                     const readData = JSON.parse(fs.readFileSync(filePath));
+                    console.log("readddd", readData);
 
-                    const qadet = await OA_DETMaster.findOne(`${readData?.jobId}`);
-                    console.log("QAAAA", qadet?.jobId);
-                    qadet.jobId = qadet.jobId;
-                    qadet.branchId = qadet.branchId;
-                    qadet.CO_CODE = qadet.CO_CODE
-                    qadet.OA_NO = qadet.OA_NO
-                    qadet.IT_CODE = qadet.IT_CODE
-                    qadet.OA_SRNO = qadet.OA_SRNO
-                    qadet.Remarks = qadet.Remarks
-                    qadet.fyear = qadet.fyear
-                    qadet.DB_CODE = qadet.DB_CODE
-                    qadet.ALT_QTY = qadet.ALT_QTY
-                    qadet.Delivery_Date = datePickerResponse
-                    qadet.ALT_RATE = qadet.ALT_RATE
-                    qadet.UR_CODE = qadet.UR_CODE
-                    qadet.Final_Amt = qadet.Final_Amt
-                    qadet.Location_Code = qadet.Location_Code
-                    qadet.Index = qadet.Index
-                    qadet.URN_No = qadet.URN_No
-                    qadet.OA_Status = qadet.OA_Status
-                    qadet.From_URN_No = qadet.From_URN_No
-                    qadet.From_Item_Sr_No = qadet.From_Item_Sr_No
-                    qadet.ALT_UNIT_ID = qadet.ALT_UNIT_ID
-                    qadet.Item_Long_Description = qadet.Item_Long_Description
-                    qadet.reason = qadet.reason
-                    qadet.Tolerance = qadet.Tolerance
-                    qadet.Close_Open_Status = qadet.Close_Open_Status
-                    qadet.Close_Open_Reason = qadet.Close_Open_Reason
-                    qadet.Discount = qadet.Discount
-                    qadet.DIS_Amount = qadet.DIS_Amount
-                    qadet.InputAmount = qadet.InputAmount
-                    qadet.MRP = qadet.MRP
-                    qadet.Other_Unit_ID = qadet.Other_Unit_ID
-                    qadet.Other_Qty = qadet.Other_Qty
-                    qadet.No_of_Color = qadet.No_of_Color
-                    qadet.Film_Type = qadet.Film_Type
-                    qadet.Single_Double_up_Type = qadet.Single_Double_up_Type
-                    qadet.Handle = qadet.Handle
-                    qadet.Handle_Type = qadet.Handle_Type
-                    qadet.Bag_Size = qadet.Bag_Size
-                    qadet.Liner = qadet.Liner
-                    qadet.Liner_Type = qadet.Liner_Type
-                    qadet.Fabric_Type = qadet.Fabric_Type
-                    qadet.Color = qadet.Color
-                    qadet.Special_Remark = qadet.Special_Remark
-                    qadet.Circumfrence = qadet.Circumfrence
-                    qadet.Film_Size = qadet.Film_Size
-                    qadet.Denier = qadet.Denier
-                    qadet.ALT_UNIT = qadet.ALT_UNIT
-                    qadet.Production_type = qadet.Production_type
-                    qadet.userId = qadet.userId
-                    qadet.ProducedQty1 = qadet.ProducedQty1
-                    qadet.ProducedQty2 = qadet.ProducedQty2
-                    qadet.TargetQty = qadet.ALT_QTY * qadet.Circumfrence / 1000
-                    qadet.Status = qadet.Status
-                    qadet.allowExcessQty = qadet.allowExcessQty
 
-                    await qadet.save();
+                    await updateOA_DETMaster(readData, datePickerResponse, " ");
+
+                    //await sendMessages();
+
+                    // console.log("employeee", employeePhone, employeeNode);
                     axios({
                         method: "POST",
                         url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
@@ -200,6 +150,22 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                         }
 
                     });
+
+                    axios({
+                        method: "POST",
+                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                        data: {
+                            messaging_product: "whatsapp",
+                            to: readData?.phoneno || '15134626290',
+                            text: {
+                                body: `Priority and Delivery date is updated for the following job ${readData?.jobId} - ${readData?.jobName}`
+                            }
+                        },
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+
+                    });
                     console.log('Date Picker Response:', datePickerResponse);
                 }
                 if (msg?.interactive?.type == "button_reply") {
@@ -207,9 +173,13 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     await sql.connect(config);
                     const readData = JSON.parse(fs.readFileSync(filePath));
                     console.log(readData?.jobId);
+
                     let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE jobId = '${readData?.jobId}';`);
-                    console.log('jobassign', jobAssign.recordset[jobAssign.recordset.length - 1]);
                     jobAssign = jobAssign.recordset[jobAssign.recordset.length - 1];
+                    let employeeNode = await new sql.Request().query(`SELECT [emp_id] FROM [Taxonanalytica].[dbo].[employee_node_mapping] WHERE node_id = '${jobAssign.node_id}';`);
+                    let employeePhone = await new sql.Request().query(`SELECT [phoneno] FROM [Taxonanalytica].[dbo].[employee] WHERE empId = '${employeeNode?.recordset[0]?.emp_id}';`);
+                    console.log("employeeee", employeePhone);
+                    console.log('jobassign', jobAssign.recordset[jobAssign.recordset.length - 1]);
 
                     //const shift = await Shift.findOne(jobAssign.shift);
                     let jobAssignVal = await JobAssign.findOne(jobAssign.id);
@@ -228,6 +198,8 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     console.log('jobassign', jobAssignVal);
 
                     await jobAssignVal.save();
+
+                    await updateOA_DETMaster(readData, null, msg?.interactive?.button_reply?.title);
 
                     axios({
                         method: "POST",
@@ -275,6 +247,8 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                             }
                         }
                     });
+                    const data = { ...readData, phoneno: employeePhone?.recordset[0]?.phoneno };
+                    fs.writeFileSync(filePath, JSON.stringify(data));
                 }
                 if (msg?.type === "text") {
                     console.log("resulttt");
@@ -387,6 +361,85 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
         return InternalServerError(res, error);
     }
 }
+
+const updateOA_DETMaster = async (readData: any, date: any, priority: any) => {
+    const qadet = await OA_DETMaster.findOne(`${readData?.jobId}`);
+    console.log("QAAAA", qadet?.jobId);
+    qadet.jobId = qadet.jobId;
+    qadet.branchId = qadet.branchId;
+    qadet.CO_CODE = qadet.CO_CODE
+    qadet.OA_NO = qadet.OA_NO
+    qadet.IT_CODE = qadet.IT_CODE
+    qadet.OA_SRNO = qadet.OA_SRNO
+    qadet.Remarks = qadet.Remarks
+    qadet.fyear = qadet.fyear
+    qadet.DB_CODE = qadet.DB_CODE
+    qadet.ALT_QTY = qadet.ALT_QTY
+    qadet.ALT_RATE = qadet.ALT_RATE
+    qadet.UR_CODE = qadet.UR_CODE
+    qadet.Final_Amt = qadet.Final_Amt
+    qadet.Location_Code = qadet.Location_Code
+    qadet.Index = qadet.Index
+    qadet.URN_No = qadet.URN_No
+    qadet.OA_Status = qadet.OA_Status
+    qadet.From_URN_No = qadet.From_URN_No
+    qadet.From_Item_Sr_No = qadet.From_Item_Sr_No
+    qadet.ALT_UNIT_ID = qadet.ALT_UNIT_ID
+    qadet.Item_Long_Description = qadet.Item_Long_Description
+    qadet.reason = qadet.reason
+    qadet.Tolerance = qadet.Tolerance
+    qadet.Close_Open_Status = qadet.Close_Open_Status
+    qadet.Close_Open_Reason = qadet.Close_Open_Reason
+    qadet.Discount = qadet.Discount
+    qadet.DIS_Amount = qadet.DIS_Amount
+    qadet.InputAmount = qadet.InputAmount
+    qadet.MRP = qadet.MRP
+    qadet.Other_Unit_ID = qadet.Other_Unit_ID
+    qadet.Other_Qty = qadet.Other_Qty
+    qadet.No_of_Color = qadet.No_of_Color
+    qadet.Film_Type = qadet.Film_Type
+    qadet.Single_Double_up_Type = qadet.Single_Double_up_Type
+    qadet.Handle = qadet.Handle
+    qadet.Handle_Type = qadet.Handle_Type
+    qadet.Bag_Size = qadet.Bag_Size
+    qadet.Liner = qadet.Liner
+    qadet.Liner_Type = qadet.Liner_Type
+    qadet.Fabric_Type = qadet.Fabric_Type
+    qadet.Color = qadet.Color
+    qadet.Special_Remark = qadet.Special_Remark
+    qadet.Circumfrence = qadet.Circumfrence
+    qadet.Film_Size = qadet.Film_Size
+    qadet.Denier = qadet.Denier
+    qadet.ALT_UNIT = qadet.ALT_UNIT
+    qadet.Production_type = qadet.Production_type
+    qadet.userId = qadet.userId
+    qadet.ProducedQty1 = qadet.ProducedQty1
+    qadet.ProducedQty2 = qadet.ProducedQty2
+    qadet.TargetQty = qadet.ALT_QTY * qadet.Circumfrence / 1000
+    qadet.Status = qadet.Status
+    qadet.priority = priority ? priority : qadet.priority
+    qadet.allowExcessQty = qadet.allowExcessQty
+
+    if (date != null) {
+        qadet.Delivery_Date = date
+    } else {
+        qadet.Delivery_Date = null
+    }
+
+    await qadet.save();
+};
+
+const sendMessages = async () => {
+
+    const sql = require('mssql');
+    await sql.connect(config);
+    const readData = JSON.parse(fs.readFileSync(filePath));
+    let employeeNode = await new sql.Request().query(`SELECT emp_id FROM [Taxonanalytica].[dbo].[employee_node_mapping] WHERE node_id = '${readData?.nodeId}';`);
+
+    let employeePhone = await new sql.Request().query(`SELECT phoneno FROM [Taxonanalytica].[dbo].[employee] WHERE node_id = '${employeeNode}';`);
+
+    console.log("employeee", employeePhone, employeeNode);
+};
 
 const createListObject = (jobs: any, itemNames: any) => {
     const object = {

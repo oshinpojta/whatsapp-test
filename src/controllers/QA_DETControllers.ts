@@ -60,6 +60,7 @@ const QA_DETSchema = Joi.object({
   ProducedQty2: Joi.number().allow('', null),
   TargetQty: Joi.number().allow('', null),
   Status: Joi.string().allow('', null),
+  priority: Joi.string().allow('', null),
   // ItemMaster: Joi.string().required()
 });
 
@@ -125,6 +126,7 @@ export const createOA_DETMaster = async (req: Request, res: Response) => {
     qadet.ProducedQty2 = req.body.ProducedQty2
     qadet.TargetQty = req.body.ALT_QTY * req.body.Circumfrence / 1000
     qadet.Status = req.body.Status
+    qadet.priority = req.body.priority
     await qadet.save();
     return res.status(201).json(qadet);
   } catch (error) {
@@ -172,6 +174,7 @@ export const getAllQA_DET = async (_: Request, res: Response) => {
           Film_Type: oaDetail.Film_Type,
           Status: oaDetail.Status,
           Delivery_Date: oaDetail.Delivery_Date,
+          priority: oaDetail.priority,
 
         };
         commonObjects.push(commonObject);
@@ -273,6 +276,7 @@ export const updateOA_DETMaster = async (req: Request, res: Response) => {
     qadet.ProducedQty2 = req.body.ProducedQty2
     qadet.TargetQty = req.body.ALT_QTY * req.body.Circumfrence / 1000
     qadet.Status = req.body.Status
+    qadet.priority = req.body.priority
 
     await qadet.save();
     return res.json(qadet);
@@ -390,6 +394,7 @@ const updateDataOA_DETMaster = async (data: any) => {
     qadet.ProducedQty2 = data.ProducedQty2
     qadet.TargetQty = data.ALT_QTY * data.Circumfrence / 1000
     qadet.Status = data.Status
+    qadet.priority = data.priority
     await qadet.save();
 
     return qadet
@@ -462,6 +467,7 @@ const createDataOA_DETMaster = async (data: any) => {
     qadet.ProducedQty2 = data.ProducedQty2
     qadet.TargetQty = data.ALT_QTY * data.Circumfrence / 1000
     qadet.Status = data.Status
+    qadet.priority = data.priority
 
     await qadet.save();
 

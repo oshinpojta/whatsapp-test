@@ -165,6 +165,12 @@ export class OA_DETMaster extends BaseEntity {
   @Column({ nullable: true })
   Status: string;
 
+  @Column({ nullable: true })
+  priority: string;
+
+  @Column({ nullable: true })
+  allowExcessQty: string;
+
   @ManyToOne(() => ItemMaster, (items) => items.IT_CODE)
   @JoinColumn({ name: "ItemCode" })
   itemmaster: ItemMaster

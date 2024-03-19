@@ -10,11 +10,12 @@ const employeeSchema = Joi.object({
   employeeName: Joi.string().required(),
   designation: Joi.string().required(),
   grade: Joi.string().required(),
-  dateOfJoining: Joi.date().allow('',null),
+  dateOfJoining: Joi.date().allow('', null),
   lastDate: Joi.date().allow('', null),
   isActive: Joi.boolean().required(),
   userName: Joi.string().required(),
   password: Joi.string().required(),
+  phoneno: Joi.date().allow('', null),
 });
 
 export const createEmployee = async (req: Request, res: Response) => {
@@ -37,6 +38,7 @@ export const createEmployee = async (req: Request, res: Response) => {
     employee.isActive = req.body.isActive;
     employee.userName = req.body.userName;
     employee.password = req.body.password;
+    employee.phoneno = req.body.phoneno;
     await employee.save();
     return res.status(201).json(employee);
   } catch (error) {
@@ -48,7 +50,7 @@ export const getAllEmployee = async (_: Request, res: Response) => {
   try {
     const Employees = await Employee.find();
     return res.json(Employees);
-  }  catch (error) {
+  } catch (error) {
     return InternalServerError(res, error);
   }
 };
@@ -77,10 +79,10 @@ export const updateEmployee = async (req: Request, res: Response) => {
     employee.userName = req.body.userName;
     employee.password = req.body.password;
     employee.userId = req.body.userId;
-
+    employee.phoneno = req.body.phoneno;
     await employee.save();
     return res.json(Employee);
-  }  catch (error) {
+  } catch (error) {
     return InternalServerError(res, error);
   }
 };
@@ -106,7 +108,7 @@ export const employeeById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Employee not found' });
     }
     return res.json(employee);
-  }  catch (error) {
+  } catch (error) {
     return InternalServerError(res, error);
   }
 };
