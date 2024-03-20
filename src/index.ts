@@ -11,8 +11,9 @@ import Routes from "./routes/Routes";
 const helmet = require("helmet");
 var cors = require('cors')
 const cookieParser = require('cookie-parser');
-const axios = require("axios");
+//const axios = require("axios");
 import { sendWebhookRequest } from "./controllers/webhookController";
+import { webhookRequestActivity } from './controllers/webhookActivityController';
 
 
 
@@ -68,7 +69,8 @@ try {
     }
   });
 
-  app.post("/webhook", sendWebhookRequest);
+  app.post("/webhook", webhookRequestActivity);
+  //app.post("/webhook/activity", webhookRequestActivity);
 
   app.get("/health", (_, res) => {
     res.status(200).json({
