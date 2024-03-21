@@ -23,7 +23,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
     try {
 
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBO6bKPVJjaplTzwospJvAjAFHTDycaudl8OEfvoOGhgooxiKfuiNI6S1fTZCrdnTHrj0VfNiGo11JkvzYCYuZA0hG8PrMjCMYESk1jomeVrZAWVQ2baGgIzSDuCDnh8OE9gHEzQJbwod5l4Qej62iapMrpuLyonweeNh87u8e0jrNPtwPwbzCTQ1wr0HRDl31heYZBRNyAZBokwZB0SmqQP3ZB8ZD';
+        const token = 'EAADs4mGRLYwBO4iYOVqX4wCD93iwHQX3ncHWIdpNiFcyej3Cxgx5b3IYtt5tYlJMbsOjuQIqYgPDZBZBduqru4nLraZCRY51rIInWLj7HC8x3XVZB8NZAEJL7tcJplZASpstR0Us9z5GJuNRyaVTElkDYQnxtpc4CBMxZB5fxqQLjbLh9JtZBL5gyangmNiPLT16kY2BlP0HNohQyWiKFJcxE9qJDoiiNzenwnoZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -178,6 +178,9 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     let oaDetails = await new sql.Request().query(`SELECT [IT_CODE] FROM [Taxonanalytica].[dbo].[oa_det_master] WHERE jobId = '${jobId}';`);
                     let fgId = oaDetails?.recordset[0]?.IT_CODE;
 
+                    let nodeDetails = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[node_master];`);
+                    nodeDetails = nodeDetails?.recordset;
+
                     let fgDetails = await new sql.Request().query(`SELECT * FROM  [Taxonanalytica].[dbo].[fg_mapping];`);
                     fgDetails = fgDetails?.recordset;
 
@@ -200,6 +203,8 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     console.log(inputsData, inputQty, "inputvalue");
 
                     const inputBatches = createListInputBatches(inputsData[0]);
+
+                    const outputDetails = edgeDetails.filter((item: any) => item.sourceNodeId == nodeId && item.routeId == routeId);
 
                     console.log(inputBatches, "inputBatches");
                     let messageObject = {
@@ -245,6 +250,11 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             "Content-Type": "application/json"
                         }
                     });
+                    const data = {
+                        ...readData,
+                        jobId: jobId, nodeDetails: nodeDetails, batchDetails: batchDetails, edgeDetails: edgeDetails, fgDetails: fgDetails, fgId: fgId, routeId: routeId, output: true, outputDetail: outputDetails,
+                    };
+                    fs.writeFileSync(filePath, JSON.stringify(data));
                 }
                 if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description.includes("Available")) {
                     axios({
@@ -256,7 +266,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             "to": from,
                             "type": "template",
                             "template": {
-                                "name": "flow_template",
+                                "name": "input_batches",
                                 "language": {
                                     "code": "en_US"
                                 },
@@ -279,7 +289,60 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                         }
                     });
                 }
+                const readData = JSON.parse(fs.readFileSync(filePath));
+                if (msg?.interactive?.type == 'nfm_reply' && readData.outputDetail?.length) {
+                    const readData = JSON.parse(fs.readFileSync(filePath));
+                    const outputDetails = readData?.outputDetail //edgeDetails.filter((item: any) => item.sourceNodeId == nodeId && item.routeId == routeId);
 
+                    let nodeDetail = readData?.nodeDetails?.filter((item1: any) => item1.nodeId === outputDetails[0]?.targetNodeId)[0];
+                    const nodeName = nodeDetail?.nodeName;
+                    const nodeCategory = nodeDetail?.nodeCategory;
+                    console.log("outputDetails", outputDetails, nodeName, nodeCategory);
+                    axios({
+                        method: "POST",
+                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                        data: {
+                            "messaging_product": "whatsapp",
+                            "recipient_type": "individual",
+                            "to": from,
+                            "type": "template",
+                            "template": {
+                                "name": "output_batches",
+                                "language": {
+                                    "code": "en_US"
+                                },
+                                "components": [
+                                    {
+                                        "type": "body",
+                                        "parameters": [
+                                            {
+                                                "type": "text",
+                                                "text": nodeName,
+                                            }]
+                                    },
+                                    {
+                                        "type": "BUTTON",
+                                        "sub_type": "flow",
+                                        "index": "0",
+                                        "parameters": [
+                                            {
+                                                "type": "action",
+                                                "action": {
+                                                    "flow_token": "unused",
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    });
+                    const outputDetail = outputDetails.slice(1);
+                    if (outputDetail.length) {
+                        const data = { ...readData, outputDetail: outputDetail };
+                        fs.writeFileSync(filePath, JSON.stringify(data));
+                    }
+                }
             }
         }
     } catch (error) {
