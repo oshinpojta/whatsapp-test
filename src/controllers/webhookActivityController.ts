@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, response } from "express";
 import { InternalServerError } from "../response/InternalServerErrorResponse";
 //import { OA_DETMaster } from "../entity/OA_DET";
 import { JobAssign } from "../entity/JobAssign";
@@ -23,7 +23,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
     try {
 
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBO4iYOVqX4wCD93iwHQX3ncHWIdpNiFcyej3Cxgx5b3IYtt5tYlJMbsOjuQIqYgPDZBZBduqru4nLraZCRY51rIInWLj7HC8x3XVZB8NZAEJL7tcJplZASpstR0Us9z5GJuNRyaVTElkDYQnxtpc4CBMxZB5fxqQLjbLh9JtZBL5gyangmNiPLT16kY2BlP0HNohQyWiKFJcxE9qJDoiiNzenwnoZD';
+        const token = 'EAADs4mGRLYwBO9XjSuqHyVUKcyvGdZAoU2aaZBRCFwNygZAsMnztgZA2qiY0yLrZBrrR8fuAgdbBON7a0cRK3LYU1k9RqmT7ZBXnidmEO8Sl8kcJ56LebbRMn4futGG3pnCBgqinJYA2aTC5umvoEgf8jTE9q9CL48nZAYjeyMoe4p90oPdXD2Mr5K5UYwKbYYJljNufC7poWqFo1JaKFF7PLgCVEdERKDxtPMZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -116,7 +116,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
 
                     let node_id = msg?.interactive?.list_reply?.title.split('-')[0];
                     console.log("MSGGGG", node_id);
-                    let jobAssign = await new sql.Request().query(`SELECT [jobId] FROM [Taxonanalytica].[dbo].[job_assign] WHERE node_id = '${node_id}';`);
+                    let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE node_id = '${node_id}';`);
 
                     console.log(jobAssign);
                     let listObject = createListObject(jobAssign?.recordset.slice(0, 10));
@@ -164,7 +164,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             "Content-Type": "application/json"
                         }
                     });
-
+                    //const readData = JSON.parse(fs.readFileSync(filePath));
                     const data = { nodeId: node_id };
                     fs.writeFileSync(filePath, JSON.stringify(data));
                 }
@@ -174,6 +174,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     const readData = JSON.parse(fs.readFileSync(filePath));
                     const nodeId = readData?.nodeId;
                     const jobId = msg?.interactive?.list_reply?.title;
+                    const jobAssignId = msg?.interactive?.list_reply?.id;
 
                     let oaDetails = await new sql.Request().query(`SELECT [IT_CODE] FROM [Taxonanalytica].[dbo].[oa_det_master] WHERE jobId = '${jobId}';`);
                     let fgId = oaDetails?.recordset[0]?.IT_CODE;
@@ -252,7 +253,13 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     });
                     const data = {
                         ...readData,
-                        jobId: jobId, nodeDetails: nodeDetails, batchDetails: batchDetails, edgeDetails: edgeDetails, fgDetails: fgDetails, fgId: fgId, routeId: routeId, output: true, outputDetail: outputDetails,
+                        jobId: jobId, nodeDetails: nodeDetails,
+                        batchDetails: batchDetails, edgeDetails: edgeDetails,
+                        fgDetails: fgDetails, fgId: fgId, routeId: routeId,
+                        jobAssignId: jobAssignId, outputDetail: outputDetails,
+                        inputDetails: [{
+                            inputId: inputNodesFromEdge[0],
+                        }]
                     };
                     fs.writeFileSync(filePath, JSON.stringify(data));
                 }
@@ -291,6 +298,8 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                 }
                 const readData = JSON.parse(fs.readFileSync(filePath));
                 if (msg?.interactive?.type == 'nfm_reply' && readData.outputDetail?.length) {
+                    const responses = JSON.parse(msg?.interactive.nfm_reply.response_json);
+
                     const readData = JSON.parse(fs.readFileSync(filePath));
                     const outputDetails = readData?.outputDetail //edgeDetails.filter((item: any) => item.sourceNodeId == nodeId && item.routeId == routeId);
 
@@ -337,11 +346,26 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             }
                         }
                     });
+                    const inputDetails = readData?.inputDetails;
+                    let data = {
+                        ...readData,
+                        inputDetails: [{
+                            ...inputDetails[0],
+                            availableQty1: responses?.screen_0_TextInput_0,
+                            availableQty2: responses?.screen_0_TextInput_1,
+                            balanceQty1: responses?.screen_0_TextInput_0,
+                            balanceQty2: responses?.screen_0_TextInput_1,
+                        }]
+                    }
                     const outputDetail = outputDetails.slice(1);
                     if (outputDetail.length) {
-                        const data = { ...readData, outputDetail: outputDetail };
-                        fs.writeFileSync(filePath, JSON.stringify(data));
+                        data = { ...data, outputDetail: outputDetail };
+                    } else {
+                        const { edgeDetails, nodeDetails, fgDetails, batchDetails, ...rest } = data;
+                        data = rest;
                     }
+                    console.log("inputDataaa", data);
+                    fs.writeFileSync(filePath, JSON.stringify(data));
                 }
             }
         }
@@ -369,8 +393,8 @@ const createListObject = (jobs: any) => {
             sections: [
                 {
                     title: "List of Jobs",
-                    rows: jobs.map((item: any, index: any) => ({
-                        id: index + 1,
+                    rows: jobs.map((item: any) => ({
+                        id: item?.id,
                         title: item?.jobId,
                         description: "Job",
                     }))

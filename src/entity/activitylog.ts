@@ -20,10 +20,10 @@ export class ActivityLog extends BaseEntity {
   @Column({ type: 'date', nullable: true }) // Use CreateDateColumn with type 'date'
   date: Date;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'datetime', nullable: true })
   shiftStartTime: Date;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'datetime', nullable: true })
   shiftEndTime: Date;
 
   @Column()
