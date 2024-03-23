@@ -23,7 +23,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
     try {
 
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBO8yw1zn0ZARMpRZAo1cBvzTj30jE17YM1rqaJpcM2dEMISdmzE28aHrthbd3KQsU6IAWQkE5VeZB9HHyblJvEL2mTT0KUURQ9tefhoKU1J2gR4Taqx9nFiAxBkkZCi6TLRHC5EMIIiXgqSxp1nV64AZC3vlHcQ92oXKjCyjR0hWBMzha4xHPwYqWRFRY2y2XF9I4bAPZAdMWnAysUodP9RlIgZD';
+        const token = 'EAADs4mGRLYwBOwlQWVZAVWhstIJt84JftuUcMiFJsW1SwC1maRZAUMARkWVyHE6en6OIuyfWd2sWmHVwzFLm1f8rTgQXmegd1odOa90gMCVqTqFLX22KLmLeeX3ZC9ybmDxkigtObELFkWkvvfR2migPD4VzByGOQw8vqShsjF6cO7xVoGvQZCgUWgxoFanZAh74PPIYTmSgQJhOGdyAXZBGbLlGr4GOplt1NL';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -113,11 +113,13 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     const sql = require('mssql');
                     await sql.connect(config);
 
+                    const readData = JSON.parse(fs.readFileSync(filePath));
+                    console.log(readData, "readdddd");
                     let node_id = msg?.interactive?.list_reply?.title.split('-')[0];
                     console.log("MSGGGG", node_id);
                     let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE node_id = '${node_id}';`);
 
-                    console.log(jobAssign);
+                    //console.log(jobAssign);
                     let listObject = createListObject(jobAssign?.recordset.slice(0, 10));
 
                     let messageObject = {
@@ -163,15 +165,17 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             "Content-Type": "application/json"
                         }
                     });
-                    const readData = JSON.parse(fs.readFileSync(filePath));
-                    const data = { ...readData, nodeId: node_id };
+                    const data = readData ? [...readData] : [];
+                    data.push({ nodeId: node_id });
+                    console.log(data, "dataaaa");
                     fs.writeFileSync(filePath, JSON.stringify(data));
                 }
                 else if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description == "Job") {
                     const sql = require('mssql');
                     await sql.connect(config);
                     const readData = JSON.parse(fs.readFileSync(filePath));
-                    const nodeId = readData?.nodeId;
+                    const len = readData?.length - 1;
+                    const nodeId = readData[len]?.nodeId;
                     const jobId = msg?.interactive?.list_reply?.title;
                     const jobAssignId = msg?.interactive?.list_reply?.id;
 
@@ -250,18 +254,20 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             "Content-Type": "application/json"
                         }
                     });
-                    const inputDetails = readData?.inputDetails || [];
-                    const data = {
-                        ...readData,
+                    //const inputDetails = readData[len]?.inputDetails || [];
+                    const data = [...readData];
+                    data.push({
+                        //...readData[readData.length],
+                        nodeId: nodeId,
                         jobId: jobId, nodeDetails: nodeDetails,
                         batchDetails: batchDetails, edgeDetails: edgeDetails,
                         fgDetails: fgDetails, fgId: fgId, routeId: routeId,
                         jobAssignId: jobAssignId, outputDetail: outputDetails,
                         inputId: inputNodesFromEdge[0],
-                        inputDetails: inputDetails,
+                        inputDetails: [],
                         outputDetails: [],
-                    };
-                    console.log(data, "dataaaaaaa");
+                    });
+                    console.log(data, "dataeeeee");
                     fs.writeFileSync(filePath, JSON.stringify(data));
                 }
                 else if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description.includes("Available")) {
@@ -298,16 +304,16 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     });
                 }
                 const readData = JSON.parse(fs.readFileSync(filePath));
-                if (msg?.interactive?.type == 'nfm_reply' && readData.outputDetail?.length) {
+                const len = readData?.length - 1;
+                if (msg?.interactive?.type == 'nfm_reply' && readData[len].outputDetail?.length) {
                     const responses = JSON.parse(msg?.interactive.nfm_reply.response_json);
 
-                    const readData = JSON.parse(fs.readFileSync(filePath));
-                    const outputDetails = readData?.outputDetail //edgeDetails.filter((item: any) => item.sourceNodeId == nodeId && item.routeId == routeId);
+                    const outputDetails = readData[len]?.outputDetail //edgeDetails.filter((item: any) => item.sourceNodeId == nodeId && item.routeId == routeId);
 
-                    let nodeDetail = readData?.nodeDetails?.filter((item1: any) => item1.nodeId === outputDetails[0]?.targetNodeId)[0];
+                    let nodeDetail = readData[len]?.nodeDetails?.filter((item1: any) => item1.nodeId === outputDetails[0]?.targetNodeId)[0];
                     const nodeName = nodeDetail?.nodeName;
                     const nodeCategory = nodeDetail?.nodeCategory;
-                    console.log("outputDetails", outputDetails, nodeName, nodeCategory);
+                    // console.log("outputDetails", outputDetails, nodeName, nodeCategory);
                     axios({
                         method: "POST",
                         url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
@@ -347,12 +353,13 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             }
                         }
                     });
-                    const inputDetails = readData?.inputDetails;
+                    //const inputDetails = readData?.inputDetails;
                     //console.log(inputDetails, readData?.inputId, "inputttDetailsss");
-                    let data = { ...readData };
+                    let data = readData[len];
                     if (data?.inputId) {
                         data["inputDetails"].push({
-                            inputId: readData?.inputId,
+                            inputId: data?.inputId,
+                            nodeCategory: nodeCategory,
                             availableQty1: responses?.screen_0_TextInput_0,
                             availableQty2: responses?.screen_0_TextInput_1,
                             balanceQty1: responses?.screen_0_TextInput_0,
@@ -362,6 +369,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     } else {
                         data["outputDetails"].push({
                             outputId: outputDetails[0]?.targetNodeId,
+                            nodeCategory: nodeCategory,
                             availableQty1: responses?.screen_0_TextInput_0,
                             availableQty2: responses?.screen_0_TextInput_1,
                             balanceQty1: responses?.screen_0_TextInput_0,
@@ -375,8 +383,9 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                         const { edgeDetails, nodeDetails, fgDetails, batchDetails, ...rest } = data;
                         data = rest;
                     }
-                    console.log("inputDataaa", data);
-                    fs.writeFileSync(filePath, JSON.stringify(data));
+                    console.log(data, "inputdataaaaaaa");
+                    readData[len] = data;
+                    fs.writeFileSync(filePath, JSON.stringify(readData));
                 }
             }
         }
