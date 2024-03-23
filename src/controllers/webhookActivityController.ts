@@ -23,7 +23,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
     try {
 
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBO9XjSuqHyVUKcyvGdZAoU2aaZBRCFwNygZAsMnztgZA2qiY0yLrZBrrR8fuAgdbBON7a0cRK3LYU1k9RqmT7ZBXnidmEO8Sl8kcJ56LebbRMn4futGG3pnCBgqinJYA2aTC5umvoEgf8jTE9q9CL48nZAYjeyMoe4p90oPdXD2Mr5K5UYwKbYYJljNufC7poWqFo1JaKFF7PLgCVEdERKDxtPMZD';
+        const token = 'EAADs4mGRLYwBO8yw1zn0ZARMpRZAo1cBvzTj30jE17YM1rqaJpcM2dEMISdmzE28aHrthbd3KQsU6IAWQkE5VeZB9HHyblJvEL2mTT0KUURQ9tefhoKU1J2gR4Taqx9nFiAxBkkZCi6TLRHC5EMIIiXgqSxp1nV64AZC3vlHcQ92oXKjCyjR0hWBMzha4xHPwYqWRFRY2y2XF9I4bAPZAdMWnAysUodP9RlIgZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -94,7 +94,6 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             }
                         };
                         //messageObject.interactive = listObject;
-                        console.log("Valuesss", JSON.stringify(messageObject, null, 2));
                         axios({
                             method: "POST",
                             url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
@@ -110,7 +109,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                         await sql.close();
                     }
                 }
-                if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description == "Machine") {
+                else if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description == "Machine") {
                     const sql = require('mssql');
                     await sql.connect(config);
 
@@ -164,11 +163,11 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             "Content-Type": "application/json"
                         }
                     });
-                    //const readData = JSON.parse(fs.readFileSync(filePath));
-                    const data = { nodeId: node_id };
+                    const readData = JSON.parse(fs.readFileSync(filePath));
+                    const data = { ...readData, nodeId: node_id };
                     fs.writeFileSync(filePath, JSON.stringify(data));
                 }
-                if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description == "Job") {
+                else if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description == "Job") {
                     const sql = require('mssql');
                     await sql.connect(config);
                     const readData = JSON.parse(fs.readFileSync(filePath));
@@ -251,19 +250,21 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             "Content-Type": "application/json"
                         }
                     });
+                    const inputDetails = readData?.inputDetails || [];
                     const data = {
                         ...readData,
                         jobId: jobId, nodeDetails: nodeDetails,
                         batchDetails: batchDetails, edgeDetails: edgeDetails,
                         fgDetails: fgDetails, fgId: fgId, routeId: routeId,
                         jobAssignId: jobAssignId, outputDetail: outputDetails,
-                        inputDetails: [{
-                            inputId: inputNodesFromEdge[0],
-                        }]
+                        inputId: inputNodesFromEdge[0],
+                        inputDetails: inputDetails,
+                        outputDetails: [],
                     };
+                    console.log(data, "dataaaaaaa");
                     fs.writeFileSync(filePath, JSON.stringify(data));
                 }
-                if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description.includes("Available")) {
+                else if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description.includes("Available")) {
                     axios({
                         method: "POST",
                         url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
@@ -347,15 +348,25 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                         }
                     });
                     const inputDetails = readData?.inputDetails;
-                    let data = {
-                        ...readData,
-                        inputDetails: [{
-                            ...inputDetails[0],
+                    //console.log(inputDetails, readData?.inputId, "inputttDetailsss");
+                    let data = { ...readData };
+                    if (data?.inputId) {
+                        data["inputDetails"].push({
+                            inputId: readData?.inputId,
                             availableQty1: responses?.screen_0_TextInput_0,
                             availableQty2: responses?.screen_0_TextInput_1,
                             balanceQty1: responses?.screen_0_TextInput_0,
                             balanceQty2: responses?.screen_0_TextInput_1,
-                        }]
+                        });
+                        data.inputId = null;
+                    } else {
+                        data["outputDetails"].push({
+                            outputId: outputDetails[0]?.targetNodeId,
+                            availableQty1: responses?.screen_0_TextInput_0,
+                            availableQty2: responses?.screen_0_TextInput_1,
+                            balanceQty1: responses?.screen_0_TextInput_0,
+                            balanceQty2: responses?.screen_0_TextInput_1,
+                        })
                     }
                     const outputDetail = outputDetails.slice(1);
                     if (outputDetail.length) {
