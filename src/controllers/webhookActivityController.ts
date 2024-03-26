@@ -23,7 +23,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
     try {
 
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBOwlQWVZAVWhstIJt84JftuUcMiFJsW1SwC1maRZAUMARkWVyHE6en6OIuyfWd2sWmHVwzFLm1f8rTgQXmegd1odOa90gMCVqTqFLX22KLmLeeX3ZC9ybmDxkigtObELFkWkvvfR2migPD4VzByGOQw8vqShsjF6cO7xVoGvQZCgUWgxoFanZAh74PPIYTmSgQJhOGdyAXZBGbLlGr4GOplt1NL';
+        const token = 'EAADs4mGRLYwBOzsQTnbSDclJ56S6JCPadv3ySSTKp857D2PAxPlPW53daEOer4XQHLs4sIuwJSugBQFTVYXrYHSVkFUI89zPDE1UgZC10ZAZBDi4cl2lVzlnDiv7LxACkZCesLaNZA5vs0WFbnXO6MhmER4NSOUNythnOrw4udgjwRhex7rldGZCPYFEfrPTIZAsKmfZCQESIA5E7rpu1UmSvKg0kPlf7zGdqzcZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -119,8 +119,18 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     console.log("MSGGGG", node_id);
                     let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE node_id = '${node_id}';`);
 
-                    //console.log(jobAssign);
-                    let listObject = createListObject(jobAssign?.recordset.slice(0, 10));
+                    jobAssign = jobAssign?.recordset.filter((item: any) => item?.status != 'Completed');
+                    jobAssign = jobAssign?.slice(0, 10);
+                    const jobs = jobAssign.map((item: any) => item?.jobId);
+                    const placeholders = jobs.map((item: any) => `'${item}'`).join(',');
+
+                    let IT_CODEs = await new sql.Request().query(`SELECT [IT_CODE] FROM [Taxonanalytica].[dbo].[oa_det_master] WHERE jobId IN (${placeholders});`);
+                    IT_CODEs = IT_CODEs?.recordset?.map((item: any) => item?.IT_CODE);
+                    const placeholdersIT = IT_CODEs?.map((item: any) => `'${item}'`).join(',');
+
+                    const itemsRecord = await new sql.Request().query(`SELECT [IT_NAME] FROM [Taxonanalytica].[dbo].[item_master] WHERE IT_CODE IN (${placeholdersIT});`);
+                    console.log(itemsRecord, "jobsssssss");
+                    let listObject = createListObject(jobAssign, itemsRecord?.recordset);
 
                     let messageObject = {
                         "messaging_product": "whatsapp",
@@ -167,10 +177,10 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     });
                     const data = readData ? [...readData] : [];
                     data.push({ nodeId: node_id });
-                    console.log(data, "dataaaa");
+                    //console.log(data, "dataaaa");
                     fs.writeFileSync(filePath, JSON.stringify(data));
                 }
-                else if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description == "Job") {
+                else if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description.includes("Job")) {
                     const sql = require('mssql');
                     await sql.connect(config);
                     const readData = JSON.parse(fs.readFileSync(filePath));
@@ -190,6 +200,24 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
 
                     let batchDetails = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[batch];`);
                     batchDetails = batchDetails?.recordset;
+                    if (batchDetails?.length == 0) {
+                        axios({
+                            method: "POST",
+                            url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                            data: {
+                                messaging_product: "whatsapp",
+                                to: from,
+                                text: {
+                                    body: `No Batches available for current selected Job ${jobId}`
+                                }
+                            },
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+
+                        });
+                        return;
+                    }
 
                     let routeId = await new sql.Request().query(`SELECT [Route] FROM [Taxonanalytica].[dbo].[item_master] WHERE IT_CODE = '${fgId}';`);
                     routeId = routeId?.recordset[0]?.Route;
@@ -206,7 +234,8 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     const inputsData = inputQty?.map((item: any) => batchDetails.filter((item1: any) => (item == item1.ItemCode && item1?.ItemCode) || (item == item1?.MaterialId && jobId == item1?.jobId)));
                     console.log(inputsData, inputQty, "inputvalue");
 
-                    const inputBatches = createListInputBatches(inputsData[0]);
+                    const inputBatches = createListInputBatches(inputsData[0].slice(0, 10));
+                    console.log(JSON.stringify(inputBatches), "inputttttBAA");
 
                     const outputDetails = edgeDetails.filter((item: any) => item.sourceNodeId == nodeId && item.routeId == routeId);
 
@@ -270,7 +299,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     console.log(data, "dataeeeee");
                     fs.writeFileSync(filePath, JSON.stringify(data));
                 }
-                else if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description.includes("Available")) {
+                else if (msg?.interactive?.type == "list_reply" && msg?.interactive?.list_reply?.description.includes("Balance")) {
                     axios({
                         method: "POST",
                         url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
@@ -313,6 +342,8 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                     let nodeDetail = readData[len]?.nodeDetails?.filter((item1: any) => item1.nodeId === outputDetails[0]?.targetNodeId)[0];
                     const nodeName = nodeDetail?.nodeName;
                     const nodeCategory = nodeDetail?.nodeCategory;
+
+                    const templateName = nodeCategory == "Waste" ? "waste_batch" : "output_batches";
                     // console.log("outputDetails", outputDetails, nodeName, nodeCategory);
                     axios({
                         method: "POST",
@@ -323,7 +354,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
                             "to": from,
                             "type": "template",
                             "template": {
-                                "name": "output_batches",
+                                "name": `${templateName}`,
                                 "language": {
                                     "code": "en_US"
                                 },
@@ -395,7 +426,7 @@ export const webhookRequestActivity = async (req: Request, res: Response) => {
 }
 
 
-const createListObject = (jobs: any) => {
+const createListObject = (jobs: any, itemNames: any) => {
     const object = {
         type: "list",
         header: {
@@ -413,10 +444,10 @@ const createListObject = (jobs: any) => {
             sections: [
                 {
                     title: "List of Jobs",
-                    rows: jobs.map((item: any) => ({
+                    rows: jobs.map((item: any, index: any) => ({
                         id: item?.id,
                         title: item?.jobId,
-                        description: "Job",
+                        description: `Job-${itemNames[index]?.IT_NAME}-Target ${item?.targetQty}`,
                     }))
                 },
             ],
@@ -430,13 +461,13 @@ const createListInputBatches = (batches: any) => {
         type: "list",
         header: {
             type: "text",
-            text: "Select the Input batch you would like",
+            text: "Select the Input batch Details you would like",
         },
         body: {
             text: "You will be presented with a list of options to choose from",
         },
         footer: {
-            text: "All of them are opened",
+            text: "All of them are available",
         },
         action: {
             button: "Select",
@@ -446,7 +477,7 @@ const createListInputBatches = (batches: any) => {
                     rows: batches.map((item: any, index: any) => ({
                         id: index + 1,
                         title: item?.activityId || item?.jobAssignId,
-                        description: `Available qty : ${item?.Availablequantity1}(M) - ${item?.Availablequantity2}(Kgs) Balance qty : ${item?.Balancequantity1}(M) - ${item?.Balancequantity2}(Kgs)`,
+                        description: `Balance qty : ${item?.Balancequantity1}(M) - ${item?.Balancequantity2}(Kgs)`,
                     }))
                 },
             ],
