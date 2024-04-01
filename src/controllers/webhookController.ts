@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { InternalServerError } from "../response/InternalServerErrorResponse";
 import { OA_DETMaster } from "../entity/OA_DET";
 import { JobAssign } from "../entity/JobAssign";
+import { webhookRequestActivity } from "./webhookActivityController";
 
 const axios = require("axios");
 const fs = require('fs');
@@ -21,7 +22,7 @@ const config = {
 export const sendWebhookRequest = async (req: Request, res: Response) => {
     try {
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBO8tiU1ySGE5uVe0k7PiX23L1FT8lB31s2H3jAPvzEtM1BUwbEXvotWOHtnm7e8yUtM2rtqy1CFLDKZBy2bsR3e3gX5dYWBhJ4lHxZA55V04U7IWjeq4hNQUknvM2Km0ti1W3vPxr3sXjAf2i6N6WZBkhrpvI0Pij0DZBiX7aCGreJn4Kw1WdPerCF35P12DkF3ZCnkPjZBJbd1tgFOvovSamGA';
+        const token = 'EAADs4mGRLYwBO0cga6vry0tSiR86RKDd7wujFnpSUVQAJ5hCZAtZCDcxSZBiC8t6496Mu7iSiy5NETItzk7xFTZCafZCBjo5NgpMqS2ZAo6d4Q5ZB0Lbmhk36bCPUCqAl2adULI9iGjECltXGoXR4ZC2zEii6ZAdZAUiTFKlUrOWCEicWy3znI595YEe2l6x6FL1i6m2vZCRkvFZBiQc8WrJwanAZCLIznQdqa08epFEZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -122,6 +123,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                 }
                 if (msg?.interactive?.type == 'nfm_reply') {
                     const responses = JSON.parse(msg?.interactive.nfm_reply.response_json);
+                    const sql = require('mssql');
 
                     const datePickerResponseTimestamp = parseInt(responses.screen_0_DatePicker_0, 10);
                     const datePickerResponse = new Date(datePickerResponseTimestamp);
@@ -135,21 +137,28 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     //await sendMessages();
 
                     // console.log("employeee", employeePhone, employeeNode);
-                    axios({
-                        method: "POST",
-                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
-                        data: {
-                            messaging_product: "whatsapp",
-                            to: from,
-                            text: {
-                                body: `Successfully updated Delivery Date for the job ${readData?.jobId} - ${readData?.jobName}`
-                            }
-                        },
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
 
-                    });
+                    let permission = await new sql.Request().query(`SELECT [phoneno] FROM [Taxonanalytica].[dbo].[manager] WHERE phoneno = '${from}'`);
+                    console.log(permission, "permissionnn");
+                    permission = permission?.recordset;
+                    for (let i = 0; i < permission?.length; i++) {
+                        const fromno = permission[i];
+                        axios({
+                            method: "POST",
+                            url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                            data: {
+                                messaging_product: "whatsapp",
+                                to: fromno,
+                                text: {
+                                    body: `Successfully updated Priority and Delivery Date for the job ${readData?.jobId} - ${readData?.jobName}`
+                                }
+                            },
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+
+                        });
+                    }
                     console.log('Date Picker Response:', datePickerResponse);
                 }
                 if (msg?.interactive?.type == "button_reply") {
@@ -159,7 +168,8 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     console.log(readData?.jobId);
 
                     let jobAssign = await new sql.Request().query(`SELECT * FROM [Taxonanalytica].[dbo].[job_assign] WHERE jobId = '${readData?.jobId}';`);
-                    jobAssign = jobAssign.recordset[jobAssign.recordset.length - 1];
+                    console.log(jobAssign.recordset[jobAssign.recordset.length - 1], "jobAssignnn");
+                    //jobAssign = jobAssign.recordset[jobAssign.recordset.length - 1];
 
                     console.log('jobassign', jobAssign.recordset[jobAssign.recordset.length - 1]);
 
@@ -233,10 +243,71 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                 if (msg?.type === "text") {
                     console.log("resulttt");
                     let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
+
+                    // if(msg_body.toLowerCase().includes("hi")) {
+                    //     webhookRequestActivity(req, res);
+                    // } else if(msg_body.toLowerCase() == "job"){
+                    //     const sql = require('mssql');
+                    //     await sql.connect(config);
+                    //     let permission = await new sql.Request().query(`SELECT [empId] FROM [Taxonanalytica].[dbo].[manager] WHERE phoneno = '${from}'`);
+                    //     if (permission?.recordset?.length == 0) {
+                    //         axios({
+                    //             method: "POST",
+                    //             url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                    //             data: {
+                    //                 messaging_product: "whatsapp",
+                    //                 to: from,
+                    //                 text: {
+                    //                     body: `You donot have permission to update the job priority`
+                    //                 }
+                    //             },
+                    //             headers: {
+                    //                 "Content-Type": "application/json"
+                    //             }
+
+                    //         });
+                    //         return;
+                    //     } else {
+                    //         axios({
+                    //             method: "POST",
+                    //             url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                    //             data: {
+                    //                 messaging_product: "whatsapp",
+                    //                 to: from,
+                    //                 text: {
+                    //                     body: `Please enter Item name`
+                    //                 }
+                    //             },
+                    //             headers: {
+                    //                 "Content-Type": "application/json"
+                    //             }
+
+                    //         });
+                    //     }
+                    // } else {
                     const sql = require('mssql');
                     try {
                         console.log(msg_body);
                         await sql.connect(config);
+                        let permission = await new sql.Request().query(`SELECT [empId] FROM [Taxonanalytica].[dbo].[manager] WHERE phoneno = '${from}'`);
+                        if (permission?.recordset?.length == 0) {
+                            axios({
+                                method: "POST",
+                                url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                                data: {
+                                    messaging_product: "whatsapp",
+                                    to: from,
+                                    text: {
+                                        body: `You donot have permission to update the job priority`
+                                    }
+                                },
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+
+                            });
+                            return;
+                        }
                         let result = await new sql.Request().query(`SELECT IT_CODE, IT_NAME FROM [Taxonanalytica].[dbo].[item_master] WHERE IT_NAME LIKE '${msg_body}%';`);
 
                         console.log(result);
@@ -313,20 +384,6 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                         // Close the SQL connection
                         await sql.close();
                     }
-                } else {
-                    const interactiveType = msg?.interactive.type;
-                    if (interactiveType === "list_reply") {
-                        //sendReplyButton(message.interactive);
-                        buttonInteractiveObject.body.text =
-                            msg?.interactive?.list_reply.id +
-                            ". " +
-                            msg?.interactive?.list_reply.title +
-                            " (" +
-                            msg?.interactive?.list_reply.description +
-                            ")";
-                        //messageObject.interactive = buttonInteractiveObject;
-                    }
-                    console.log("buttonnnn", buttonInteractiveObject);
                 }
                 console.log("phone number " + phon_no_id);
                 console.log("from " + from);
@@ -344,7 +401,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
 
 const updateOA_DETMaster = async (readData: any, date: any, priority: any) => {
     const qadet = await OA_DETMaster.findOne(`${readData?.jobId}`);
-    console.log("QAAAA", qadet?.jobId);
+    console.log("QAAAA", qadet?.jobId, priority, date);
     qadet.jobId = qadet.jobId;
     qadet.branchId = qadet.branchId;
     qadet.CO_CODE = qadet.CO_CODE
