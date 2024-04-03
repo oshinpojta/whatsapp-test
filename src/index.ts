@@ -69,8 +69,8 @@ try {
     }
   });
 
-  //app.post("/webhook", sendWebhookRequest);
-  app.post("/webhook", webhookRequestActivity);
+  app.post("/webhook", sendWebhookRequest);
+  //app.post("/webhook", webhookRequestActivity);
 
   app.get("/health", (_, res) => {
     res.status(200).json({

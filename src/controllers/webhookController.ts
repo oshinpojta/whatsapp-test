@@ -22,7 +22,7 @@ const config = {
 export const sendWebhookRequest = async (req: Request, res: Response) => {
     try {
         let body_param = req.body;
-        const token = 'EAADs4mGRLYwBO0cga6vry0tSiR86RKDd7wujFnpSUVQAJ5hCZAtZCDcxSZBiC8t6496Mu7iSiy5NETItzk7xFTZCafZCBjo5NgpMqS2ZAo6d4Q5ZB0Lbmhk36bCPUCqAl2adULI9iGjECltXGoXR4ZC2zEii6ZAdZAUiTFKlUrOWCEicWy3znI595YEe2l6x6FL1i6m2vZCRkvFZBiQc8WrJwanAZCLIznQdqa08epFEZD';
+        const token = 'EAADs4mGRLYwBO4NZA30ZCiekDWVMdCCLioCp0EQ549ZAbqIFmRKDOzqwRUQ3m2dP3EZAnZCAWyH9zzr3ZAyl6QtWZAFb4l0c9fcogzDfiP3hD1vuHa7sPO1ZBV0TD4HSR3BHpZCfQAZC11iZB9g6fIT6fcucoxk9X0xgsvJQxDWsNXfv8ZA3rDCbwr7esWWhMkZAGQuW10i5ZB8Ufkh4xuGC1ZCyW5ZB5ON7oFovvErpdN8ZD';
 
         console.log(JSON.stringify(body_param.object, null, 2));
 
@@ -77,6 +77,48 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                 let from = body_param.entry[0].changes[0].value.messages[0].from;
                 let msg = body_param.entry[0].changes[0].value.messages[0];
 
+                const readData = JSON.parse(fs.readFileSync(filePath));
+
+                console.log(readData, "readdddd");
+
+                if (readData != null && Object.keys(readData).length != 0 && (msg?.text?.body?.toLowerCase() == "hi" || msg?.text?.body.toLowerCase() == "job")) {
+                    axios({
+                        method: "POST",
+                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                        data: {
+                            messaging_product: "whatsapp",
+                            to: from,
+                            text: {
+                                body: `Please complete the current flow`
+                            }
+                        },
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+
+                    });
+                    return;
+                }
+
+                if (msg?.interactive?.type == 'list_reply' && readData?.flow) {
+                    axios({
+                        method: "POST",
+                        url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                        data: {
+                            messaging_product: "whatsapp",
+                            to: from,
+                            text: {
+                                body: `Thank you for selecting the Machine`
+                            }
+                        },
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+
+                    });
+                    fs.writeFileSync(filePath, JSON.stringify({}));
+                    return;
+                }
                 if (msg?.interactive?.type == 'list_reply') {
                     console.log("interactiveee", msg?.interactive);
                     buttonInteractiveObject.body.text =
@@ -159,6 +201,8 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
 
                         });
                     }
+
+                    fs.writeFileSync(filePath, JSON.stringify({}));
                     console.log('Date Picker Response:', datePickerResponse);
                 }
                 if (msg?.interactive?.type == "button_reply") {
@@ -244,50 +288,78 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     console.log("resulttt");
                     let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
 
-                    // if(msg_body.toLowerCase().includes("hi")) {
-                    //     webhookRequestActivity(req, res);
-                    // } else if(msg_body.toLowerCase() == "job"){
-                    //     const sql = require('mssql');
-                    //     await sql.connect(config);
-                    //     let permission = await new sql.Request().query(`SELECT [empId] FROM [Taxonanalytica].[dbo].[manager] WHERE phoneno = '${from}'`);
-                    //     if (permission?.recordset?.length == 0) {
-                    //         axios({
-                    //             method: "POST",
-                    //             url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
-                    //             data: {
-                    //                 messaging_product: "whatsapp",
-                    //                 to: from,
-                    //                 text: {
-                    //                     body: `You donot have permission to update the job priority`
-                    //                 }
-                    //             },
-                    //             headers: {
-                    //                 "Content-Type": "application/json"
-                    //             }
+                    if (msg_body.toLowerCase().includes("hi")) {
+                        let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
+                        const sql = require('mssql');
+                        try {
+                            console.log(msg_body);
+                            await sql.connect(config);
+                            let result = await new sql.Request().query(`SELECT [empId] FROM [Taxonanalytica].[dbo].[employee] WHERE phoneno = '${from}'`);
 
-                    //         });
-                    //         return;
-                    //     } else {
-                    //         axios({
-                    //             method: "POST",
-                    //             url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
-                    //             data: {
-                    //                 messaging_product: "whatsapp",
-                    //                 to: from,
-                    //                 text: {
-                    //                     body: `Please enter Item name`
-                    //                 }
-                    //             },
-                    //             headers: {
-                    //                 "Content-Type": "application/json"
-                    //             }
+                            const empId = result?.recordset[0]?.empId;
 
-                    //         });
-                    //     }
-                    // } else {
-                    const sql = require('mssql');
-                    try {
-                        console.log(msg_body);
+                            let nodeId = await new sql.Request().query(`SELECT [node_Id] FROM [Taxonanalytica].[dbo].[employee_node_mapping] WHERE emp_id = '${empId}'`);
+
+                            nodeId = nodeId?.recordset[0]?.node_Id;
+                            //let jobAssign = await new sql.Request().query(`SELECT [jobId] FROM [Taxonanalytica].[dbo].[job_assign] WHERE node_id = '${nodeId}';`);
+                            let nodeMaster = await new sql.Request().query(`SELECT [nodeId], [nodeName] FROM [Taxonanalytica].[dbo].[node_master] WHERE nodeId = '${nodeId}';`);
+                            nodeMaster = nodeMaster?.recordset[0];
+
+                            console.log(result, nodeMaster);
+                            //let jobs = nodeMaster?.recordset.slice(0, 10);
+                            //const listObject = createListObjectNodes(jobs);
+                            let messageObject = {
+                                "messaging_product": "whatsapp",
+                                "recipient_type": "individual",
+                                "to": from,
+                                "type": "interactive",
+                                "interactive": {
+                                    "type": "list",
+                                    "header": {
+                                        "type": "text",
+                                        "text": "Select the Machine you would like"
+                                    },
+                                    "body": {
+                                        "text": "You will be presented with a list of options to choose from"
+                                    },
+                                    "footer": {
+                                        "text": "All of them are assigned"
+                                    },
+                                    "action": {
+                                        "button": "Select",
+                                        "sections": [
+                                            {
+                                                "title": "List of Machines",
+                                                "rows": [
+                                                    {
+                                                        "id": "1",
+                                                        "title": `${nodeMaster?.nodeId}-${nodeMaster?.nodeName}`,
+                                                        "description": "Machine"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            };
+                            //messageObject.interactive = listObject;
+                            axios({
+                                method: "POST",
+                                url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                                data: messageObject,
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            });
+                            fs.writeFileSync(filePath, JSON.stringify({ "flow": msg_body }));
+                        } catch (error) {
+                            return InternalServerError(res, error);
+                        } finally {
+                            // Close the SQL connection
+                            await sql.close();
+                        }
+                    } else if (msg_body.toLowerCase() == "job") {
+                        const sql = require('mssql');
                         await sql.connect(config);
                         let permission = await new sql.Request().query(`SELECT [empId] FROM [Taxonanalytica].[dbo].[manager] WHERE phoneno = '${from}'`);
                         if (permission?.recordset?.length == 0) {
@@ -307,82 +379,124 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
 
                             });
                             return;
-                        }
-                        let result = await new sql.Request().query(`SELECT IT_CODE, IT_NAME FROM [Taxonanalytica].[dbo].[item_master] WHERE IT_NAME LIKE '${msg_body}%';`);
-
-                        console.log(result);
-                        const items = result?.recordset.map((item: any) => item?.IT_CODE);
-                        const itemNames = result?.recordset.map((item: any) => item?.IT_NAME);
-
-                        const placeholders = items.map((item: any) => `'${item}'`).join(',');
-
-                        const job = await new sql.Request().query(`SELECT [jobId], [Status] FROM [Taxonanalytica].[dbo].[oa_det_master] WHERE IT_CODE IN (${placeholders});`);
-
-                        const jobs = job?.recordset;
-
-                        const listObject = createListObject(jobs, itemNames);
-                        console.log("ITEMNAMES", itemNames);
-
-                        let messageObject = {
-                            "messaging_product": "whatsapp",
-                            "recipient_type": "individual",
-                            "to": from,
-                            "type": "interactive",
-                            "interactive": {
-                                "type": "list",
-                                "header": {
-                                    "type": "text",
-                                    "text": "Select the Job you would like"
+                        } else {
+                            axios({
+                                method: "POST",
+                                url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                                data: {
+                                    messaging_product: "whatsapp",
+                                    to: from,
+                                    text: {
+                                        body: `Please enter Item name`
+                                    }
                                 },
-                                "body": {
-                                    "text": "You will be presented with a list of options to choose from"
-                                },
-                                "footer": {
-                                    "text": "All of them are opened"
-                                },
-                                "action": {
-                                    "button": "Select",
-                                    "sections": [
-                                        {
-                                            "title": "List of Jobs",
-                                            "rows": [
-                                                {
-                                                    "id": "1",
-                                                    "title": "0292-030224"
-                                                },
-                                                {
-                                                    "id": "2",
-                                                    "title": "0983-100124"
-                                                },
-                                                {
-                                                    "id": "3",
-                                                    "title": "1218-100124"
-                                                },
-                                                {
-                                                    "id": "4",
-                                                    "title": "1359-100224"
-                                                }
-                                            ]
-                                        }
-                                    ]
+                                headers: {
+                                    "Content-Type": "application/json"
                                 }
-                            }
-                        };
-                        messageObject.interactive = listObject;
-                        console.log("Valuesss", JSON.stringify(messageObject, null, 2));
-                        axios({
-                            method: "POST",
-                            url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
-                            data: messageObject,
-                            headers: {
-                                "Content-Type": "application/json"
-                            }
-                        });
-                    } catch (error) {
-                        return InternalServerError(res, error);
-                    } finally {
-                        // Close the SQL connection
-                        await sql.close();
+
+                            });
+                        }
+                    } else {
+                        const sql = require('mssql');
+                        try {
+                            console.log(msg_body);
+                            await sql.connect(config);
+                            // let permission = await new sql.Request().query(`SELECT [empId] FROM [Taxonanalytica].[dbo].[manager] WHERE phoneno = '${from}'`);
+                            // if (permission?.recordset?.length == 0) {
+                            //     axios({
+                            //         method: "POST",
+                            //         url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                            //         data: {
+                            //             messaging_product: "whatsapp",
+                            //             to: from,
+                            //             text: {
+                            //                 body: `You donot have permission to update the job priority`
+                            //             }
+                            //         },
+                            //         headers: {
+                            //             "Content-Type": "application/json"
+                            //         }
+
+                            //     });
+                            //     return;
+                            // }
+                            let result = await new sql.Request().query(`SELECT IT_CODE, IT_NAME FROM [Taxonanalytica].[dbo].[item_master] WHERE IT_NAME LIKE '${msg_body}%';`);
+
+                            console.log(result);
+                            const items = result?.recordset.map((item: any) => item?.IT_CODE);
+                            const itemNames = result?.recordset.map((item: any) => item?.IT_NAME);
+
+                            const placeholders = items.map((item: any) => `'${item}'`).join(',');
+
+                            const job = await new sql.Request().query(`SELECT [jobId], [Status] FROM [Taxonanalytica].[dbo].[oa_det_master] WHERE IT_CODE IN (${placeholders});`);
+
+                            const jobs = job?.recordset;
+
+                            const listObject = createListObject(jobs, itemNames);
+                            console.log("ITEMNAMES", itemNames);
+
+                            let messageObject = {
+                                "messaging_product": "whatsapp",
+                                "recipient_type": "individual",
+                                "to": from,
+                                "type": "interactive",
+                                "interactive": {
+                                    "type": "list",
+                                    "header": {
+                                        "type": "text",
+                                        "text": "Select the Job you would like"
+                                    },
+                                    "body": {
+                                        "text": "You will be presented with a list of options to choose from"
+                                    },
+                                    "footer": {
+                                        "text": "All of them are opened"
+                                    },
+                                    "action": {
+                                        "button": "Select",
+                                        "sections": [
+                                            {
+                                                "title": "List of Jobs",
+                                                "rows": [
+                                                    {
+                                                        "id": "1",
+                                                        "title": "0292-030224"
+                                                    },
+                                                    {
+                                                        "id": "2",
+                                                        "title": "0983-100124"
+                                                    },
+                                                    {
+                                                        "id": "3",
+                                                        "title": "1218-100124"
+                                                    },
+                                                    {
+                                                        "id": "4",
+                                                        "title": "1359-100224"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            };
+                            messageObject.interactive = listObject;
+                            console.log("Valuesss", JSON.stringify(messageObject, null, 2));
+                            axios({
+                                method: "POST",
+                                url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
+                                data: messageObject,
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            });
+                            fs.writeFileSync(filePath, JSON.stringify([{ "itemName": msg_body }]));
+                        } catch (error) {
+                            return InternalServerError(res, error);
+                        } finally {
+                            // Close the SQL connection
+                            await sql.close();
+                        }
                     }
                 }
                 console.log("phone number " + phon_no_id);
