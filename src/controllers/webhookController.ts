@@ -81,7 +81,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
 
                 console.log(readData, "readdddd");
 
-                if (readData != null && Object.keys(readData).length != 0 && (msg?.text?.body?.toLowerCase() == "hi" || msg?.text?.body.toLowerCase() == "job")) {
+                if (readData != null && Object.keys(readData).length != 0 && (msg?.text?.body?.toLowerCase() == "ok" || msg?.text?.body.toLowerCase() == "job")) {
                     axios({
                         method: "POST",
                         url: "https://graph.facebook.com/v18.0/" + phon_no_id + "/messages?access_token=" + token,
@@ -288,7 +288,7 @@ export const sendWebhookRequest = async (req: Request, res: Response) => {
                     console.log("resulttt");
                     let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
 
-                    if (msg_body.toLowerCase().includes("hi")) {
+                    if (msg_body.toLowerCase().includes("ok")) {
                         let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
                         const sql = require('mssql');
                         try {
