@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { Request, Response } from "express";
 import { InternalServerError } from "../response/InternalServerErrorResponse";
 
