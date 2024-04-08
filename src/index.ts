@@ -86,13 +86,13 @@ try {
     });
   });
 
-  createConnection()
-    .then(async () => {
-      app.listen(PORT, () => {
-        console.log(`CONNECTED TO DB AND SERVER STARTED ON PORT  ${PORT}`);
-      });
-    })
-    .catch((error: any) => console.log(error));
+  // createConnection()
+  //   .then(async () => {
+  //     app.listen(PORT, () => {
+  //       console.log(`CONNECTED TO DB AND SERVER STARTED ON PORT  ${PORT}`);
+  //     });
+  //   })
+  //   .catch((error: any) => console.log(error));
 
 } catch (error) {
 
