@@ -8,7 +8,7 @@ import compression from "compression";
 import * as dotenv from "dotenv";
 import express from "express";
 import "reflect-metadata";
-import { createConnection } from "typeorm";
+// import { createConnection } from "typeorm";
 import { pagination } from "typeorm-pagination";
 import Routes from "./routes/Routes";
 const helmet = require("helmet");
@@ -35,14 +35,14 @@ try {
   app.use(express.json());
   app.use(helmet());
   app.use(cors(
-    {
-      origin: [
-        "http://localhost:3000",
-        "http://192.168.43.197:3000", // give correct IP
-      ],
-      credentials: true,
-      allowedHeaders: ["Content-Type", "Authorization"],
-    }
+    // {
+    //   origin: [
+    //     "http://localhost:3000",
+    //     "http://192.168.43.197:3000", // give correct IP
+    //   ],
+    //   credentials: true,
+    //   allowedHeaders: ["Content-Type", "Authorization"],
+    // }
   ))
   app.use(cookieParser());
 
@@ -94,6 +94,9 @@ try {
   //   })
   //   .catch((error: any) => console.log(error));
 
+  app.listen(PORT, () => {
+          console.log(`CONNECTED TO DB AND SERVER STARTED ON PORT  ${PORT}`);
+        });
 } catch (error) {
 
   const content = error.message + '\n'
