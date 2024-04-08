@@ -59,6 +59,10 @@ try {
 
   app.use("/api", Routes);
 
+  app.use("/check", (req, res) => {
+    res.json({ success : true, msg : "Successfully Server Called !" })
+  })
+
   const mytoken = 'MACHOPTIC';
 
   app.get('/webhook', function (req, res) {
